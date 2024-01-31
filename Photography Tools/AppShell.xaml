@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="Photography_Tools.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:Photography_Tools.Pages"
+    Title="Photography_Tools">
+
+    <Shell.FlyoutHeader>
+        <Label
+            Text="Photography Tools"
+            HorizontalOptions="Center"
+        />
+    </Shell.FlyoutHeader>
+
+    <ShellContent
+        Title="Depth of Field Calculator"
+        ContentTemplate="{DataTemplate pages:DofCalcPage}"
+        Route="DofCalcPage"
+    />
+
+    <ShellContent
+        Title="ND Filter Calculator"
+        ContentTemplate="{DataTemplate pages:NdFilterCalcPage}"
+        Route="NdFilterCalcPage" 
+    />
+    
+</Shell>
