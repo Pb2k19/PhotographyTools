@@ -9,16 +9,16 @@ public class DofService : IDofService
 
     public void CalculateDofValues(DofInfo dofInfo)
     {
-        double focalRatio = CalculateFullApertureValue(dofInfo.LensInfo.LensAperture);
+        double focalRatio = CalculateFullApertureValue(dofInfo.LensInfo.Aperture);
 
         double diagonalPrintMM = Math.Sqrt(Math.Pow(dofInfo.PrintWidthMM, 2) + Math.Pow(dofInfo.PrintHeighthMM, 2));
-        double diagonalSensorMM = Math.Sqrt(Math.Pow(dofInfo.CameraInfo.CameraSensorWidthMM, 2) + Math.Pow(dofInfo.CameraInfo.CameraSensorHeightMM, 2));
+        double diagonalSensorMM = Math.Sqrt(Math.Pow(dofInfo.CameraInfo.SensorWidthMM, 2) + Math.Pow(dofInfo.CameraInfo.SensorHeightMM, 2));
         double enlargmentFactor = diagonalPrintMM / diagonalSensorMM;
 
         dofInfo.CircleOfConfusion = dofInfo.ActualViewingDistanceMM / (double)(dofInfo.StandardViewingDistanceMM * dofInfo.VisualAcuityLpPerMM) / enlargmentFactor;
-        dofInfo.HyperfocalDistanceMM = dofInfo.LensInfo.LensFocalLenghtMM + Math.Pow(dofInfo.LensInfo.LensFocalLenghtMM, 2) / (focalRatio * dofInfo.CircleOfConfusion);
-        dofInfo.DofFarLimitMM = dofInfo.HyperfocalDistanceMM * dofInfo.FocusingDistanceMM / (dofInfo.HyperfocalDistanceMM - (dofInfo.FocusingDistanceMM - dofInfo.LensInfo.LensFocalLenghtMM));
-        dofInfo.DofNearLimitMM = dofInfo.HyperfocalDistanceMM * dofInfo.FocusingDistanceMM / (dofInfo.HyperfocalDistanceMM + (dofInfo.FocusingDistanceMM - dofInfo.LensInfo.LensFocalLenghtMM));
+        dofInfo.HyperfocalDistanceMM = dofInfo.LensInfo.FocalLengthMM + Math.Pow(dofInfo.LensInfo.FocalLengthMM, 2) / (focalRatio * dofInfo.CircleOfConfusion);
+        dofInfo.DofFarLimitMM = dofInfo.HyperfocalDistanceMM * dofInfo.FocusingDistanceMM / (dofInfo.HyperfocalDistanceMM - (dofInfo.FocusingDistanceMM - dofInfo.LensInfo.FocalLengthMM));
+        dofInfo.DofNearLimitMM = dofInfo.HyperfocalDistanceMM * dofInfo.FocusingDistanceMM / (dofInfo.HyperfocalDistanceMM + (dofInfo.FocusingDistanceMM - dofInfo.LensInfo.FocalLengthMM));
 
         dofInfo.DofMM = dofInfo.DofFarLimitMM - dofInfo.DofNearLimitMM;
         dofInfo.DofInFrontOfSubject = dofInfo.FocusingDistanceMM - dofInfo.DofNearLimitMM;

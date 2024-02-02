@@ -24,7 +24,7 @@
 		<ApplicationTitle>Photography Tools</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.photography_tools</ApplicationId>
+		<ApplicationId>com.companyname.photographyTools</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -57,7 +57,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Maui.Core" Version="7.0.1" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="7.0.1" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.6" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.6" />
@@ -65,10 +65,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="ViewModels\" />
+	  <Compile Update="Components\Controls\LengthEntryControl.xaml.cs">
+	    <DependentUpon>LengthEntryControl.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Components\Controls\LengthEntryControl.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\DofCalcPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

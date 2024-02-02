@@ -2,6 +2,6 @@
 
 public class CameraInfo
 {
-    public int CameraSensorWidthMM { get; set; }
-    public int CameraSensorHeightMM { get; set; }
+    public int SensorWidthMM { get; set; }
+    public int SensorHeightMM { get; set; }
 }

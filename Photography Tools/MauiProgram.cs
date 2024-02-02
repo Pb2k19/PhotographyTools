@@ -1,7 +1,8 @@
-﻿using CommunityToolkit.Maui.Core;
+﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using Photography_Tools.Pages;
 using Photography_Tools.Services.DofService;
+using Photography_Tools.ViewModels;
 
 namespace Photography_Tools;
 public static class MauiProgram
@@ -11,6 +12,7 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
+            .UseMauiCommunityToolkit()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -18,16 +20,18 @@ public static class MauiProgram
             });
 
 #if DEBUG
-		builder.Logging.AddDebug();
+        builder.Logging.AddDebug();
 #endif
-        builder.UseMauiApp<App>().UseMauiCommunityToolkitCore();
 
-        //Pages
+        // Pages
         builder.Services.AddSingleton<DofCalcPage>();
         builder.Services.AddSingleton<NdFilterCalcPage>();
 
         // Services
         builder.Services.AddSingleton<IDofService, DofService>();
+
+        // ViewModel
+        builder.Services.AddSingleton<DofCalcViewModel>();
 
         return builder.Build();
     }

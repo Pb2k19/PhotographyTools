@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Photography_Tools.Components.Controls"
+    x:Class="Photography_Tools.Components.Controls.LengthEntryControl"
+    x:DataType="local:LengthEntryControl">
+
+    <Grid
+        Margin="5"
+        ColumnDefinitions="{OnPlatform WinUI='*,75', Default='*,50'}">
+        
+        <Entry
+            x:Name="LengthEntry"
+            FontSize="Medium"
+            HorizontalTextAlignment="Center"
+            Completed="LengthEntry_Completed"
+            Unfocused="LengthEntry_Unfocused"
+        />
+        
+        <Picker
+            Grid.Column="1"
+            x:Name="UnitPicker"
+            HorizontalTextAlignment="Center"
+            SelectedIndexChanged="PickerIndexChanged"
+        />
+    </Grid>
+</ContentView>

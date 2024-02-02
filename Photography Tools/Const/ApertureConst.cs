@@ -1,4 +1,5 @@
 ﻿using System.Collections.Frozen;
+using System.Collections.Immutable;
 
 namespace Photography_Tools.Const;
 
@@ -12,7 +13,7 @@ public static class ApertureConst
 
     public static FrozenSet<double> ThirdStops { get; }
 
-    public static FrozenSet<double> AllStops { get; }
+    public static ImmutableArray<double> AllStops { get; }
 
     static ApertureConst()
     {
@@ -31,6 +32,7 @@ public static class ApertureConst
         }.ToFrozenSet();
 
         double[] allStops = [.. FullStops, .. SecondStops, .. ThirdStops];
-        AllStops = allStops.ToFrozenSet();
+        Array.Sort(allStops);
+        AllStops = [.. allStops];
     }
 }

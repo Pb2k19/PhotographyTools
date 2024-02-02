@@ -2,6 +2,6 @@
 
 public class LensInfo
 {
-    public int LensFocalLenghtMM { get; set; }
-    public double LensAperture { get; set; }
+    public int FocalLengthMM { get; set; }
+    public double Aperture { get; set; }
 }

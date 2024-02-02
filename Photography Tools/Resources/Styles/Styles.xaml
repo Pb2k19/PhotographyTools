@@ -424,5 +424,68 @@
         <Setter Property="UnselectedTabColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray950}}" />
         <Setter Property="SelectedTabColor" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
     </Style>
+    
+    <!--Custom-->
+
+    <Style x:Key="BaseLabel" TargetType="Label">
+        <Setter Property="TextColor" Value="{AppThemeBinding Dark={StaticResource White},
+                                                             Light={StaticResource Black}}" />
+    </Style>
+
+    <Style x:Key="BaseLabelBold" TargetType="Label" 
+                BasedOn="{StaticResource BaseLabel}">
+        <Setter Property="FontAttributes" Value="Bold"/>
+    </Style>
+
+    <Style x:Key="LabelMicro" TargetType="Label" 
+                BasedOn="{StaticResource BaseLabel}">
+        <Setter Property="FontSize" Value="Micro"/>
+    </Style>
+
+    <Style x:Key="LabelMicroBold" TargetType="Label" 
+                BasedOn="{StaticResource BaseLabelBold}">
+        <Setter Property="FontSize" Value="Micro"/>
+    </Style>
+
+    <Style x:Key="LabelSmall" TargetType="Label" 
+                   BasedOn="{StaticResource BaseLabel}">
+        <Setter Property="FontSize" Value="Small" />
+    </Style>
+
+    <Style x:Key="LabelSmallBold" TargetType="Label" 
+                   BasedOn="{StaticResource BaseLabelBold}">
+        <Setter Property="FontSize" Value="Small" />
+    </Style>
+
+    <Style x:Key="LabelMedium" TargetType="Label" 
+                BasedOn="{StaticResource BaseLabel}">
+        <Setter Property="FontSize" Value="Medium"/>
+    </Style>
+
+    <Style x:Key="LabelMediumBold" TargetType="Label" 
+                BasedOn="{StaticResource BaseLabelBold}">
+        <Setter Property="FontSize" Value="Medium"/>
+    </Style>
+
+    <Style x:Key="StandardBorder" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark={StaticResource Gray900}, Light = {StaticResource Gray50}}"/>
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="StrokeShape" Value="RoundRectangle 10"/>
+        <Setter Property="StrokeThickness" Value="0"/>
+    </Style>
+
+    <Style x:Key="EntryBorder" TargetType="Border" BasedOn="{StaticResource StandardBorder}">
+        <Setter Property="Padding" Value="5"/>
+    </Style>
+
+    <Style x:Key="StandardEntry" TargetType="Entry">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark = {StaticResource Gray900}, 
+                                                                   Light = {StaticResource Gray50}}"/>
+        <Setter Property="MaxLength" Value="100"/>
+        <Setter Property="TextColor" Value="{AppThemeBinding Dark = {StaticResource White},
+                                                             Light = {StaticResource Black}}"/>
+        <Setter Property="VerticalTextAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="Medium" />
+    </Style>
 
 </ResourceDictionary>
