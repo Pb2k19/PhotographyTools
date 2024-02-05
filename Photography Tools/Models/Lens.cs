@@ -1,7 +1,7 @@
 ﻿namespace Photography_Tools.Models;
 
-public class LensInfo
+public class Lens
 {
-    public int FocalLengthMM { get; set; }
+    public double FocalLengthMM { get; set; }
     public double Aperture { get; set; }
 }

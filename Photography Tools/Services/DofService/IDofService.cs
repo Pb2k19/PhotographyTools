@@ -4,5 +4,5 @@ namespace Photography_Tools.Services.DofService;
 
 public interface IDofService
 {
-    void CalculateDofValues(DofInfo dofInfo);
+    DofCalcResult CalculateDofValues(DofCalcInput dofInfo);
 }

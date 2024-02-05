@@ -2,13 +2,15 @@ using Photography_Tools.Const;
 using Photography_Tools.Helpers;
 using System.Collections.Immutable;
 using System.Windows.Input;
+#if DEBUG
+using System.Diagnostics;
+#endif
 
 namespace Photography_Tools.Components.Controls;
 
 public partial class LengthEntryControl : ContentView
 {
     private double lengthMM;
-    private string previousLengthText = string.Empty;
 
     #region BindableProperties
     public static readonly BindableProperty LengthValueChangedCommandProperty = BindableProperty.Create(
@@ -46,13 +48,13 @@ public partial class LengthEntryControl : ContentView
         });
     #endregion
 
-    public ICommand LengthValueChangedCommand
+    public ICommand? LengthValueChangedCommand
     {
         get => (ICommand)GetValue(LengthValueChangedCommandProperty);
         set => SetValue(LengthValueChangedCommandProperty, value);
     }
     
-    public ICommand UnitChangedCommand
+    public ICommand? UnitChangedCommand
     {
         get => (ICommand)GetValue(UnitChangedCommandProperty);
         set => SetValue(UnitChangedCommandProperty, value);
@@ -63,16 +65,14 @@ public partial class LengthEntryControl : ContentView
         get => lengthMM;
         set
         {
-            value = AcceptIntOnly ? Math.Round(value, 0) : Math.Round(value, DisplayPrecison);
-
             if (lengthMM != value && value >= MinLengthMM && value <= MaxLengthMM)
             {
                 lengthMM = value;
                 SetValue(LengthMMProperty, value);
                 OnPropertyChanged(nameof(LengthMM));
-                SetLenghtText(value);
+                SetLengthText(value);
 
-                if (LengthValueChangedCommand.CanExecute(null))
+                if (LengthValueChangedCommand?.CanExecute(null) ?? false)
                     LengthValueChangedCommand.Execute(null);
             }
         }
@@ -90,7 +90,13 @@ public partial class LengthEntryControl : ContentView
 
     public bool AcceptIntOnly { get; set; } = false;
 
-    public int DisplayPrecison { get; set; } = 3;
+    public int DisplayPrecision { get; set; } = 3;
+
+    public bool IsReadOnly 
+    {
+        get => LengthEntry.IsReadOnly; 
+        set => LengthEntry.IsReadOnly = value; 
+    }
 
     private ImmutableArray<string> LengthUnits { get; }
 
@@ -100,7 +106,7 @@ public partial class LengthEntryControl : ContentView
         LengthEntry.Text = string.Empty;
         LengthUnits = UnitConst.LengthUnits;
         UnitPicker.ItemsSource = LengthUnits;
-        SetLenghtText(lengthMM);
+        SetLengthText(lengthMM);
         if (LengthUnits.Length > 0)
             UnitPicker.SelectedItem = LengthUnits[0];
     }
@@ -122,7 +128,7 @@ public partial class LengthEntryControl : ContentView
         if (index >= 0 && index < LengthUnits.Length)
         {
             SelectedUnit = LengthUnits[index];
-            SetLengthFromText();
+            SetLengthText(lengthMM);
 
             if (UnitChangedCommand?.CanExecute(null) ?? false)
                 UnitChangedCommand.Execute(this);
@@ -133,37 +139,39 @@ public partial class LengthEntryControl : ContentView
     {
         if (ParseHelper.TryParseDoubleDifferentCulture(LengthEntry.Text, out double newValue))
         {
-            newValue = AcceptIntOnly ? Math.Round(newValue, 0) : newValue;
-
-            if (newValue >= MinLengthMM && newValue <= MaxLengthMM)
-            {
-                double newValueMM = UnitHelper.ConvertUnitsToMM(newValue, SelectedUnit);
-                if (newValueMM == lengthMM)
-                    return;
-
-                lengthMM = newValueMM;
-                SetValue(LengthMMProperty, lengthMM);
-                OnPropertyChanged(nameof(LengthMM));
-                SetLenghtText(Math.Round(newValue, DisplayPrecison).ToString());
-
-                if (LengthValueChangedCommand?.CanExecute(null) ?? false)
-                    LengthValueChangedCommand.Execute(null);
-
+            if (SetLenghtMMAndNotify(UnitHelper.ConvertUnitsToMM(newValue, SelectedUnit)))
                 return;
-            }
         }
 
-        SetLenghtText(previousLengthText);
+        SetLengthText(lengthMM);
     }
 
-    private void SetLenghtText(string value)
+    private bool SetLenghtMMAndNotify(double value)
     {
-        previousLengthText = value;
-        LengthEntry.Text = value;
+        if (value != lengthMM && value >= MinLengthMM && value <= MaxLengthMM)
+        {
+            lengthMM = value;
+            SetValue(LengthMMProperty, lengthMM);
+            OnPropertyChanged(nameof(LengthMM));
+            SetLengthText(value);
+
+            if (LengthValueChangedCommand?.CanExecute(null) ?? false)
+                LengthValueChangedCommand.Execute(null);
+
+            return true;
+        }
+
+        return false;
     }
 
-    private void SetLenghtText(double value)
+    private void SetLengthText(double value)
     {
-        SetLenghtText(Math.Round(UnitHelper.ConvertMMToUnits(value, SelectedUnit), DisplayPrecison).ToString());
+        value = UnitHelper.ConvertMMToUnits(value, SelectedUnit);
+        value = AcceptIntOnly ? Math.Round(value, 0) : Math.Round(value, DisplayPrecision);
+           
+        LengthEntry.Text = value.ToString();
+#if DEBUG
+        Debug.WriteLine(lengthMM);
+#endif
     }
 }

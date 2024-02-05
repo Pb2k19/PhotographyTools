@@ -7,20 +7,21 @@
     xmlns:controls="clr-namespace:Photography_Tools.Components.Controls"
     x:Class="Photography_Tools.Pages.DofCalcPage"
     x:DataType="viewmodels:DofCalcViewModel"
-    Title="Depth of Field Calculator" Background="Black">
+    Title="Depth of Field Calculator" 
+    Background="Black">
 
     <ScrollView
         Margin="20">
 
         <Grid
-            ColumnSpacing="10"
             RowSpacing="10"
+            ColumnSpacing="10"
             ColumnDefinitions="*,*,*,*,*,*"
-            RowDefinitions="auto, auto, auto, auto, auto, auto">
+            RowDefinitions="auto, auto, auto, auto, auto, auto, auto, auto, auto, auto">
 
             <Label
                 Text="Camera sensor"
-                Grid.ColumnSpan="3"
+                Grid.ColumnSpan="6"
                 Style="{StaticResource LabelMediumBold}"
             />
 
@@ -28,15 +29,20 @@
                 Grid.Row="1"
                 Grid.ColumnSpan="6"
                 Style="{StaticResource EntryBorder}">
-                
                 <Picker 
-                    
-                />
+                    ItemsSource="{Binding SensorNames}"
+                    SelectedItem="{Binding SelectedSensorName}"                        
+                    HorizontalOptions="FillAndExpand"
+                    FontSize="Medium">
+                    <Picker.Behaviors>
+                        <toolkit:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding CalculateValuesCommand}"/>
+                    </Picker.Behaviors>
+                </Picker>
             </Border>
 
             <Label
                 Grid.Row="2"
-                Grid.ColumnSpan="3"
+                Grid.ColumnSpan="2"
                 Margin="0,10,0,0"
                 Text="Focal length"
                 Style="{StaticResource LabelMediumBold}"
@@ -44,8 +50,17 @@
 
             <Label
                 Grid.Row="2"
-                Grid.Column="3"
-                Grid.ColumnSpan="3"
+                Grid.Column="2"
+                Grid.ColumnSpan="2"
+                Margin="0,10,0,0"
+                Text="Distance"
+                Style="{StaticResource LabelMediumBold}"
+            />
+
+            <Label
+                Grid.Row="2"
+                Grid.Column="4"
+                Grid.ColumnSpan="2"
                 Margin="0,10,0,0"
                 Text="Aperture"
                 Style="{StaticResource LabelMediumBold}"
@@ -53,10 +68,12 @@
 
             <Border
                 Grid.Row="3"
-                Grid.ColumnSpan="3"
+                Grid.ColumnSpan="2"
                 Style="{StaticResource EntryBorder}">
-                <controls:LengthEntryControl 
-                    LengthMM="{Binding FocalLength}"
+                <controls:LengthEntryControl
+                    MinLengthMM="4"
+                    MaxLengthMM="9999"
+                    LengthMM="{Binding DofCalcInput.LensInfo.FocalLengthMM}"
                     LengthValueChangedCommand="{Binding CalculateValuesCommand}"
                     UnitChangedCommand="{Binding UnitChangedCommand}"
                 />
@@ -64,22 +81,165 @@
 
             <Border
                 Grid.Row="3"
-                Grid.Column="3"
-                Grid.ColumnSpan="3"
+                Grid.Column="2"
+                Grid.ColumnSpan="2"
                 Style="{StaticResource EntryBorder}">
-                <controls:LengthEntryControl 
-                    LengthMM="{Binding Aperture}"
+                <controls:LengthEntryControl
+                    MinLengthMM="50"
+                    MaxLengthMM="9999999"
+                    LengthMM="{Binding DofCalcInput.FocusingDistanceMM}"
                     LengthValueChangedCommand="{Binding CalculateValuesCommand}"
                     UnitChangedCommand="{Binding UnitChangedCommand}"
-                    MaxLengthMM="2000"
                 />
             </Border>
 
-            <Button
-                Text="Calculate"
+            <Border
+                Grid.Row="3"
+                Grid.Column="4"
+                Grid.ColumnSpan="2"
+                Padding="10"
+                Style="{StaticResource EntryBorder}">
+                <StackLayout
+                    Orientation="Horizontal">
+                    <Label 
+                        Text="F"
+                        Style="{StaticResource LabelMediumBold}"
+                        VerticalTextAlignment="Center"
+                        Margin="0,0,5,0"
+                    />
+
+                    <Picker
+                        ItemsSource="{Binding Apertures}"
+                        SelectedItem="{Binding DofCalcInput.LensInfo.Aperture}"
+                        HorizontalOptions="FillAndExpand"
+                        HorizontalTextAlignment="Center"
+                        FontSize="Medium">
+                        <Picker.Behaviors>
+                            <toolkit:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding CalculateValuesCommand}"/>
+                        </Picker.Behaviors>
+                    </Picker>
+                </StackLayout>
+            </Border>
+
+            <Label
                 Grid.Row="4"
-                Command="{Binding CalculateValuesCommand}" 
+                Grid.ColumnSpan="3"
+                Margin="0,10,0,0"
+                Text="Depth of Field"
+                Style="{StaticResource LabelMediumBold}"
             />
+
+            <Label
+                Grid.Row="4"
+                Grid.Column="3"
+                Grid.ColumnSpan="3"
+                Margin="0,10,0,0"
+                Text="Hyperfocal"
+                Style="{StaticResource LabelMediumBold}"
+            />
+
+            <Border
+                Grid.Row="5"
+                Grid.ColumnSpan="3"
+                Style="{StaticResource EntryBorder}">
+                <controls:LengthEntryControl
+                    IsReadOnly="True"
+                    MaxLengthMM="1000000"
+                    LengthMM="{Binding DofCalcResult.DofMM}"
+                />
+            </Border>
+
+            <Border
+                Grid.Row="5"
+                Grid.Column="3"
+                Grid.ColumnSpan="3"
+                Style="{StaticResource EntryBorder}">
+                <controls:LengthEntryControl
+                    IsReadOnly="True"
+                    MaxLengthMM="1000000"
+                    LengthMM="{Binding DofCalcResult.HyperfocalDistanceMM}"
+                />
+            </Border>
+
+            <Label
+                Grid.Row="6"
+                Grid.ColumnSpan="3"
+                Margin="0,10,0,0"
+                Text="Near limit"
+                Style="{StaticResource LabelMediumBold}"
+            />
+
+            <Label
+                Grid.Row="6"
+                Grid.Column="3"
+                Grid.ColumnSpan="2"
+                Margin="0,10,0,0"
+                Text="Far Limit"
+                Style="{StaticResource LabelMediumBold}"
+            />
+
+            <Border
+                Grid.Row="7"
+                Grid.ColumnSpan="3"
+                Style="{StaticResource EntryBorder}">
+                 <controls:LengthEntryControl
+                    IsReadOnly="True"
+                    MaxLengthMM="1000000"
+                    LengthMM="{Binding DofCalcResult.DofNearLimitMM}"
+                 />
+            </Border>
+
+            <Border
+                Grid.Row="7"
+                Grid.Column="3"
+                Grid.ColumnSpan="3"
+                Style="{StaticResource EntryBorder}">
+                <controls:LengthEntryControl
+                    IsReadOnly="True"
+                    MaxLengthMM="1000000"
+                    LengthMM="{Binding DofCalcResult.DofFarLimitMM}"
+                />
+            </Border>
+
+            <Label
+                Grid.Row="8"
+                Grid.ColumnSpan="3"
+                Margin="0,10,0,0"
+                Text="In front of subject"
+                Style="{StaticResource LabelMediumBold}"
+            />
+
+            <Label
+                Grid.Row="8"
+                Grid.Column="3"
+                Grid.ColumnSpan="3"
+                Margin="0,10,0,0"
+                Text="Behind subject"
+                Style="{StaticResource LabelMediumBold}"
+            />
+
+            <Border
+                Grid.Row="9"
+                Grid.ColumnSpan="3"
+                Style="{StaticResource EntryBorder}">
+                <controls:LengthEntryControl
+                   IsReadOnly="True"
+                   MaxLengthMM="1000000"
+                   LengthMM="{Binding DofCalcResult.DofInFrontOfSubject}"
+                />
+            </Border>
+
+            <Border
+                Grid.Row="9"
+                Grid.Column="3"
+                Grid.ColumnSpan="3"
+                Style="{StaticResource EntryBorder}">
+                <controls:LengthEntryControl
+                    IsReadOnly="True"
+                    MaxLengthMM="1000000"
+                    LengthMM="{Binding DofCalcResult.DofInBackOfSubject}"
+                />
+            </Border>
         </Grid>
     </ScrollView>
 </ContentPage>

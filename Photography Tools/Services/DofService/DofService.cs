@@ -7,7 +7,7 @@ public class DofService : IDofService
 {
     private static double SqrtOf2 { get; } = Math.Sqrt(2);
 
-    public void CalculateDofValues(DofInfo dofInfo)
+    public DofCalcResult CalculateDofValues(DofCalcInput dofInfo)
     {
         double focalRatio = CalculateFullApertureValue(dofInfo.LensInfo.Aperture);
 
@@ -15,14 +15,19 @@ public class DofService : IDofService
         double diagonalSensorMM = Math.Sqrt(Math.Pow(dofInfo.CameraInfo.SensorWidthMM, 2) + Math.Pow(dofInfo.CameraInfo.SensorHeightMM, 2));
         double enlargmentFactor = diagonalPrintMM / diagonalSensorMM;
 
-        dofInfo.CircleOfConfusion = dofInfo.ActualViewingDistanceMM / (double)(dofInfo.StandardViewingDistanceMM * dofInfo.VisualAcuityLpPerMM) / enlargmentFactor;
-        dofInfo.HyperfocalDistanceMM = dofInfo.LensInfo.FocalLengthMM + Math.Pow(dofInfo.LensInfo.FocalLengthMM, 2) / (focalRatio * dofInfo.CircleOfConfusion);
-        dofInfo.DofFarLimitMM = dofInfo.HyperfocalDistanceMM * dofInfo.FocusingDistanceMM / (dofInfo.HyperfocalDistanceMM - (dofInfo.FocusingDistanceMM - dofInfo.LensInfo.FocalLengthMM));
-        dofInfo.DofNearLimitMM = dofInfo.HyperfocalDistanceMM * dofInfo.FocusingDistanceMM / (dofInfo.HyperfocalDistanceMM + (dofInfo.FocusingDistanceMM - dofInfo.LensInfo.FocalLengthMM));
+        DofCalcResult result = new()
+        {
+            CircleOfConfusion = dofInfo.ActualViewingDistanceMM / (double)(dofInfo.StandardViewingDistanceMM * dofInfo.VisualAcuityLpPerMM) / enlargmentFactor
+        };
+        result.HyperfocalDistanceMM = dofInfo.LensInfo.FocalLengthMM + Math.Pow(dofInfo.LensInfo.FocalLengthMM, 2) / (focalRatio * result.CircleOfConfusion);
+        result.DofFarLimitMM = result.HyperfocalDistanceMM * dofInfo.FocusingDistanceMM / (result.HyperfocalDistanceMM - (dofInfo.FocusingDistanceMM - dofInfo.LensInfo.FocalLengthMM));
+        result.DofNearLimitMM = result.HyperfocalDistanceMM * dofInfo.FocusingDistanceMM / (result.HyperfocalDistanceMM + (dofInfo.FocusingDistanceMM - dofInfo.LensInfo.FocalLengthMM));
 
-        dofInfo.DofMM = dofInfo.DofFarLimitMM - dofInfo.DofNearLimitMM;
-        dofInfo.DofInFrontOfSubject = dofInfo.FocusingDistanceMM - dofInfo.DofNearLimitMM;
-        dofInfo.DofInBackOfSubject = dofInfo.DofFarLimitMM - dofInfo.FocusingDistanceMM;
+        result.DofMM = result.DofFarLimitMM - result.DofNearLimitMM;
+        result.DofInFrontOfSubject = dofInfo.FocusingDistanceMM - result.DofNearLimitMM;
+        result.DofInBackOfSubject = result.DofFarLimitMM - dofInfo.FocusingDistanceMM;
+
+        return result;
     }
 
     public static double CalculateFullApertureValue(double apertureValue)

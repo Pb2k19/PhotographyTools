@@ -13,6 +13,8 @@ public static class ApertureConst
 
     public static FrozenSet<double> ThirdStops { get; }
 
+    public static FrozenSet<double> OtherStops { get; }
+
     public static ImmutableArray<double> AllStops { get; }
 
     static ApertureConst()
@@ -30,9 +32,35 @@ public static class ApertureConst
             4.5, 5.0, 5.6, 6.3, 7.1, 8.0, 9.0, 10.0, 11.0, 13.0, 14.0, 16.0,
             18.0, 20.0, 22.0, 25.0, 29.0, 32.0, 36.0
         }.ToFrozenSet();
+        OtherStops = new double[]
+        { 0.95, 1.05 }.ToFrozenSet();
 
-        double[] allStops = [.. FullStops, .. SecondStops, .. ThirdStops];
-        Array.Sort(allStops);
-        AllStops = [.. allStops];
+        int arraySize = FullStops.Count + SecondStops.Count + ThirdStops.Count;
+        Span<double> allStops = arraySize * sizeof(double) <= 512 ? stackalloc double[arraySize] : new double[arraySize];
+        allStops.Clear();
+
+        int insertedValues = ThirdStops.Count;
+        ThirdStops.CopyTo(allStops);
+
+        AddStops(allStops, SecondStops, ref insertedValues);
+        AddStops(allStops, FullStops, ref insertedValues);
+        AddStops(allStops, OtherStops, ref insertedValues);
+
+        allStops = allStops[..insertedValues];
+        allStops.Sort();
+
+        AllStops = allStops.ToImmutableArray();
+    }
+
+    private static void AddStops(Span<double> destination, FrozenSet<double> source, ref int insertedValue)
+    {
+        foreach (double value in source)
+        {
+            if (destination[..insertedValue].Contains(value))
+                continue;
+
+            destination[insertedValue] = value;
+            insertedValue++;
+        }
     }
 }
