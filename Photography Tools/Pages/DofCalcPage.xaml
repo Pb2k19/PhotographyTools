@@ -11,16 +11,16 @@
     Background="Black">
 
     <ScrollView
-        Margin="20">
+        Padding="20">
 
         <Grid
-            RowSpacing="10"
             ColumnSpacing="10"
             ColumnDefinitions="*,*,*,*,*,*"
-            RowDefinitions="auto, auto, auto, auto, auto, auto, auto, auto, auto, auto">
+            RowDefinitions="auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto">
 
             <Label
-                Text="Camera sensor"
+                Margin="0,10"
+                Text="Camera Sensor"
                 Grid.ColumnSpan="6"
                 Style="{StaticResource LabelMediumBold}"
             />
@@ -43,8 +43,8 @@
             <Label
                 Grid.Row="2"
                 Grid.ColumnSpan="2"
-                Margin="0,10,0,0"
-                Text="Focal length"
+                Margin="0,20,0,10"
+                Text="Focal Length"
                 Style="{StaticResource LabelMediumBold}"
             />
 
@@ -52,7 +52,7 @@
                 Grid.Row="2"
                 Grid.Column="2"
                 Grid.ColumnSpan="2"
-                Margin="0,10,0,0"
+                Margin="0,20,0,10"
                 Text="Distance"
                 Style="{StaticResource LabelMediumBold}"
             />
@@ -61,7 +61,7 @@
                 Grid.Row="2"
                 Grid.Column="4"
                 Grid.ColumnSpan="2"
-                Margin="0,10,0,0"
+                Margin="0,20,0,10"
                 Text="Aperture"
                 Style="{StaticResource LabelMediumBold}"
             />
@@ -120,37 +120,168 @@
                     </Picker>
                 </StackLayout>
             </Border>
-
+            
             <Label
                 Grid.Row="4"
-                Grid.ColumnSpan="3"
-                Margin="0,10,0,0"
-                Text="Depth of Field"
+                Grid.ColumnSpan="2"
+                Margin="0,20,0,10"
+                Text="Print Heigth"
+                IsVisible="{Binding IsAdvancedModeEnabled}"
                 Style="{StaticResource LabelMediumBold}"
             />
 
             <Label
                 Grid.Row="4"
-                Grid.Column="3"
-                Grid.ColumnSpan="3"
-                Margin="0,10,0,0"
-                Text="Hyperfocal"
+                Grid.Column="2"
+                Grid.ColumnSpan="2"
+                Margin="0,20,0,10"
+                Text="Print Width"
+                IsVisible="{Binding IsAdvancedModeEnabled}"
+                Style="{StaticResource LabelMediumBold}"
+            />
+
+            <Label
+                Grid.Row="4"
+                Grid.Column="4"
+                Grid.ColumnSpan="2"
+                Margin="0,20,0,10"
+                Text="Visual Acuity"
+                IsVisible="{Binding IsAdvancedModeEnabled}"
                 Style="{StaticResource LabelMediumBold}"
             />
 
             <Border
                 Grid.Row="5"
+                Grid.ColumnSpan="2"
+                IsVisible="{Binding IsAdvancedModeEnabled}"
+                Style="{StaticResource EntryBorder}">
+                <controls:LengthEntryControl
+                    MaxLengthMM="10000"
+                    LengthMM="{Binding DofCalcInput.PrintHeighthMM}"
+                    LengthValueChangedCommand="{Binding CalculateValuesCommand}"
+                    UnitChangedCommand="{Binding UnitChangedCommand}"                    
+                />
+            </Border>
+
+            <Border
+                Grid.Row="5"
+                Grid.Column="2"
+                Grid.ColumnSpan="2"
+                IsVisible="{Binding IsAdvancedModeEnabled}"
+                Style="{StaticResource EntryBorder}">
+                <controls:LengthEntryControl
+                    MaxLengthMM="10000"
+                    LengthMM="{Binding DofCalcInput.PrintWidthMM}"
+                    LengthValueChangedCommand="{Binding CalculateValuesCommand}"
+                    UnitChangedCommand="{Binding UnitChangedCommand}"
+                />
+            </Border>
+
+            <Border
+                Grid.Row="5"
+                Grid.Column="4"
+                Grid.ColumnSpan="2"
+                IsVisible="{Binding IsAdvancedModeEnabled}"
+                Style="{StaticResource EntryBorder}">
+                <StackLayout
+                    Orientation="Horizontal">
+                    <Entry
+                        Keyboard="Numeric"
+                        Margin="0,5"
+                        Text="{Binding VisualAcuityLpPerMM}"
+                        HorizontalOptions="FillAndExpand"
+                        HorizontalTextAlignment="Center"
+                        FontSize="Medium">
+                        <Entry.Behaviors>
+                            <toolkit:EventToCommandBehavior EventName="TextChanged" Command="{Binding VisualAcuityLpPerMMChangedCommand}"/>
+                        </Entry.Behaviors>
+                    </Entry>
+                    <Label 
+                        Text="lp/mm"
+                        Style="{StaticResource LabelSmall}"
+                        VerticalTextAlignment="Center"
+                        Margin="5,0"
+                    />
+                </StackLayout>
+            </Border>
+
+            <Label
+                Grid.Row="6"
+                Grid.ColumnSpan="3"
+                Margin="0,20,0,10"
+                Text="Standard Viewing Distance"
+                IsVisible="{Binding IsAdvancedModeEnabled}"
+                Style="{StaticResource LabelMediumBold}"
+            />
+
+            <Label
+                Grid.Row="6"
+                Grid.Column="3"
+                Grid.ColumnSpan="3"
+                Margin="0,20,0,10"
+                Text="Actual Viewing Distance"
+                IsVisible="{Binding IsAdvancedModeEnabled}"
+                Style="{StaticResource LabelMediumBold}"
+            />
+
+            <Border
+                Grid.Row="7"
+                Grid.ColumnSpan="3"
+                IsVisible="{Binding IsAdvancedModeEnabled}"
+                Style="{StaticResource EntryBorder}">
+                <controls:LengthEntryControl
+                    MaxLengthMM="10000"
+                    LengthMM="{Binding DofCalcInput.StandardViewingDistanceMM}"
+                    LengthValueChangedCommand="{Binding CalculateValuesCommand}"
+                    UnitChangedCommand="{Binding UnitChangedCommand}"
+                />
+            </Border>
+
+            <Border
+                Grid.Row="7"
+                Grid.Column="3"
+                Grid.ColumnSpan="3"
+                IsVisible="{Binding IsAdvancedModeEnabled}"
+                Style="{StaticResource EntryBorder}">
+                <controls:LengthEntryControl
+                    MaxLengthMM="10000"
+                    LengthMM="{Binding DofCalcInput.ActualViewingDistanceMM}"
+                    LengthValueChangedCommand="{Binding CalculateValuesCommand}"
+                    UnitChangedCommand="{Binding UnitChangedCommand}"
+                />
+            </Border>
+
+            <Label
+                Grid.Row="8"
+                Grid.ColumnSpan="3"
+                Margin="0,20,0,10"
+                Text="Depth of Field"
+                Style="{StaticResource LabelMediumBold}"
+            />
+
+            <Label
+                Grid.Row="8"
+                Grid.Column="3"
+                Grid.ColumnSpan="3"
+                Margin="0,20,0,10"
+                Text="Hyperfocal"
+                Style="{StaticResource LabelMediumBold}"
+            />
+
+            <Border
+                Grid.Row="9"
                 Grid.ColumnSpan="3"
                 Style="{StaticResource EntryBorder}">
                 <controls:LengthEntryControl
                     IsReadOnly="True"
                     MaxLengthMM="1000000"
                     LengthMM="{Binding DofCalcResult.DofMM}"
+                    UnitChangedCommand="{Binding UnitChangedCommand}"
                 />
             </Border>
 
             <Border
-                Grid.Row="5"
+                Grid.Row="9"
                 Grid.Column="3"
                 Grid.ColumnSpan="3"
                 Style="{StaticResource EntryBorder}">
@@ -158,39 +289,41 @@
                     IsReadOnly="True"
                     MaxLengthMM="1000000"
                     LengthMM="{Binding DofCalcResult.HyperfocalDistanceMM}"
+                    UnitChangedCommand="{Binding UnitChangedCommand}"
                 />
             </Border>
 
             <Label
-                Grid.Row="6"
+                Grid.Row="10"
                 Grid.ColumnSpan="3"
-                Margin="0,10,0,0"
+                Margin="0,20,0,10"
                 Text="Near limit"
                 Style="{StaticResource LabelMediumBold}"
             />
 
             <Label
-                Grid.Row="6"
+                Grid.Row="10"
                 Grid.Column="3"
                 Grid.ColumnSpan="2"
-                Margin="0,10,0,0"
+                Margin="0,20,0,10"
                 Text="Far Limit"
                 Style="{StaticResource LabelMediumBold}"
             />
 
             <Border
-                Grid.Row="7"
+                Grid.Row="11"
                 Grid.ColumnSpan="3"
                 Style="{StaticResource EntryBorder}">
                  <controls:LengthEntryControl
                     IsReadOnly="True"
                     MaxLengthMM="1000000"
                     LengthMM="{Binding DofCalcResult.DofNearLimitMM}"
+                    UnitChangedCommand="{Binding UnitChangedCommand}"
                  />
             </Border>
 
             <Border
-                Grid.Row="7"
+                Grid.Row="11"
                 Grid.Column="3"
                 Grid.ColumnSpan="3"
                 Style="{StaticResource EntryBorder}">
@@ -198,39 +331,41 @@
                     IsReadOnly="True"
                     MaxLengthMM="1000000"
                     LengthMM="{Binding DofCalcResult.DofFarLimitMM}"
+                    UnitChangedCommand="{Binding UnitChangedCommand}"
                 />
             </Border>
 
             <Label
-                Grid.Row="8"
+                Grid.Row="12"
                 Grid.ColumnSpan="3"
-                Margin="0,10,0,0"
-                Text="In front of subject"
+                Margin="0,20,0,10"
+                Text="In Front of Subject"
                 Style="{StaticResource LabelMediumBold}"
             />
 
             <Label
-                Grid.Row="8"
+                Grid.Row="12"
                 Grid.Column="3"
                 Grid.ColumnSpan="3"
-                Margin="0,10,0,0"
-                Text="Behind subject"
+                Margin="0,20,0,10"
+                Text="Behind Subject"
                 Style="{StaticResource LabelMediumBold}"
             />
 
             <Border
-                Grid.Row="9"
+                Grid.Row="13"
                 Grid.ColumnSpan="3"
                 Style="{StaticResource EntryBorder}">
                 <controls:LengthEntryControl
-                   IsReadOnly="True"
-                   MaxLengthMM="1000000"
-                   LengthMM="{Binding DofCalcResult.DofInFrontOfSubject}"
+                    IsReadOnly="True"
+                    MaxLengthMM="1000000"
+                    LengthMM="{Binding DofCalcResult.DofInFrontOfSubject}"
+                    UnitChangedCommand="{Binding UnitChangedCommand}"
                 />
             </Border>
 
             <Border
-                Grid.Row="9"
+                Grid.Row="13"
                 Grid.Column="3"
                 Grid.ColumnSpan="3"
                 Style="{StaticResource EntryBorder}">
@@ -238,8 +373,18 @@
                     IsReadOnly="True"
                     MaxLengthMM="1000000"
                     LengthMM="{Binding DofCalcResult.DofInBackOfSubject}"
+                    UnitChangedCommand="{Binding UnitChangedCommand}"
                 />
             </Border>
+
+            <Button
+                Margin="0,20,0,10"
+                Grid.Row="14"
+                Grid.Column="3"
+                Grid.ColumnSpan="3"
+                Text="{Binding ToggleText}"
+                Command="{Binding ChangeModeCommand}"
+            />
         </Grid>
     </ScrollView>
 </ContentPage>

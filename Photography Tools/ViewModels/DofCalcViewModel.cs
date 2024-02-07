@@ -12,10 +12,13 @@ public partial class DofCalcViewModel : ObservableObject
     private readonly IDofService dofService;
 
     [ObservableProperty]
-    private bool isAdvancedModeEnabled = false;
+    private int visualAcuityLpPerMM;
 
     [ObservableProperty]
-    private string selectedSensorName;
+    private bool isAdvancedModeEnabled;
+
+    [ObservableProperty]
+    private string selectedSensorName, toggleText = string.Empty;
 
     [ObservableProperty]
     private DofCalcResult dofCalcResult = new();
@@ -36,21 +39,46 @@ public partial class DofCalcViewModel : ObservableObject
         DofCalcInput.LensInfo.FocalLengthMM = 50;
         DofCalcInput.FocusingDistanceMM = 50;
 
+        SetToggleText();
+
         CalculateValues();
     }
 
     [RelayCommand]
     private void CalculateValues()
     {
-        DofCalcInput.CameraInfo.SensorWidthMM = SensorConst.Sensors[SelectedSensorName].SensorWidthMM;
-        DofCalcInput.CameraInfo.SensorHeightMM = SensorConst.Sensors[SelectedSensorName].SensorHeightMM;
+        DofCalcInput.CameraInfo = SensorConst.Sensors[SelectedSensorName];
 
         DofCalcResult = dofService.CalculateDofValues(DofCalcInput);
+    }
+
+    [RelayCommand]
+    private void OnVisualAcuityLpPerMMChanged()
+    {
+        if (DofCalcInput.VisualAcuityLpPerMM != VisualAcuityLpPerMM)
+        {
+            DofCalcInput.VisualAcuityLpPerMM = VisualAcuityLpPerMM;
+            CalculateValues();
+        }
+
+        OnPropertyChanged(nameof(VisualAcuityLpPerMM));
+    }
+
+    [RelayCommand]
+    private void ChangeMode()
+    {
+        IsAdvancedModeEnabled = !IsAdvancedModeEnabled;
+        SetToggleText();
     }
 
     [RelayCommand]
     private void OnUnitChanged()
     {
 
+    }
+
+    private void SetToggleText()
+    {
+        ToggleText = IsAdvancedModeEnabled ? "Simple mode" : "Advanced mode";
     }
 }
