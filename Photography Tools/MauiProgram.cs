@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using Photography_Tools.Pages;
-using Photography_Tools.Services.DofService;
+using Photography_Tools.Services.PhotographyCalculationsService;
 using Photography_Tools.ViewModels;
 
 namespace Photography_Tools;
@@ -28,7 +28,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<NdFilterCalcPage>();
 
         // Services
-        builder.Services.AddSingleton<IDofService, DofService>();
+        builder.Services.AddSingleton<IPhotographyCalculationsService, PhotographyCalculationsService>();
 
         // ViewModel
         builder.Services.AddSingleton<DofCalcViewModel>();

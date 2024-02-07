@@ -1,9 +1,9 @@
 ﻿using Photography_Tools.Const;
 using Photography_Tools.Models;
 
-namespace Photography_Tools.Services.DofService;
+namespace Photography_Tools.Services.PhotographyCalculationsService;
 
-public class DofService : IDofService
+public class PhotographyCalculationsService : IPhotographyCalculationsService
 {
     private static double SqrtOf2 { get; } = Math.Sqrt(2);
 

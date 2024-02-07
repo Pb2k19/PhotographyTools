@@ -2,14 +2,14 @@
 using CommunityToolkit.Mvvm.Input;
 using Photography_Tools.Const;
 using Photography_Tools.Models;
-using Photography_Tools.Services.DofService;
+using Photography_Tools.Services.PhotographyCalculationsService;
 using System.Collections.Immutable;
 
 namespace Photography_Tools.ViewModels;
 
 public partial class DofCalcViewModel : ObservableObject
 {
-    private readonly IDofService dofService;
+    private readonly IPhotographyCalculationsService photographyCalcService;
 
     [ObservableProperty]
     private int visualAcuityLpPerMM;
@@ -30,9 +30,9 @@ public partial class DofCalcViewModel : ObservableObject
 
     public ImmutableArray<string> SensorNames { get; } = SensorConst.Sensors.Keys;
 
-    public DofCalcViewModel(IDofService dofService)
+    public DofCalcViewModel(IPhotographyCalculationsService photographyCalcService)
     {
-        this.dofService = dofService;
+        this.photographyCalcService = photographyCalcService;
 
         SelectedSensorName = SensorNames.Length > 0 ? SensorNames[0] : string.Empty;
         DofCalcInput.LensInfo.Aperture = Apertures.Length > 8 ? Apertures[8] : 2.0;
@@ -49,7 +49,7 @@ public partial class DofCalcViewModel : ObservableObject
     {
         DofCalcInput.CameraInfo = SensorConst.Sensors[SelectedSensorName];
 
-        DofCalcResult = dofService.CalculateDofValues(DofCalcInput);
+        DofCalcResult = photographyCalcService.CalculateDofValues(DofCalcInput);
     }
 
     [RelayCommand]
