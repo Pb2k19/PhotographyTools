@@ -4,16 +4,18 @@ using System.Collections.Frozen;
 namespace Photography_Tools.Const;
 public static class SensorConst
 {
+    public const double FullFrameDiagonal = 43.2666153055679;
+
     public static FrozenDictionary<string, Sensor> Sensors { get; }
 
     static SensorConst()
     {
         Sensors = new Dictionary<string, Sensor>()
         {
-            { "Full Frame", new Sensor { SensorHeightMM = 36, SensorWidthMM = 24 } },
-            { "Nikon CX", new Sensor { SensorHeightMM = 8.8, SensorWidthMM = 13.2 } },
-            { "Nikon DX", new Sensor { SensorHeightMM = 15.7, SensorWidthMM = 23.5 } },
-            { "Nikon FX", new Sensor { SensorHeightMM = 35.9, SensorWidthMM = 23.9 } },
+            { "Full Frame", new Sensor(36, 24, 24.3) },
+            { "Nikon CX", new Sensor(8.8, 13.2, 24.3) },
+            { "Nikon DX", new Sensor(23.5, 15.7, 24.3) },
+            { "Nikon FX", new Sensor(35.9, 23.9, 24.3) },
         }.ToFrozenDictionary();
     }
 }

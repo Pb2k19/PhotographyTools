@@ -11,9 +11,8 @@ public class PhotographyCalculationsService : IPhotographyCalculationsService
     {
         double focalRatio = CalculateFullApertureValue(dofInfo.LensInfo.Aperture);
 
-        double diagonalPrintMM = Math.Sqrt(Math.Pow(dofInfo.PrintWidthMM, 2) + Math.Pow(dofInfo.PrintHeighthMM, 2));
-        double diagonalSensorMM = Math.Sqrt(Math.Pow(dofInfo.CameraInfo.SensorWidthMM, 2) + Math.Pow(dofInfo.CameraInfo.SensorHeightMM, 2));
-        double enlargmentFactor = diagonalPrintMM / diagonalSensorMM;
+        double diagonalPrintMM = Math.Sqrt(dofInfo.PrintWidthMM * dofInfo.PrintWidthMM + dofInfo.PrintHeighthMM * dofInfo.PrintHeighthMM);
+        double enlargmentFactor = diagonalPrintMM / dofInfo.CameraInfo.Diagonal;
 
         DofCalcResult result = new()
         {
@@ -28,6 +27,17 @@ public class PhotographyCalculationsService : IPhotographyCalculationsService
         result.DofInBackOfSubject = result.DofFarLimitMM - dofInfo.FocusingDistanceMM;
 
         return result;
+    }
+
+    public double CalculateTimeForAstroWithNPFRule(Sensor sensor, Lens lens, int accuracy, double declination = 0)
+    {
+        return accuracy * (16.856 * lens.Aperture + 0.1 * lens.FocalLengthMM + 13.713 * sensor.PixelPitch) / (lens.FocalLengthMM * Math.Cos(declination));
+    }
+
+    public (double rule200, double rule300, double rule500) CalculateTimeForAstro(double sensorCrop, double focalLength)
+    {
+        double x = sensorCrop * focalLength;
+        return (200 / x, 300 / x, 500 / x);
     }
 
     public static double CalculateFullApertureValue(double apertureValue)
