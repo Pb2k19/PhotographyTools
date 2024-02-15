@@ -34,8 +34,8 @@ public partial class DofCalcViewModel : ObservableObject
     {
         this.photographyCalcService = photographyCalcService;
 
-        SelectedSensorName = SensorNames.Length > 0 ? SensorNames[0] : string.Empty;
-        DofCalcInput.LensInfo.Aperture = Apertures.Length > 8 ? Apertures[8] : 2.0;
+        SelectedSensorName = SensorNames[0];
+        DofCalcInput.LensInfo.Aperture = Apertures[8];
         DofCalcInput.LensInfo.FocalLengthMM = 50;
         DofCalcInput.FocusingDistanceMM = 50;
 

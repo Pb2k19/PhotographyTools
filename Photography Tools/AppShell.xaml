@@ -20,9 +20,15 @@
     />
 
     <ShellContent
+        Title="Astrophotography"
+        ContentTemplate="{DataTemplate pages:AstroTimeCalcPage}"
+        Route="AstroTimeCalcPage"
+    />
+
+    <ShellContent
         Title="ND Filter Calculator"
         ContentTemplate="{DataTemplate pages:NdFilterCalcPage}"
-        Route="NdFilterCalcPage" 
+        Route="NdFilterCalcPage"
     />
     
 </Shell>

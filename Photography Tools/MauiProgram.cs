@@ -24,6 +24,7 @@ public static class MauiProgram
 #endif
 
         // Pages
+        builder.Services.AddSingleton<AstroTimeCalcPage>();
         builder.Services.AddSingleton<DofCalcPage>();
         builder.Services.AddSingleton<NdFilterCalcPage>();
 
@@ -31,6 +32,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IPhotographyCalculationsService, PhotographyCalculationsService>();
 
         // ViewModel
+        builder.Services.AddSingleton<AstroTimeCalcViewModel>();
         builder.Services.AddSingleton<DofCalcViewModel>();
 
         return builder.Build();
