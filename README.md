@@ -1,5 +1,5 @@
 # Photography Tools
-.NET Maui multi-platform application containing the most important tools useful for every photographer, especially useful for landscape photography.
+.NET Maui multi-platform application containing the most important tools useful for every photographer, especially for landscape photography.
 
 ## Features
 * Depth of field calculator
