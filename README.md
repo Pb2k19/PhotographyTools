@@ -15,3 +15,5 @@
 ## Libraries
 * [CommunityToolkit](https://github.com/CommunityToolkit/dotnet?tab=License-1-ov-file)
 * [CommunityToolkit.Maui](https://github.com/CommunityToolkit/Maui?tab=MIT-1-ov-file)
+* [VSTest](https://github.com/microsoft/vstest?tab=readme-ov-file)
+* [xUnit](https://github.com/xunit/xunit?tab=License-1-ov-file)
