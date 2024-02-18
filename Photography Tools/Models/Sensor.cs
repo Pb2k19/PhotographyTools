@@ -34,6 +34,12 @@ public class Sensor
 
     public static double CalculateDiagonal(double sensorHeigth, double sensorWidth)
     {
+        if (sensorHeigth < 0)
+            throw new ArgumentException($"Argument cannot be less than zero", nameof(sensorHeigth));
+
+        if (sensorWidth < 0)
+            throw new ArgumentException($"Argument cannot be less than zero", nameof(sensorWidth));
+
         return Math.Sqrt(sensorWidth * sensorWidth + sensorHeigth * sensorHeigth);
     }
 
@@ -41,11 +47,17 @@ public class Sensor
     /// Calculates sensor resolution
     /// </summary>
     /// <param name="ratio">Sensor width / Sensor height</param>
-    /// <param name="megapixles">Effective megapixels</param>
+    /// <param name="megapixels">Effective megapixels</param>
     /// <returns>Sensor resolution</returns>
-    public static (int horizontal, int vertical) CalculateSensorResolution(double ratio, double megapixles)
+    public static (int horizontal, int vertical) CalculateSensorResolution(double ratio, double megapixels)
     {
-        double vertical = Math.Round(Math.Sqrt(megapixles * 1000000 / ratio));
+        if (ratio < 0)
+            throw new ArgumentException($"Argument cannot be less than zero", nameof(ratio));
+
+        if (megapixels < 0)
+            throw new ArgumentException($"Argument cannot be less than zero", nameof(megapixels));
+
+        double vertical = Math.Round(Math.Sqrt(megapixels * 1000000 / ratio));
         return ((int)Math.Round(vertical * ratio, 0), (int)Math.Round(vertical, 0)); 
     }
 }
