@@ -24,7 +24,7 @@ public partial class DofCalcViewModel : ObservableObject
     private DofCalcResult dofCalcResult = new();
 
     [ObservableProperty]
-    private DofCalcInput dofCalcInput = new() { CameraInfo = new(36, 24, 24.3), LensInfo = new() };
+    private DofCalcInput dofCalcInput = new() { CameraInfo = new(24, 36, 24), LensInfo = new() };
 
     public ImmutableArray<double> Apertures { get; } = ApertureConst.AllStops;
 

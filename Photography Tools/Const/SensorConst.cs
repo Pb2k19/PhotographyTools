@@ -12,10 +12,10 @@ public static class SensorConst
     {
         Sensors = new Dictionary<string, Sensor>()
         {
-            { "Full Frame", new Sensor(36, 24, 24.3) },
-            { "Nikon CX", new Sensor(8.8, 13.2, 24.3) },
-            { "Nikon DX", new Sensor(23.5, 15.7, 24.3) },
-            { "Nikon FX", new Sensor(35.9, 23.9, 24.3) },
+            { "Full Frame", new Sensor(24, 36, 24) },
+            { "Nikon CX", new Sensor(8.8, 13.2, 20) },
+            { "Nikon DX", new Sensor(15.7, 23.5, 24) },
+            { "Nikon FX", new Sensor(23.9, 35.9, 24) },
         }.ToFrozenDictionary();
     }
 }

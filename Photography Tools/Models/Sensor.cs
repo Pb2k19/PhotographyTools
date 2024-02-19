@@ -4,44 +4,87 @@ namespace Photography_Tools.Models;
 
 public class Sensor
 {
-    public double SensorWidthMM { get; }
-    public double SensorHeightMM { get; }
-    public double Diagonal { get; }
-    public double CropFactor { get; }
-    public double Megapixels { get; }
-    public double Ratio { get; }
-    public double PixelPitch { get; }
-    public int ResolutionHorizontal { get; }
-    public int ResolutionVertical { get; }
+    public double SensorWidthMM { get; private set; }
+    public double SensorHeigthMM { get; private set; }
+    public double Megapixels { get; private set; }
+    public double Ratio { get; private set; }
+    public int ResolutionHorizontal { get; private set; }
+    public double Diagonal { get; private set; }
+    public int ResolutionVertical { get; private set; }
+    public double CropFactor { get; private set; }
+    public double PixelPitch { get; private set; }
 
-
-    public Sensor(double sensorWidthMM, double sensorHeightMM, double megapixels)
+    public Sensor(double sensorHeigthMM, double sensorWidthMM, double megapixels)
     {
         SensorWidthMM = sensorWidthMM;
-        SensorHeightMM = sensorHeightMM;
+        SensorHeigthMM = sensorHeigthMM;
         Megapixels = megapixels;
 
-        Ratio = sensorWidthMM / sensorHeightMM;
-        Diagonal = CalculateDiagonal(sensorHeightMM, sensorWidthMM);
-        CropFactor = SensorConst.FullFrameDiagonal / Diagonal;
+        UpdateAll();
+    }
 
-        (int horizontal, int vertical) = CalculateSensorResolution(Ratio, megapixels);
+    public void SetSensorWidthMM(double value)
+    {
+        if (SensorWidthMM != value)
+        {
+            SensorWidthMM = value;
+            UpdateAll();
+        }
+    }
+
+    public void SetSensorHeigthMM(double value)
+    {
+        if (SensorHeigthMM != value)
+        {
+            SensorHeigthMM = value;
+            UpdateAll();
+        }
+    }
+
+    public void SetMegapixels(double value)
+    {
+        if (Megapixels != value)
+        {
+            Megapixels = value;
+            UpdateResolution();
+            UpdatePixelPitch();
+        }
+    }
+
+    private void UpdateAll()
+    {
+        UpdateRatio();
+        UpdateDiagonal();
+        UpdateCropFactor();
+        UpdateResolution();
+        UpdatePixelPitch();
+    }
+
+    private void UpdateRatio() => Ratio = SensorCalculations.CalculateRatio(SensorWidthMM, SensorHeigthMM);
+
+    private void UpdateDiagonal() => Diagonal = SensorCalculations.CalculateDiagonal(SensorWidthMM, SensorHeigthMM);
+
+    private void UpdateCropFactor() => CropFactor = SensorCalculations.CalculateCropFactor(Diagonal);
+
+    private void UpdateResolution()
+    {
+        (int horizontal, int vertical) = SensorCalculations.CalculateSensorResolution(Ratio, Megapixels);
         ResolutionHorizontal = horizontal;
         ResolutionVertical = vertical;
-
-        PixelPitch = sensorWidthMM / ResolutionHorizontal * 1000;
     }
 
-    public static double CalculateDiagonal(double sensorHeigth, double sensorWidth)
-    {
-        if (sensorHeigth < 0)
-            throw new ArgumentException($"Argument cannot be less than zero", nameof(sensorHeigth));
+    private void UpdatePixelPitch() => PixelPitch = SensorCalculations.CalculatePixelPitch(SensorWidthMM, ResolutionHorizontal);
+}
 
-        if (sensorWidth < 0)
-            throw new ArgumentException($"Argument cannot be less than zero", nameof(sensorWidth));
+public static class SensorCalculations
+{
+    public static double CalculateCropFactor(double diagonal) => SensorConst.FullFrameDiagonal / diagonal;
 
-        return Math.Sqrt(sensorWidth * sensorWidth + sensorHeigth * sensorHeigth);
-    }
+    public static double CalculatePixelPitch(double sensorWidthMM, double resolutionHorizontal) => sensorWidthMM / resolutionHorizontal * 1000;
+
+    public static double CalculateRatio(double sensorWidthMM, double sensorHeightMM) => sensorWidthMM / sensorHeightMM;
+
+    public static double CalculateDiagonal(double sensorWidth, double sensorHeigth) => Math.Sqrt(sensorWidth * sensorWidth + sensorHeigth * sensorHeigth);
 
     /// <summary>
     /// Calculates sensor resolution
@@ -51,13 +94,7 @@ public class Sensor
     /// <returns>Sensor resolution</returns>
     public static (int horizontal, int vertical) CalculateSensorResolution(double ratio, double megapixels)
     {
-        if (ratio < 0)
-            throw new ArgumentException($"Argument cannot be less than zero", nameof(ratio));
-
-        if (megapixels < 0)
-            throw new ArgumentException($"Argument cannot be less than zero", nameof(megapixels));
-
         double vertical = Math.Round(Math.Sqrt(megapixels * 1000000 / ratio));
-        return ((int)Math.Round(vertical * ratio, 0), (int)Math.Round(vertical, 0)); 
+        return ((int)Math.Round(vertical * ratio, 0), (int)Math.Round(vertical, 0));
     }
 }

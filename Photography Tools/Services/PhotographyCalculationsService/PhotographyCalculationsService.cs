@@ -7,6 +7,7 @@ public class PhotographyCalculationsService : IPhotographyCalculationsService
 {
     private static double SqrtOf2 { get; } = Math.Sqrt(2);
 
+    // Source: Depth of Field in Depth, Jeff Conrad, Large Format Page, https://www.largeformatphotography.info/articles/DoFinDepth.pdf access date: 19.02.2024
     public DofCalcResult CalculateDofValues(DofCalcInput dofInfo)
     {
         double focalRatio = CalculateFullApertureValue(dofInfo.LensInfo.Aperture);
@@ -18,7 +19,7 @@ public class PhotographyCalculationsService : IPhotographyCalculationsService
         {
             CircleOfConfusion = dofInfo.ActualViewingDistanceMM / (double)(dofInfo.StandardViewingDistanceMM * dofInfo.VisualAcuityLpPerMM) / enlargmentFactor
         };
-        result.HyperfocalDistanceMM = dofInfo.LensInfo.FocalLengthMM + Math.Pow(dofInfo.LensInfo.FocalLengthMM, 2) / (focalRatio * result.CircleOfConfusion);
+        result.HyperfocalDistanceMM = dofInfo.LensInfo.FocalLengthMM + dofInfo.LensInfo.FocalLengthMM * dofInfo.LensInfo.FocalLengthMM / (focalRatio * result.CircleOfConfusion);
         result.DofFarLimitMM = result.HyperfocalDistanceMM * dofInfo.FocusingDistanceMM / (result.HyperfocalDistanceMM - (dofInfo.FocusingDistanceMM - dofInfo.LensInfo.FocalLengthMM));
         result.DofNearLimitMM = result.HyperfocalDistanceMM * dofInfo.FocusingDistanceMM / (result.HyperfocalDistanceMM + (dofInfo.FocusingDistanceMM - dofInfo.LensInfo.FocalLengthMM));
 
@@ -29,9 +30,10 @@ public class PhotographyCalculationsService : IPhotographyCalculationsService
         return result;
     }
 
+    // Source: Frederic Michaud from Le Havre Astronomical Society, https://sahavre.fr/wp/regle-npf-rule/ access date: 19.02.2024
     public double CalculateTimeForAstroWithNPFRule(Sensor sensor, Lens lens, int accuracy, double declinationDegrees = 0)
     {
-        return accuracy * (16.856 * CalculateFullApertureValue(lens.Aperture) + 0.1 * lens.FocalLengthMM + 13.713 * sensor.PixelPitch) / (lens.FocalLengthMM * Math.Cos(DegreesToRadians(declinationDegrees)));
+        return accuracy * (16.856 * CalculateFullApertureValue(lens.Aperture) + 0.0997 * lens.FocalLengthMM + 13.713 * sensor.PixelPitch) / (lens.FocalLengthMM * Math.Cos(DegreesToRadians(declinationDegrees)));
     }
 
     public (double rule200, double rule300, double rule500) CalculateTimeForAstro(double sensorCrop, double focalLength)
