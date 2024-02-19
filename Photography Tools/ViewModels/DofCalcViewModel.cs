@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Photography_Tools.Const;
+using Photography_Tools.DataAccess.SensorsDataAccess;
 using Photography_Tools.Models;
 using Photography_Tools.Services.PhotographyCalculationsService;
 using System.Collections.Immutable;
@@ -10,6 +11,7 @@ namespace Photography_Tools.ViewModels;
 public partial class DofCalcViewModel : ObservableObject
 {
     private readonly IPhotographyCalculationsService photographyCalcService;
+    private readonly ISensorsDataAccess sensorsDataAccess;
 
     [ObservableProperty]
     private int visualAcuityLpPerMM;
@@ -21,23 +23,26 @@ public partial class DofCalcViewModel : ObservableObject
     private string selectedSensorName, toggleText = string.Empty;
 
     [ObservableProperty]
-    private DofCalcResult dofCalcResult = new();
+    private DofCalcResult dofCalcResult;
 
     [ObservableProperty]
-    private DofCalcInput dofCalcInput = new() { CameraInfo = new(24, 36, 24), LensInfo = new() };
+    private DofCalcInput dofCalcInput;
 
-    public ImmutableArray<double> Apertures { get; } = ApertureConst.AllStops;
+    public ImmutableArray<double> Apertures { get; }
 
-    public ImmutableArray<string> SensorNames { get; } = SensorConst.Sensors.Keys;
+    public ImmutableArray<string> SensorNames { get; }
 
-    public DofCalcViewModel(IPhotographyCalculationsService photographyCalcService)
+    public DofCalcViewModel(IPhotographyCalculationsService photographyCalcService, ISensorsDataAccess sensorsDataAccess)
     {
         this.photographyCalcService = photographyCalcService;
+        this.sensorsDataAccess = sensorsDataAccess;
 
+        Apertures = ApertureConst.AllStops;
+        SensorNames = sensorsDataAccess.GetSensorNames();
         SelectedSensorName = SensorNames[0];
-        DofCalcInput.LensInfo.Aperture = Apertures[8];
-        DofCalcInput.LensInfo.FocalLengthMM = 50;
-        DofCalcInput.FocusingDistanceMM = 50;
+
+        DofCalcResult = new();
+        DofCalcInput = new() { CameraInfo = sensorsDataAccess.GetSensor(SelectedSensorName), LensInfo = new() { Aperture = Apertures[8], FocalLengthMM = 50 }, FocusingDistanceMM = 500 };
 
         SetToggleText();
 
@@ -47,8 +52,7 @@ public partial class DofCalcViewModel : ObservableObject
     [RelayCommand]
     private void CalculateValues()
     {
-        DofCalcInput.CameraInfo = SensorConst.Sensors[SelectedSensorName];
-
+        DofCalcInput.CameraInfo = sensorsDataAccess.GetSensor(SelectedSensorName);
         DofCalcResult = photographyCalcService.CalculateDofValues(DofCalcInput);
     }
 

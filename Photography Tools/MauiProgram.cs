@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+using Photography_Tools.DataAccess.NDFiltersData;
+using Photography_Tools.DataAccess.SensorsDataAccess;
 using Photography_Tools.Pages;
 using Photography_Tools.Services.PhotographyCalculationsService;
 using Photography_Tools.ViewModels;
@@ -22,6 +24,10 @@ public static class MauiProgram
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
+
+        //DataAccess
+        builder.Services.AddSingleton<INDFiltersData, StaticNDFiltersData>();
+        builder.Services.AddSingleton<ISensorsDataAccess, StaticSensorsDataAccess>();
 
         // Pages
         builder.Services.AddSingleton<AstroTimeCalcPage>();
