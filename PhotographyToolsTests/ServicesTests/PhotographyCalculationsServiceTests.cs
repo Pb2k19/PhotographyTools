@@ -111,4 +111,23 @@ public class PhotographyCalculationsServiceTests
         Assert.Equal(expected.DofNearLimitMM, actaul.DofNearLimitMM, 2);
         Assert.Equal(expected.HyperfocalDistanceMM, actaul.HyperfocalDistanceMM, 2);
     }
+
+    [Theory]
+    [InlineData(1, 120)]
+    [InlineData(0.5, 60)]
+    [InlineData(0.4, 48)]
+    [InlineData(0.2, 24)]
+    [InlineData(0.005, 0.6)]
+    [InlineData(0.000125, 0.015)]
+    public void CalculateTimeWithNDFilters_ShouldReturnTimeOfExpousureWithNDFilters(double input, double expected)
+    {
+        TimeSpan expectedTime = TimeSpan.FromSeconds(expected);
+        TimeSpan inputTime = TimeSpan.FromSeconds(input);
+        NDFilter[] filters = [new NDFilter { Factor = 2 }, new NDFilter { Factor = 6 }, new NDFilter { Factor = 10 }];
+        PhotographyCalculationsService service = new();
+
+        TimeSpan actual = service.CalculateTimeWithNDFilters(inputTime, filters);
+
+        Assert.Equal(expectedTime, actual);
+    }
 }

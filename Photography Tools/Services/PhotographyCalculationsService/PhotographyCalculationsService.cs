@@ -42,6 +42,18 @@ public class PhotographyCalculationsService : IPhotographyCalculationsService
         return (200 / x, 300 / x, 500 / x);
     }
 
+    public TimeSpan CalculateTimeWithNDFilters(TimeSpan baseTime, IEnumerable<NDFilter> filters)
+    {
+        int multiplier = 1;
+
+        foreach (NDFilter filter in filters)
+        {
+            multiplier *= filter.Factor;
+        }
+
+        return baseTime * multiplier;
+    }
+
     public static double CalculateFullApertureValue(double apertureValue)
     {
         int apertureMultiplier = GetApertureMultiplier(apertureValue);
