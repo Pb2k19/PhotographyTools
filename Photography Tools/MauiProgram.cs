@@ -35,6 +35,7 @@ public static class MauiProgram
         // ViewModel
         builder.Services.AddSingleton<AstroTimeCalcViewModel>();
         builder.Services.AddSingleton<DofCalcViewModel>();
+        builder.Services.AddSingleton<NDFilterCalcViewModel>();
 
         return builder.Build();
     }

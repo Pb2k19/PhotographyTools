@@ -1,12 +1,87 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Photography_Tools.Pages.NdFilterCalcPage"
-             Title="NdFilterCalcPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:Photography_Tools.ViewModels"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:models="clr-namespace:Photography_Tools.Models"
+    x:Class="Photography_Tools.Pages.NdFilterCalcPage"
+    x:DataType="viewmodels:NDFilterCalcViewModel"
+    Title="NdFilter Time Calculator"
+    Background="Black">
+    
+    <ScrollView
+        Padding="10">
+        <VerticalStackLayout>
+
+            <Border
+                Margin="5"
+                Style="{StaticResource StandardBorder}">
+                <Entry
+                    Text="{Binding InputTimeText}">
+                    <Entry.Behaviors>
+                        <toolkit:EventToCommandBehavior EventName="TextChanged" Command="{Binding CalculateTimeCommand}"/>
+                    </Entry.Behaviors>
+                </Entry>
+            </Border>
+
+            <Border
+                Margin="5"
+                Style="{StaticResource StandardBorder}">
+                <Entry
+                    Text="{Binding ResultTimeText}"/>
+            </Border>
+
+
+            <CollectionView
+                ItemsSource="{Binding NdFilters}"
+                ItemSizingStrategy="MeasureFirstItem">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:NDFilter">
+                        <Border
+                            Margin="5"
+                            Padding="10"
+                            Style="{StaticResource StandardBorder}">
+                            <Grid
+                                ColumnDefinitions="*,*,*"
+                                RowDefinitions="auto, auto"
+                                ColumnSpacing="10">
+                                <Label
+                                    Style="{StaticResource LabelMedium}"
+                                    Text="FStop"
+                                />
+                                <Label
+                                    Grid.Column="1"
+                                    Style="{StaticResource LabelMedium}"
+                                    Text="Factor"
+                                />
+                                <Label
+                                    Grid.Column="2"
+                                    Style="{StaticResource LabelMedium}"
+                                    Text="Optical Density"
+                                />
+                                <Label
+                                    Grid.Row="1"
+                                    Style="{StaticResource LabelMedium}"
+                                    Text="{Binding Factor}"
+                                />
+                                <Label
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Style="{StaticResource LabelMedium}"
+                                    Text="{Binding FStopReduction}"
+                                />
+                                <Label
+                                    Grid.Row="1"
+                                    Grid.Column="2"
+                                    Style="{StaticResource LabelMedium}"
+                                    Text="{Binding OpticalDensity}"
+                                />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
