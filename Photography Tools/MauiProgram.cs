@@ -1,10 +1,5 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
-using Photography_Tools.DataAccess.NDFiltersData;
-using Photography_Tools.DataAccess.SensorsDataAccess;
-using Photography_Tools.Pages;
-using Photography_Tools.Services.PhotographyCalculationsService;
-using Photography_Tools.ViewModels;
 
 namespace Photography_Tools;
 public static class MauiProgram

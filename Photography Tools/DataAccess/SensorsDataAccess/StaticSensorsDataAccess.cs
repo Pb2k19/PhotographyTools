@@ -1,6 +1,5 @@
 ﻿using System.Collections.Frozen;
 using System.Collections.Immutable;
-using Photography_Tools.Models;
 
 namespace Photography_Tools.DataAccess.SensorsDataAccess;
 

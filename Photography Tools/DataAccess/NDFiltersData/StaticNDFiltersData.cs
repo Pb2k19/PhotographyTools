@@ -1,5 +1,4 @@
-﻿using Photography_Tools.Models;
-using System.Collections.Frozen;
+﻿using System.Collections.Frozen;
 using System.Collections.Immutable;
 
 namespace Photography_Tools.DataAccess.NDFiltersData;

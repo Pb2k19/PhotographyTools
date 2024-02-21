@@ -1,6 +1,4 @@
-﻿using Photography_Tools.Const;
-
-namespace Photography_Tools.Models;
+﻿namespace Photography_Tools.Models;
 
 public class Sensor
 {

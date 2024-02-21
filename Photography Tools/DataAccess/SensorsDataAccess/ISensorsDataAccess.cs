@@ -1,5 +1,4 @@
-﻿using Photography_Tools.Models;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 
 namespace Photography_Tools.DataAccess.SensorsDataAccess;
 

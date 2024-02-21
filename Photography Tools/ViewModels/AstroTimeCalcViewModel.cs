@@ -1,10 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using Photography_Tools.Const;
-using Photography_Tools.DataAccess.SensorsDataAccess;
-using Photography_Tools.Models;
-using Photography_Tools.Services.PhotographyCalculationsService;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 
 namespace Photography_Tools.ViewModels;
 

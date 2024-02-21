@@ -1,6 +1,4 @@
-﻿using Photography_Tools.Const;
-
-namespace Photography_Tools.Helpers;
+﻿namespace Photography_Tools.Helpers;
 
 public static class UnitHelper
 {

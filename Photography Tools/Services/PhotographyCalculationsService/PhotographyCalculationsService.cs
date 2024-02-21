@@ -1,7 +1,4 @@
-﻿using Photography_Tools.Const;
-using Photography_Tools.Models;
-
-namespace Photography_Tools.Services.PhotographyCalculationsService;
+﻿namespace Photography_Tools.Services.PhotographyCalculationsService;
 
 public class PhotographyCalculationsService : IPhotographyCalculationsService
 {
