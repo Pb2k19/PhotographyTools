@@ -41,11 +41,17 @@ public class PhotographyCalculationsService : IPhotographyCalculationsService
 
     public TimeSpan CalculateTimeWithNDFilters(TimeSpan baseTime, IEnumerable<NDFilter> filters)
     {
-        int multiplier = 1;
+        if (baseTime == TimeSpan.Zero)
+            return baseTime;
 
-        foreach (NDFilter filter in filters)
+        ulong multiplier = 1;
+        checked
         {
-            multiplier *= filter.Factor;
+            foreach (NDFilter filter in filters)
+            {
+                if (filter.Factor > 0)
+                    multiplier *= filter.Factor;
+            }
         }
 
         return baseTime * multiplier;

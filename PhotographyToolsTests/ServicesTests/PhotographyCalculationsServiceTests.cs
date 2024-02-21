@@ -113,6 +113,7 @@ public class PhotographyCalculationsServiceTests
     }
 
     [Theory]
+    [InlineData(0, 0)]
     [InlineData(1, 120)]
     [InlineData(0.5, 60)]
     [InlineData(0.4, 48)]
@@ -123,11 +124,28 @@ public class PhotographyCalculationsServiceTests
     {
         TimeSpan expectedTime = TimeSpan.FromSeconds(expected);
         TimeSpan inputTime = TimeSpan.FromSeconds(input);
-        NDFilter[] filters = [new NDFilter { Factor = 2 }, new NDFilter { Factor = 6 }, new NDFilter { Factor = 10 }];
+        NDFilter[] filters = [new NDFilter { Factor = 2 }, new NDFilter { Factor = 6 }, new NDFilter { Factor = 10 }, new NDFilter { Factor = 0 }];
         PhotographyCalculationsService service = new();
 
         TimeSpan actual = service.CalculateTimeWithNDFilters(inputTime, filters);
 
         Assert.Equal(expectedTime, actual);
+    }
+
+    [Fact]
+    public void CalculateTimeWithNDFilters_ShouldThrowOverflowException_TooBigTimespan()
+    {
+        PhotographyCalculationsService service = new();
+
+        Assert.Throws<OverflowException>(() => service.CalculateTimeWithNDFilters(TimeSpan.FromDays(20), [new NDFilter { Factor = 2000000000 }, new NDFilter { Factor = 2000000000 }]));
+    }
+
+    [Fact]
+    public void CalculateTimeWithNDFilters_ShouldThrowOverflowException_TooBigMultiplier()
+    {
+        PhotographyCalculationsService service = new();
+
+        Assert.Throws<OverflowException>(() => service.CalculateTimeWithNDFilters(TimeSpan.FromSeconds(1), 
+            [new NDFilter { Factor = 4000000000 }, new NDFilter { Factor = 4000000000 }, new NDFilter { Factor = 4000000000 }, new NDFilter { Factor = 4000000000 }]));
     }
 }
