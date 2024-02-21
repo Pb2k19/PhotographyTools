@@ -3,11 +3,11 @@ using System.Collections.Immutable;
 
 namespace Photography_Tools.DataAccess.NDFiltersData;
 
-public class StaticNDFiltersData : INDFiltersData
+public class StaticNDFiltersDataAccess : INDFiltersDataAccess
 {
     private static readonly FrozenDictionary<string, NDFilter> filters;
 
-    static StaticNDFiltersData() 
+    static StaticNDFiltersDataAccess() 
     {
         filters = new Dictionary<string, NDFilter>
         {

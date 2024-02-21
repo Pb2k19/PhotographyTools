@@ -2,7 +2,7 @@
 
 namespace Photography_Tools.DataAccess.NDFiltersData;
 
-public interface INDFiltersData
+public interface INDFiltersDataAccess
 {
     ImmutableArray<string> GetFilterNames();
     ImmutableArray<NDFilter> GetFilters();

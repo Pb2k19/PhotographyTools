@@ -21,7 +21,7 @@ public static class MauiProgram
 #endif
 
         //DataAccess
-        builder.Services.AddSingleton<INDFiltersData, StaticNDFiltersData>();
+        builder.Services.AddSingleton<INDFiltersDataAccess, StaticNDFiltersDataAccess>();
         builder.Services.AddSingleton<ISensorsDataAccess, StaticSensorsDataAccess>();
 
         // Pages
