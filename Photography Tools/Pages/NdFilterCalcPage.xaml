@@ -13,22 +13,29 @@
     <ScrollView
         Padding="10">
         <VerticalStackLayout>
-
+            
             <Border
                 Margin="5"
                 Style="{StaticResource StandardBorder}">
-                <Entry
-                    Text="{Binding InputTimeText}">
-                    <Entry.Behaviors>
-                        <toolkit:EventToCommandBehavior EventName="TextChanged" Command="{Binding CalculateTimeCommand}"/>
-                    </Entry.Behaviors>
-                </Entry>
+                <Picker
+                    ItemsSource="{Binding AllShutterSpeedsNames}"
+                    SelectedItem="{Binding InputTimeText}"
+                    HorizontalOptions="FillAndExpand"
+                    HorizontalTextAlignment="Center"
+                    FontSize="Medium">
+                    <Picker.Behaviors>
+                        <toolkit:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding CalculateTimeCommand}"/>
+                    </Picker.Behaviors>
+                </Picker>
             </Border>
 
             <Border
                 Margin="5"
                 Style="{StaticResource StandardBorder}">
                 <Entry
+                    HorizontalTextAlignment="Center"
+                    FontSize="Medium"
+                    IsReadOnly="True"
                     Text="{Binding ResultTimeText}"/>
             </Border>
 

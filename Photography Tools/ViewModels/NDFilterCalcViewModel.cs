@@ -18,17 +18,20 @@ public partial class NDFilterCalcViewModel : ObservableObject
 
     public ImmutableArray<string> AvaliableNDFiltersNames { get; }
 
+    public ImmutableArray<string> AllShutterSpeedsNames { get; }
+
     public NDFilterCalcViewModel(IPhotographyCalculationsService photographyCalculationsService, INDFiltersDataAccess ndFiltersDataAccess)
     {
         this.photographyCalculationsService = photographyCalculationsService;
         this.ndFiltersDataAccess = ndFiltersDataAccess;
+        AllShutterSpeedsNames = ShutterSpeedConst.AllShutterSpeedsNamesSorted;
         AvaliableNDFiltersNames = ndFiltersDataAccess.GetFilterNames();
 
-        ndFilters = new(ndFiltersDataAccess.GetFilters().Take(5));
+        ndFilters = new(ndFiltersDataAccess.GetFilters().Take(7));
 
         inputTime = TimeSpan.FromSeconds(1);
-        InputTimeText = "1";
-        ResultTimeText = "1";
+        InputTimeText = ShutterSpeedConst.AllShutterSpeedsNamesSorted[9];
+        ResultTimeText = string.Empty;
 
         CalculateTime();
     }
@@ -36,7 +39,7 @@ public partial class NDFilterCalcViewModel : ObservableObject
     [RelayCommand]
     private void CalculateTime() 
     {
-        if (ParseHelper.TryParseDoubleDifferentCulture(InputTimeText, out double time) && time <= TimeSpan.MaxValue.TotalSeconds)
+        if (ShutterSpeedConst.AllShutterSpeeds.TryGetValue(InputTimeText, out double time) && time <= TimeSpan.MaxValue.TotalSeconds)
         {
             inputTime = TimeSpan.FromSeconds(time);
             try
