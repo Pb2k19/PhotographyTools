@@ -2,5 +2,5 @@
 
 public static class SensorConst
 {
-    public const double FullFrameDiagonal = 43.2666153055679;
+    public const double FullFrameDiagonal = 43.266615305567875;
 }
