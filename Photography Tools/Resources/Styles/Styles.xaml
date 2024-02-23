@@ -427,6 +427,13 @@
     
     <!--Custom-->
 
+    <Style x:Key="TransparentButton" TargetType="Button">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource PrimaryDarkText}, Dark={StaticResource White}}" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="BorderWidth" Value="0"/>
+    </Style>
+    
     <Style x:Key="BaseLabel" TargetType="Label">
         <Setter Property="TextColor" Value="{AppThemeBinding Dark={StaticResource White},
                                                              Light={StaticResource Black}}" />

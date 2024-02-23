@@ -51,37 +51,61 @@
                             Style="{StaticResource StandardBorder}">
                             <Grid
                                 ColumnDefinitions="*,*,*"
-                                RowDefinitions="auto, auto"
+                                RowDefinitions="auto, auto, auto"
                                 ColumnSpacing="10">
                                 <Label
+                                    Grid.Column="1"
+                                    Style="{StaticResource LabelMediumBold}"
+                                    HorizontalTextAlignment="Center"
+                                    Text="{Binding Name}"
+                                />
+                                <Button
+                                    Grid.Column="2"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="End"
+                                    Style="{StaticResource TransparentButton}"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:NDFilterCalcViewModel}}, Path=RemoveFilterCommand}"
+                                    CommandParameter="{Binding Name}"
+                                    Text="x"
+                                />
+                                <Label
+                                    Grid.Row="1"
                                     Style="{StaticResource LabelMedium}"
+                                    HorizontalTextAlignment="Center"
                                     Text="FStop"
                                 />
                                 <Label
+                                    Grid.Row="1"
                                     Grid.Column="1"
                                     Style="{StaticResource LabelMedium}"
+                                    HorizontalTextAlignment="Center"
                                     Text="Factor"
                                 />
                                 <Label
+                                    Grid.Row="1"
                                     Grid.Column="2"
                                     Style="{StaticResource LabelMedium}"
+                                    HorizontalTextAlignment="Center"
                                     Text="Optical Density"
                                 />
                                 <Label
-                                    Grid.Row="1"
+                                    Grid.Row="2"
                                     Style="{StaticResource LabelMedium}"
+                                    HorizontalTextAlignment="Center"
                                     Text="{Binding Factor}"
                                 />
                                 <Label
-                                    Grid.Row="1"
+                                    Grid.Row="2"
                                     Grid.Column="1"
                                     Style="{StaticResource LabelMedium}"
+                                    HorizontalTextAlignment="Center"
                                     Text="{Binding FStopReduction}"
                                 />
                                 <Label
-                                    Grid.Row="1"
+                                    Grid.Row="2"
                                     Grid.Column="2"
                                     Style="{StaticResource LabelMedium}"
+                                    HorizontalTextAlignment="Center"
                                     Text="{Binding OpticalDensity}"
                                 />
                             </Grid>

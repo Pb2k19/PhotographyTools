@@ -60,25 +60,47 @@ public partial class NDFilterCalcViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void AddFilter(string filterName) => NdFilters.Add(ndFiltersDataAccess.GetFilter(filterName));
+    private void AddFilter(string filterName)
+    {
+        NdFilters.Add(ndFiltersDataAccess.GetFilter(filterName));
+        CalculateTime();
+    }
 
     [RelayCommand]
-    private void RemoveFilter(string filterName) => NdFilters.Remove(ndFiltersDataAccess.GetFilter(filterName));
+    private void RemoveFilter(string filterName)
+    {
+        NdFilters.Remove(ndFiltersDataAccess.GetFilter(filterName));
+        CalculateTime();
+    }
 
     [RelayCommand]
-    private void ClearAllFilters() => NdFilters.Clear();
+    private void ClearAllFilters()
+    {
+        NdFilters.Clear();
+        CalculateTime();
+    }
 
     private static string GetTimeText(TimeSpan time)
     {
+        if (time == TimeSpan.Zero)
+            return "0s";
+
+        if (time.TotalSeconds < 10)
+        {
+#if DEBUG
+            return $"{ShutterSpeedConst.AllShutterSpeeds.Aggregate((s1, s2) => Math.Abs(s1.Value - time.TotalSeconds) < Math.Abs(s2.Value - time.TotalSeconds) ? s1 : s2).Key} ({time.TotalSeconds}s)";
+#else
+            return ShutterSpeedConst.AllShutterSpeeds.Aggregate((s1, s2) => Math.Abs(s1.Value - time.TotalSeconds) < Math.Abs(s2.Value - time.TotalSeconds) ? s1 : s2).Key;
+#endif
+        }
+
         if (time.Days > 0)
             return $"{time.Days} days, {time.Hours}h, {time.Minutes}m, {time.Seconds}s, {time.Milliseconds}ms";
         else if (time.Hours > 0)
             return $"{time.Hours}h, {time.Minutes}m, {time.Seconds}s, {time.Milliseconds}ms";
         else if (time.Minutes > 0)
             return $"{time.Minutes}m, {time.Seconds}s, {time.Milliseconds}ms";
-        else if (time.Seconds > 0)
-            return $"{time.Seconds}s, {time.Milliseconds}ms";
         else
-            return $"{time.Milliseconds}ms";
+            return $"{time.Seconds}s, {time.Milliseconds}ms";
     }
 }
