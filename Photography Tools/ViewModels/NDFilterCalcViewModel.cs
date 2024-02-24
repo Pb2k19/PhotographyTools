@@ -11,7 +11,7 @@ public partial class NDFilterCalcViewModel : ObservableObject
     private TimeSpan inputTime, resultTime;
 
     [ObservableProperty]
-    private string inputTimeText, resultTimeText;
+    private string inputTimeText, resultTimeText, filterToAddName;
 
     [ObservableProperty]
     ObservableCollection<NDFilter> ndFilters;
@@ -24,12 +24,13 @@ public partial class NDFilterCalcViewModel : ObservableObject
     {
         this.photographyCalculationsService = photographyCalculationsService;
         this.ndFiltersDataAccess = ndFiltersDataAccess;
+
+        ndFilters = [];
+
         AllShutterSpeedsNames = ShutterSpeedConst.AllShutterSpeedsNamesSorted;
         AvaliableNDFiltersNames = ndFiltersDataAccess.GetFilterNames();
-
-        ndFilters = new(ndFiltersDataAccess.GetFilters().Take(7));
-
-        inputTime = TimeSpan.FromSeconds(1);
+        
+        FilterToAddName = AvaliableNDFiltersNames[0];
         InputTimeText = ShutterSpeedConst.AllShutterSpeedsNamesSorted[9];
         ResultTimeText = string.Empty;
 

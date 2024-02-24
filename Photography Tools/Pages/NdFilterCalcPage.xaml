@@ -39,6 +39,34 @@
                     Text="{Binding ResultTimeText}"/>
             </Border>
 
+            <Grid
+                Margin="5,19"
+                ColumnSpacing="10"
+                ColumnDefinitions="*,auto">
+
+                <Border
+                    Style="{StaticResource EntryBorder}">
+                    <Picker
+                        ItemsSource="{Binding AvaliableNDFiltersNames}"
+                        SelectedItem="{Binding FilterToAddName}"
+                        HorizontalOptions="FillAndExpand"
+                        HorizontalTextAlignment="Center"
+                        FontSize="Medium"
+                    />
+                </Border>
+
+                <Button
+                    Grid.Column="1"
+                    Text="Add"
+                    Command="{Binding AddFilterCommand}"
+                    CommandParameter="{Binding FilterToAddName}"
+                />
+            </Grid>
+
+            <Label
+                Text="Filters"
+                Style="{StaticResource LabelMediumBold}"
+            />
 
             <CollectionView
                 ItemsSource="{Binding NdFilters}"
