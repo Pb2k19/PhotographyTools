@@ -7,13 +7,18 @@
     xmlns:models="clr-namespace:Photography_Tools.Models"
     x:Class="Photography_Tools.Pages.NdFilterCalcPage"
     x:DataType="viewmodels:NDFilterCalcViewModel"
-    Title="NdFilter Time Calculator"
+    Title="ND Filter Time Calculator"
     Background="Black">
     
     <ScrollView
         Padding="10">
         <VerticalStackLayout>
-            
+
+            <Label
+                Text="Exposure Without Filters"
+                Style="{StaticResource LabelMediumBold}"
+            />
+
             <Border
                 Margin="5"
                 Style="{StaticResource StandardBorder}">
@@ -29,6 +34,11 @@
                 </Picker>
             </Border>
 
+            <Label
+                Text="Exposure With Filters"
+                Style="{StaticResource LabelMediumBold}"
+            />
+
             <Border
                 Margin="5"
                 Style="{StaticResource StandardBorder}">
@@ -38,6 +48,11 @@
                     IsReadOnly="True"
                     Text="{Binding ResultTimeText}"/>
             </Border>
+
+            <Label
+                Text="Add filter"
+                Style="{StaticResource LabelMediumBold}"
+            />
 
             <Grid
                 Margin="5,19"
@@ -69,8 +84,21 @@
             />
 
             <CollectionView
-                ItemsSource="{Binding NdFilters}"
+                x:Name="FiltersCollectionView"
+                SelectionMode="None"
+                ItemsSource="{Binding NdFilters, Mode=OneWay}"
                 ItemSizingStrategy="MeasureFirstItem">
+
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout
+                        x:Name="GridItemsLayout"
+                        Span="{OnPlatform WinUI=2, Default=1}" 
+                        HorizontalItemSpacing="10" 
+                        VerticalItemSpacing="{OnPlatform WinUI=5, Default=0}" 
+                        Orientation="Vertical"
+                    />
+                </CollectionView.ItemsLayout>
+
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:NDFilter">
                         <Border
@@ -89,18 +117,19 @@
                                 />
                                 <Button
                                     Grid.Column="2"
-                                    VerticalOptions="Center"
+                                    VerticalOptions="Start"
                                     HorizontalOptions="End"
                                     Style="{StaticResource TransparentButton}"
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:NDFilterCalcViewModel}}, Path=RemoveFilterCommand}"
                                     CommandParameter="{Binding Name}"
-                                    Text="x"
+                                    Margin="-10"
+                                    Text="&#x2715;"
                                 />
                                 <Label
                                     Grid.Row="1"
                                     Style="{StaticResource LabelMedium}"
                                     HorizontalTextAlignment="Center"
-                                    Text="FStop"
+                                    Text="F Stop Reduction"
                                 />
                                 <Label
                                     Grid.Row="1"
