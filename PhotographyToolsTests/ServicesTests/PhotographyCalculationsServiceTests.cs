@@ -124,7 +124,7 @@ public class PhotographyCalculationsServiceTests
     {
         TimeSpan expectedTime = TimeSpan.FromSeconds(expected);
         TimeSpan inputTime = TimeSpan.FromSeconds(input);
-        NDFilter[] filters = [new NDFilter { Factor = 2 }, new NDFilter { Factor = 6 }, new NDFilter { Factor = 10 }, new NDFilter { Factor = 0 }];
+        NDFilter[] filters = [new NDFilter { Factor = 2, Name = "ND2" }, new NDFilter { Factor = 6, Name = "ND6" }, new NDFilter { Factor = 10, Name = "ND10" }, new NDFilter { Factor = 0, Name = "ND0" }];
         PhotographyCalculationsService service = new();
 
         TimeSpan actual = service.CalculateTimeWithNDFilters(inputTime, filters);
@@ -137,7 +137,7 @@ public class PhotographyCalculationsServiceTests
     {
         PhotographyCalculationsService service = new();
 
-        Assert.Throws<OverflowException>(() => service.CalculateTimeWithNDFilters(TimeSpan.FromDays(20), [new NDFilter { Factor = 2000000000 }, new NDFilter { Factor = 2000000000 }]));
+        Assert.Throws<OverflowException>(() => service.CalculateTimeWithNDFilters(TimeSpan.FromDays(20), [new NDFilter { Factor = 2000000000, Name = "ND20K" }, new NDFilter { Factor = 2000000000, Name = "ND20K" }]));
     }
 
     [Fact]
@@ -146,6 +146,6 @@ public class PhotographyCalculationsServiceTests
         PhotographyCalculationsService service = new();
 
         Assert.Throws<OverflowException>(() => service.CalculateTimeWithNDFilters(TimeSpan.FromSeconds(1), 
-            [new NDFilter { Factor = 4000000000 }, new NDFilter { Factor = 4000000000 }, new NDFilter { Factor = 4000000000 }, new NDFilter { Factor = 4000000000 }]));
+            [new NDFilter { Factor = 4000000000, Name = "ND40K" }, new NDFilter { Factor = 4000000000, Name = "ND40K" }, new NDFilter { Factor = 4000000000, Name = "ND40K" }, new NDFilter { Factor = 4000000000, Name = "ND40K" }]));
     }
 }
