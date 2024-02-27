@@ -68,9 +68,9 @@ public partial class NDFilterCalcViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void RemoveFilter(string filterName)
+    private void RemoveFilter(NDFilter filter)
     {
-        NdFilters.Remove(ndFiltersDataAccess.GetFilter(filterName));
+        NdFilters.Remove(filter);
         CalculateTime();
     }
 

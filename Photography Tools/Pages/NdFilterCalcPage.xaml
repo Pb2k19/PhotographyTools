@@ -5,15 +5,186 @@
     xmlns:viewmodels="clr-namespace:Photography_Tools.ViewModels"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:models="clr-namespace:Photography_Tools.Models"
+    xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
+    xmlns:datatemplate="clr-namespace:Photography_Tools.Components.DataTemplateSelectors"
     x:Class="Photography_Tools.Pages.NdFilterCalcPage"
     x:DataType="viewmodels:NDFilterCalcViewModel"
     Title="ND Filter Time Calculator"
     Background="Black">
+
+    <ContentPage.Resources>
+        <DataTemplate x:Key="MobileTemplate" x:DataType="models:NDFilter">
+            <Border
+                Margin="5"
+                Padding="15,10"
+                Style="{StaticResource StandardBorder}">
+                <SwipeView
+                    android:SwipeView.SwipeTransitionMode="Drag">
+                    <SwipeView.RightItems>
+                        <SwipeItemView
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:NDFilterCalcViewModel}}, Path=RemoveFilterCommand}"
+                            CommandParameter="{Binding .}">
+                            <Border
+                                Style="{StaticResource SwipeItemBorder}"
+                                BackgroundColor="{DynamicResource Primary}">
+                                <Label 
+                                    Style="{StaticResource LabelSmallBold}" 
+                                    HorizontalTextAlignment="Center"
+                                    VerticalTextAlignment="Center"
+                                    Text="Remove"
+                                />
+                            </Border>
+                        </SwipeItemView>
+                    </SwipeView.RightItems>
+
+                    <VerticalStackLayout>
+                        <Label
+                            Style="{StaticResource LabelMediumBold}"
+                            HorizontalTextAlignment="Center"
+                            Text="{Binding Name}"
+                        />
+
+                        <Grid
+                            ColumnDefinitions="*,*,*"
+                            RowDefinitions="auto, auto"
+                            ColumnSpacing="5">
+                            <Label
+                                Style="{StaticResource LabelSmall}"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center"
+                                Text="F Stop Reduction"
+                            />
+                            <Label
+                                Grid.Column="1"
+                                Style="{StaticResource LabelSmall}"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center"
+                                Text="Factor"
+                            />
+                            <Label
+                                Grid.Column="2"
+                                Style="{StaticResource LabelSmall}"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center"
+                                Text="Optical Density"
+                            />
+                            <Label
+                                Grid.Row="1"
+                                Style="{StaticResource LabelSmall}"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center"
+                                Text="{Binding Factor}"
+                            />
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Style="{StaticResource LabelSmall}"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center"
+                                Text="{Binding FStopReduction}"
+                            />
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="2"
+                                Style="{StaticResource LabelSmall}"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center"
+                                Text="{Binding OpticalDensity}"
+                            />
+                        </Grid>
+                    </VerticalStackLayout>
+                </SwipeView>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="DesktopTemplate" x:DataType="models:NDFilter">
+            <Border
+                Margin="5"
+                Padding="10"
+                Style="{StaticResource StandardBorder}">
+                <VerticalStackLayout>
+                    <Grid
+                        Margin="0,0,0,10"
+                        ColumnDefinitions="*,20">
+                        <Label
+                            Margin="20,0,0,0"
+                            Style="{StaticResource LabelMediumBold}"
+                            HorizontalTextAlignment="Center"
+                            Text="{Binding Name}"
+                        />
+                        <Label
+                            Grid.Column="1"
+                            Style="{StaticResource TransparentButton}"
+                            Text="✕">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:NDFilterCalcViewModel}}, Path=RemoveFilterCommand}"
+                                    CommandParameter="{Binding .}"
+                                />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Grid>
+                    
+                    <Grid
+                        ColumnDefinitions="*,*,*"
+                        RowDefinitions="auto, auto"
+                        ColumnSpacing="5">
+                        <Label
+                            Style="{StaticResource LabelSmall}"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            Text="F Stop Reduction"
+                        />
+                        <Label
+                            Grid.Column="1"
+                            Style="{StaticResource LabelSmall}"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            Text="Factor"
+                        />
+                        <Label
+                            Grid.Column="2"
+                            Style="{StaticResource LabelSmall}"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            Text="Optical Density"
+                        />
+                        <Label
+                            Grid.Row="1"
+                            Style="{StaticResource LabelSmall}"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            Text="{Binding Factor}"
+                        />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelSmall}"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            Text="{Binding FStopReduction}"
+                        />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            Style="{StaticResource LabelSmall}"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            Text="{Binding OpticalDensity}"
+                        />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+        </DataTemplate>
+        <datatemplate:PlatformTemplateSelector 
+            x:Key="PlatformSelector" 
+            DesktopTemplate="{StaticResource DesktopTemplate}" 
+            MobileTemplate="{StaticResource MobileTemplate}" 
+        />
+    </ContentPage.Resources>
     
     <ScrollView
         Padding="10">
         <VerticalStackLayout>
-
             <Label
                 Text="Exposure Without Filters"
                 Style="{StaticResource LabelMediumBold}"
@@ -86,8 +257,19 @@
             <CollectionView
                 x:Name="FiltersCollectionView"
                 SelectionMode="None"
+                ItemTemplate="{StaticResource PlatformSelector}"
                 ItemsSource="{Binding NdFilters, Mode=OneWay}"
                 ItemSizingStrategy="MeasureFirstItem">
+
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout Padding="0,20,0,0">
+                        <Label 
+                            HorizontalOptions="Center" 
+                            Text="No filters selected" 
+                            Style="{StaticResource LabelMediumBold}"
+                        />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
 
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout
@@ -98,77 +280,6 @@
                         Orientation="Vertical"
                     />
                 </CollectionView.ItemsLayout>
-
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:NDFilter">
-                        <Border
-                            Margin="5"
-                            Padding="10"
-                            Style="{StaticResource StandardBorder}">
-                            <Grid
-                                ColumnDefinitions="*,*,*"
-                                RowDefinitions="auto, auto, auto"
-                                ColumnSpacing="10">
-                                <Label
-                                    Grid.Column="1"
-                                    Style="{StaticResource LabelMediumBold}"
-                                    HorizontalTextAlignment="Center"
-                                    Text="{Binding Name}"
-                                />
-                                <Button
-                                    Grid.Column="2"
-                                    VerticalOptions="Start"
-                                    HorizontalOptions="End"
-                                    Style="{StaticResource TransparentButton}"
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:NDFilterCalcViewModel}}, Path=RemoveFilterCommand}"
-                                    CommandParameter="{Binding Name}"
-                                    Margin="-10"
-                                    Text="&#x2715;"
-                                />
-                                <Label
-                                    Grid.Row="1"
-                                    Style="{StaticResource LabelMedium}"
-                                    HorizontalTextAlignment="Center"
-                                    Text="F Stop Reduction"
-                                />
-                                <Label
-                                    Grid.Row="1"
-                                    Grid.Column="1"
-                                    Style="{StaticResource LabelMedium}"
-                                    HorizontalTextAlignment="Center"
-                                    Text="Factor"
-                                />
-                                <Label
-                                    Grid.Row="1"
-                                    Grid.Column="2"
-                                    Style="{StaticResource LabelMedium}"
-                                    HorizontalTextAlignment="Center"
-                                    Text="Optical Density"
-                                />
-                                <Label
-                                    Grid.Row="2"
-                                    Style="{StaticResource LabelMedium}"
-                                    HorizontalTextAlignment="Center"
-                                    Text="{Binding Factor}"
-                                />
-                                <Label
-                                    Grid.Row="2"
-                                    Grid.Column="1"
-                                    Style="{StaticResource LabelMedium}"
-                                    HorizontalTextAlignment="Center"
-                                    Text="{Binding FStopReduction}"
-                                />
-                                <Label
-                                    Grid.Row="2"
-                                    Grid.Column="2"
-                                    Style="{StaticResource LabelMedium}"
-                                    HorizontalTextAlignment="Center"
-                                    Text="{Binding OpticalDensity}"
-                                />
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
             </CollectionView>
         </VerticalStackLayout>
     </ScrollView>

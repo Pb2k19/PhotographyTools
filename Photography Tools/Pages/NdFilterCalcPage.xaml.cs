@@ -9,7 +9,6 @@ public partial class NdFilterCalcPage : ContentPage
 	}
 
 #if ANDROID
-    private const int Offset = 15;
     private double lastWidth = 0;
     private bool isOneColumn = true;
 
@@ -35,7 +34,7 @@ public partial class NdFilterCalcPage : ContentPage
         }
     }
 #elif WINDOWS
-    private const int MinTwoLineWidth = 650;
+    private const int MinTwoLineWidth = 600;
     private bool isOneColumn = false;
     
     protected override void OnSizeAllocated(double width, double height)
