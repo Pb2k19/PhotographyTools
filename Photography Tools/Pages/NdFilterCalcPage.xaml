@@ -26,7 +26,7 @@
                             CommandParameter="{Binding .}">
                             <Border
                                 Style="{StaticResource SwipeItemBorder}"
-                                BackgroundColor="{DynamicResource Primary}">
+                                BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}">
                                 <Label 
                                     Style="{StaticResource LabelSmallBold}" 
                                     HorizontalTextAlignment="Center"
