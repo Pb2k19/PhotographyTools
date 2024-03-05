@@ -12,6 +12,14 @@
     Title="ND Filter Time Calculator"
     Background="Black">
 
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior
+            x:DataType="viewmodels:NDFilterCalcViewModel"
+            EventName="Disappearing"
+            Command="{Binding DisappearingCommand}"
+        />
+    </ContentPage.Behaviors>
+
     <ContentPage.Resources>
         <DataTemplate x:Key="MobileTemplate" x:DataType="models:NDFilter">
             <Border
@@ -195,7 +203,7 @@
                 Style="{StaticResource StandardBorder}">
                 <Picker
                     ItemsSource="{Binding AllShutterSpeedsNames}"
-                    SelectedItem="{Binding InputTimeText}"
+                    SelectedItem="{Binding UserInput.TimeText}"
                     HorizontalOptions="FillAndExpand"
                     HorizontalTextAlignment="Center"
                     FontSize="Medium">
@@ -258,7 +266,7 @@
                 x:Name="FiltersCollectionView"
                 SelectionMode="None"
                 ItemTemplate="{StaticResource PlatformSelector}"
-                ItemsSource="{Binding NdFilters, Mode=OneWay}"
+                ItemsSource="{Binding UserInput.NdFilters, Mode=OneWay}"
                 ItemSizingStrategy="MeasureFirstItem">
 
                 <CollectionView.EmptyView>

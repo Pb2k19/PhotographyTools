@@ -1,51 +1,56 @@
 ﻿using System.Collections.Immutable;
-using System.Collections.ObjectModel;
 
 namespace Photography_Tools.ViewModels;
 
 public partial class NDFilterCalcViewModel : ObservableObject
 {
     private readonly IPhotographyCalculationsService photographyCalculationsService;
+    private readonly IPreferencesService preferencesServcie;
     private readonly INDFiltersDataAccess ndFiltersDataAccess;
 
     private TimeSpan inputTime, resultTime;
 
     [ObservableProperty]
-    private string inputTimeText, resultTimeText, filterToAddName;
+    private string resultTimeText = string.Empty, filterToAddName;
 
     [ObservableProperty]
-    ObservableCollection<NDFilter> ndFilters;
+    private NDFilterCalcUserInput userInput;
 
     public ImmutableArray<string> AvaliableNDFiltersNames { get; }
 
     public ImmutableArray<string> AllShutterSpeedsNames { get; }
 
-    public NDFilterCalcViewModel(IPhotographyCalculationsService photographyCalculationsService, INDFiltersDataAccess ndFiltersDataAccess)
+    public NDFilterCalcViewModel(IPhotographyCalculationsService photographyCalculationsService, IPreferencesService preferencesServcie, INDFiltersDataAccess ndFiltersDataAccess)
     {
         this.photographyCalculationsService = photographyCalculationsService;
+        this.preferencesServcie = preferencesServcie;
         this.ndFiltersDataAccess = ndFiltersDataAccess;
-
-        ndFilters = [];
 
         AllShutterSpeedsNames = ShutterSpeedConst.AllShutterSpeedsNamesSorted;
         AvaliableNDFiltersNames = ndFiltersDataAccess.GetFilterNames();
-        
         FilterToAddName = AvaliableNDFiltersNames[0];
-        InputTimeText = ShutterSpeedConst.AllShutterSpeedsNamesSorted[9];
-        ResultTimeText = string.Empty;
+
+        NDFilterCalcUserInput? input = preferencesServcie.GetDeserailizedPreference<NDFilterCalcUserInput>(PreferencesKeys.NDFilterCalcUserInputPreferencesKey);
+        userInput = input is not null ? input : new() { TimeText = ShutterSpeedConst.AllShutterSpeedsNamesSorted[9], NdFilters = [] };
 
         CalculateTime();
     }
 
     [RelayCommand]
-    private void CalculateTime() 
+    private void OnDisappearing()
     {
-        if (ShutterSpeedConst.AllShutterSpeeds.TryGetValue(InputTimeText, out double time) && time <= TimeSpan.MaxValue.TotalSeconds)
+        preferencesServcie.SerializedAndSetPreference(PreferencesKeys.NDFilterCalcUserInputPreferencesKey, UserInput);
+    }
+
+    [RelayCommand]
+    private void CalculateTime()
+    {
+        if (ShutterSpeedConst.AllShutterSpeeds.TryGetValue(UserInput.TimeText, out double time) && time <= TimeSpan.MaxValue.TotalSeconds)
         {
             inputTime = TimeSpan.FromSeconds(time);
             try
             {
-                resultTime = photographyCalculationsService.CalculateTimeWithNDFilters(inputTime, NdFilters);
+                resultTime = photographyCalculationsService.CalculateTimeWithNDFilters(inputTime, UserInput.NdFilters);
                 ResultTimeText = GetTimeText(resultTime);
             }
             catch (OverflowException)
@@ -53,9 +58,9 @@ public partial class NDFilterCalcViewModel : ObservableObject
                 ResultTimeText = "Invalid input data";
             }
         }
-        else if(!string.IsNullOrEmpty(InputTimeText))
+        else if (!string.IsNullOrEmpty(UserInput.TimeText))
         {
-            InputTimeText = inputTime.TotalSeconds.ToString();
+            UserInput.TimeText = inputTime.TotalSeconds.ToString();
             ResultTimeText = GetTimeText(resultTime);
         }
     }
@@ -63,21 +68,21 @@ public partial class NDFilterCalcViewModel : ObservableObject
     [RelayCommand]
     private void AddFilter(string filterName)
     {
-        NdFilters.Add(ndFiltersDataAccess.GetFilter(filterName));
+        UserInput.NdFilters.Add(ndFiltersDataAccess.GetFilter(filterName));
         CalculateTime();
     }
 
     [RelayCommand]
     private void RemoveFilter(NDFilter filter)
     {
-        NdFilters.Remove(filter);
+        UserInput.NdFilters.Remove(filter);
         CalculateTime();
     }
 
     [RelayCommand]
     private void ClearAllFilters()
     {
-        NdFilters.Clear();
+        UserInput.NdFilters.Clear();
         CalculateTime();
     }
 
