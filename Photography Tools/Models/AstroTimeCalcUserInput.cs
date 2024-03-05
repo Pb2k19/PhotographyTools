@@ -1,6 +1,6 @@
 ﻿namespace Photography_Tools.Models;
 
-public class AstroTimeCalcInput
+public class AstroTimeCalcUserInput
 {
     public required Lens Lens { get; set; }
     public required string SelectedSensorName { get; set; }

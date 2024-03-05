@@ -9,7 +9,7 @@ public partial class AstroTimeCalcViewModel : ObservableObject
     private readonly ISensorsDataAccess sensorsDataAccess;
 
     [ObservableProperty]
-    private AstroTimeCalcInput userInput;
+    private AstroTimeCalcUserInput userInput;
 
     [ObservableProperty]
     private double rule200, rule300, rule500, npfRuleH, npfRuleM, npfRuleS;
@@ -25,7 +25,7 @@ public partial class AstroTimeCalcViewModel : ObservableObject
         this.sensorsDataAccess = sensorsDataAccess;
         SensorNames = sensorsDataAccess.GetSensorNames();
 
-        AstroTimeCalcInput? input = preferencesService?.GetDeserailizedPreference<AstroTimeCalcInput>(PreferencesKeys.AstroTimeCalcUserInputPreferencesKey);
+        AstroTimeCalcUserInput? input = preferencesService?.GetDeserailizedPreference<AstroTimeCalcUserInput>(PreferencesKeys.AstroTimeCalcUserInputPreferencesKey);
 
         userInput = input is not null ? input : new()
         {
