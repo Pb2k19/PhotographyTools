@@ -35,6 +35,13 @@ public class PreferencesService : IPreferencesService
         if (string.IsNullOrWhiteSpace(serialized))
             return defaultValue;
 
-        return JsonSerializer.Deserialize<T>(serialized);
+        try
+        {
+            return JsonSerializer.Deserialize<T>(serialized);
+        }
+        catch (JsonException)
+        {
+            return default;
+        }
     }
 }
