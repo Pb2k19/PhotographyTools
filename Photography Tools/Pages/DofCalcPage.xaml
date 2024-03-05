@@ -10,6 +10,14 @@
     Title="Depth of Field Calculator" 
     Background="Black">
 
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior
+            x:DataType="viewmodels:DofCalcViewModel"
+            EventName="Disappearing"
+            Command="{Binding DisappearingCommand}"
+        />
+    </ContentPage.Behaviors>
+
     <ScrollView
         Padding="20">
 
@@ -31,7 +39,7 @@
                 Style="{StaticResource EntryBorder}">
                 <Picker 
                     ItemsSource="{Binding SensorNames}"
-                    SelectedItem="{Binding SelectedSensorName}"                        
+                    SelectedItem="{Binding DofCalcUserInput.SelectedSensorName}"                        
                     HorizontalOptions="FillAndExpand"
                     FontSize="Medium">
                     <Picker.Behaviors>
@@ -73,9 +81,9 @@
                 <controls:LengthEntryControl
                     MinLengthMM="4"
                     MaxLengthMM="9999"
-                    LengthMM="{Binding DofCalcInput.LensInfo.FocalLengthMM}"
+                    LengthMM="{Binding DofCalcUserInput.DofCalcInput.LensInfo.FocalLengthMM}"
                     LengthValueChangedCommand="{Binding CalculateValuesCommand}"
-                    UnitChangedCommand="{Binding UnitChangedCommand}"
+                    SelectedUnitIndex="{Binding DofCalcUserInput.FocalLengthUnitIndex}"
                 />
             </Border>
 
@@ -87,9 +95,9 @@
                 <controls:LengthEntryControl
                     MinLengthMM="50"
                     MaxLengthMM="9999999"
-                    LengthMM="{Binding DofCalcInput.FocusingDistanceMM}"
+                    LengthMM="{Binding DofCalcUserInput.DofCalcInput.FocusingDistanceMM}"
                     LengthValueChangedCommand="{Binding CalculateValuesCommand}"
-                    UnitChangedCommand="{Binding UnitChangedCommand}"
+                    SelectedUnitIndex="{Binding DofCalcUserInput.FocusingDistanceUnitIndex}"
                 />
             </Border>
 
@@ -110,7 +118,7 @@
 
                     <Picker
                         ItemsSource="{Binding Apertures}"
-                        SelectedItem="{Binding DofCalcInput.LensInfo.Aperture}"
+                        SelectedItem="{Binding DofCalcUserInput.DofCalcInput.LensInfo.Aperture}"
                         HorizontalOptions="FillAndExpand"
                         HorizontalTextAlignment="Center"
                         FontSize="Medium">
@@ -126,7 +134,7 @@
                 Grid.ColumnSpan="2"
                 Margin="0,20,0,10"
                 Text="Print Heigth"
-                IsVisible="{Binding IsAdvancedModeEnabled}"
+                IsVisible="{Binding DofCalcUserInput.IsAdvancedModeEnabled}"
                 Style="{StaticResource LabelMediumBold}"
             />
 
@@ -136,7 +144,7 @@
                 Grid.ColumnSpan="2"
                 Margin="0,20,0,10"
                 Text="Print Width"
-                IsVisible="{Binding IsAdvancedModeEnabled}"
+                IsVisible="{Binding DofCalcUserInput.IsAdvancedModeEnabled}"
                 Style="{StaticResource LabelMediumBold}"
             />
 
@@ -146,20 +154,20 @@
                 Grid.ColumnSpan="2"
                 Margin="0,20,0,10"
                 Text="Visual Acuity"
-                IsVisible="{Binding IsAdvancedModeEnabled}"
+                IsVisible="{Binding DofCalcUserInput.IsAdvancedModeEnabled}"
                 Style="{StaticResource LabelMediumBold}"
             />
 
             <Border
                 Grid.Row="5"
                 Grid.ColumnSpan="2"
-                IsVisible="{Binding IsAdvancedModeEnabled}"
+                IsVisible="{Binding DofCalcUserInput.IsAdvancedModeEnabled}"
                 Style="{StaticResource EntryBorder}">
                 <controls:LengthEntryControl
                     MaxLengthMM="10000"
-                    LengthMM="{Binding DofCalcInput.PrintHeighthMM}"
+                    LengthMM="{Binding DofCalcUserInput.DofCalcInput.PrintHeighthMM}"
                     LengthValueChangedCommand="{Binding CalculateValuesCommand}"
-                    UnitChangedCommand="{Binding UnitChangedCommand}"                    
+                    SelectedUnitIndex="{Binding DofCalcUserInput.PrintHeighthUnitIndex}"
                 />
             </Border>
 
@@ -167,13 +175,13 @@
                 Grid.Row="5"
                 Grid.Column="2"
                 Grid.ColumnSpan="2"
-                IsVisible="{Binding IsAdvancedModeEnabled}"
+                IsVisible="{Binding DofCalcUserInput.IsAdvancedModeEnabled}"
                 Style="{StaticResource EntryBorder}">
                 <controls:LengthEntryControl
                     MaxLengthMM="10000"
-                    LengthMM="{Binding DofCalcInput.PrintWidthMM}"
+                    LengthMM="{Binding DofCalcUserInput.DofCalcInput.PrintWidthMM}"
                     LengthValueChangedCommand="{Binding CalculateValuesCommand}"
-                    UnitChangedCommand="{Binding UnitChangedCommand}"
+                    SelectedUnitIndex="{Binding DofCalcUserInput.PrintWidthUnitIndex}"
                 />
             </Border>
 
@@ -181,14 +189,14 @@
                 Grid.Row="5"
                 Grid.Column="4"
                 Grid.ColumnSpan="2"
-                IsVisible="{Binding IsAdvancedModeEnabled}"
+                IsVisible="{Binding DofCalcUserInput.IsAdvancedModeEnabled}"
                 Style="{StaticResource EntryBorder}">
                 <StackLayout
                     Orientation="Horizontal">
                     <Entry
                         Keyboard="Numeric"
                         Margin="0,5"
-                        Text="{Binding VisualAcuityLpPerMM}"
+                        Text="{Binding DofCalcUserInput.VisualAcuityLpPerMM}"
                         HorizontalOptions="FillAndExpand"
                         HorizontalTextAlignment="Center"
                         FontSize="Medium">
@@ -210,7 +218,7 @@
                 Grid.ColumnSpan="3"
                 Margin="0,20,0,10"
                 Text="Standard Viewing Distance"
-                IsVisible="{Binding IsAdvancedModeEnabled}"
+                IsVisible="{Binding DofCalcUserInput.IsAdvancedModeEnabled}"
                 Style="{StaticResource LabelMediumBold}"
             />
 
@@ -220,20 +228,20 @@
                 Grid.ColumnSpan="3"
                 Margin="0,20,0,10"
                 Text="Actual Viewing Distance"
-                IsVisible="{Binding IsAdvancedModeEnabled}"
+                IsVisible="{Binding DofCalcUserInput.IsAdvancedModeEnabled}"
                 Style="{StaticResource LabelMediumBold}"
             />
 
             <Border
                 Grid.Row="7"
                 Grid.ColumnSpan="3"
-                IsVisible="{Binding IsAdvancedModeEnabled}"
+                IsVisible="{Binding DofCalcUserInput.IsAdvancedModeEnabled}"
                 Style="{StaticResource EntryBorder}">
                 <controls:LengthEntryControl
                     MaxLengthMM="10000"
-                    LengthMM="{Binding DofCalcInput.StandardViewingDistanceMM}"
+                    LengthMM="{Binding DofCalcUserInput.DofCalcInput.StandardViewingDistanceMM}"
                     LengthValueChangedCommand="{Binding CalculateValuesCommand}"
-                    UnitChangedCommand="{Binding UnitChangedCommand}"
+                    SelectedUnitIndex="{Binding DofCalcUserInput.StandardViewingDistanceUnitIndex}"
                 />
             </Border>
 
@@ -241,13 +249,13 @@
                 Grid.Row="7"
                 Grid.Column="3"
                 Grid.ColumnSpan="3"
-                IsVisible="{Binding IsAdvancedModeEnabled}"
+                IsVisible="{Binding DofCalcUserInput.IsAdvancedModeEnabled}"
                 Style="{StaticResource EntryBorder}">
                 <controls:LengthEntryControl
                     MaxLengthMM="10000"
-                    LengthMM="{Binding DofCalcInput.ActualViewingDistanceMM}"
+                    LengthMM="{Binding DofCalcUserInput.DofCalcInput.ActualViewingDistanceMM}"
                     LengthValueChangedCommand="{Binding CalculateValuesCommand}"
-                    UnitChangedCommand="{Binding UnitChangedCommand}"
+                    SelectedUnitIndex="{Binding DofCalcUserInput.ActualViewingDistanceUnitIndex}"
                 />
             </Border>
 
@@ -276,7 +284,7 @@
                     IsReadOnly="True"
                     MaxLengthMM="1000000"
                     LengthMM="{Binding DofCalcResult.DofMM}"
-                    UnitChangedCommand="{Binding UnitChangedCommand}"
+                    SelectedUnitIndex="{Binding DofCalcUserInput.DofUnitIndex}"
                 />
             </Border>
 
@@ -289,7 +297,7 @@
                     IsReadOnly="True"
                     MaxLengthMM="1000000"
                     LengthMM="{Binding DofCalcResult.HyperfocalDistanceMM}"
-                    UnitChangedCommand="{Binding UnitChangedCommand}"
+                    SelectedUnitIndex="{Binding DofCalcUserInput.HyperfocalDistanceUnitIndex}"
                 />
             </Border>
 
@@ -315,10 +323,10 @@
                 Grid.ColumnSpan="3"
                 Style="{StaticResource EntryBorder}">
                  <controls:LengthEntryControl
-                    IsReadOnly="True"
-                    MaxLengthMM="1000000"
-                    LengthMM="{Binding DofCalcResult.DofNearLimitMM}"
-                    UnitChangedCommand="{Binding UnitChangedCommand}"
+                     IsReadOnly="True"
+                     MaxLengthMM="1000000"
+                     LengthMM="{Binding DofCalcResult.DofNearLimitMM}"
+                     SelectedUnitIndex="{Binding DofCalcUserInput.DofNearLimitUnitIndex}"
                  />
             </Border>
 
@@ -331,7 +339,7 @@
                     IsReadOnly="True"
                     MaxLengthMM="1000000"
                     LengthMM="{Binding DofCalcResult.DofFarLimitMM}"
-                    UnitChangedCommand="{Binding UnitChangedCommand}"
+                    SelectedUnitIndex="{Binding DofCalcUserInput.DofFarLimitUnitIndex}"
                 />
             </Border>
 
@@ -360,7 +368,7 @@
                     IsReadOnly="True"
                     MaxLengthMM="1000000"
                     LengthMM="{Binding DofCalcResult.DofInFrontOfSubject}"
-                    UnitChangedCommand="{Binding UnitChangedCommand}"
+                    SelectedUnitIndex="{Binding DofCalcUserInput.DofInFrontOfSubjectUnitIndex}"
                 />
             </Border>
 
@@ -373,7 +381,7 @@
                     IsReadOnly="True"
                     MaxLengthMM="1000000"
                     LengthMM="{Binding DofCalcResult.DofInBackOfSubject}"
-                    UnitChangedCommand="{Binding UnitChangedCommand}"
+                    SelectedUnitIndex="{Binding DofCalcUserInput.DofInBackOfSubjectUnitIndex}"
                 />
             </Border>
 

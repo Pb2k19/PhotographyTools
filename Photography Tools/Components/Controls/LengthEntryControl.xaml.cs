@@ -1,5 +1,3 @@
-using Photography_Tools.Const;
-using Photography_Tools.Helpers;
 using System.Collections.Immutable;
 using System.Windows.Input;
 #if DEBUG
@@ -10,16 +8,12 @@ namespace Photography_Tools.Components.Controls;
 
 public partial class LengthEntryControl : ContentView
 {
+    private int selectedUnitIndex;
     private double lengthMM;
 
     #region BindableProperties
     public static readonly BindableProperty LengthValueChangedCommandProperty = BindableProperty.Create(
         nameof(LengthValueChangedCommand),
-        typeof(ICommand), 
-        typeof(LengthEntryControl));
-
-    public static readonly BindableProperty UnitChangedCommandProperty = BindableProperty.Create(
-        nameof(UnitChangedCommand),
         typeof(ICommand),
         typeof(LengthEntryControl));
 
@@ -28,23 +22,23 @@ public partial class LengthEntryControl : ContentView
         typeof(double),
         typeof(LengthEntryControl),
         defaultValue: 0.0,
-        defaultBindingMode:BindingMode.TwoWay,
+        defaultBindingMode: BindingMode.TwoWay,
         propertyChanged: (bindable, oldValue, newValue) =>
         {
             var control = (LengthEntryControl)bindable;
             control.LengthMM = (double)newValue;
         });
 
-    public static readonly BindableProperty SelectedUnitProperty = BindableProperty.Create(
-        nameof(SelectedUnit),
-        typeof(string),
+    public static readonly BindableProperty SelectedUnitIndexProperty = BindableProperty.Create(
+        nameof(SelectedUnitIndex),
+        typeof(int),
         typeof(LengthEntryControl),
-        defaultValue: UnitConst.LengthMM,
+        defaultValue: 0,
         defaultBindingMode: BindingMode.TwoWay,
         propertyChanged: (bindable, oldValue, newValue) =>
         {
             var control = (LengthEntryControl)bindable;
-            control.SelectedUnit = (string)newValue;
+            control.SelectedUnitIndex = (int)newValue;
         });
     #endregion
 
@@ -52,12 +46,6 @@ public partial class LengthEntryControl : ContentView
     {
         get => (ICommand)GetValue(LengthValueChangedCommandProperty);
         set => SetValue(LengthValueChangedCommandProperty, value);
-    }
-    
-    public ICommand? UnitChangedCommand
-    {
-        get => (ICommand)GetValue(UnitChangedCommandProperty);
-        set => SetValue(UnitChangedCommandProperty, value);
     }
 
     public double LengthMM
@@ -78,10 +66,18 @@ public partial class LengthEntryControl : ContentView
         }
     }
 
-    public string SelectedUnit 
+    public int SelectedUnitIndex
     {
-        get => (string)GetValue(SelectedUnitProperty);
-        set => SetValue(SelectedUnitProperty, value);
+        get => selectedUnitIndex;
+        set
+        {
+            if (value >= 0 && value < LengthUnits.Length)
+            {
+                selectedUnitIndex = value;
+                SetValue(SelectedUnitIndexProperty, value);
+                UnitPicker.SelectedIndex = value;
+            }
+        }
     }
 
     public double MinLengthMM { get; set; } = 0;
@@ -92,10 +88,10 @@ public partial class LengthEntryControl : ContentView
 
     public int DisplayPrecision { get; set; } = 3;
 
-    public bool IsReadOnly 
+    public bool IsReadOnly
     {
-        get => LengthEntry.IsReadOnly; 
-        set => LengthEntry.IsReadOnly = value; 
+        get => LengthEntry.IsReadOnly;
+        set => LengthEntry.IsReadOnly = value;
     }
 
     private ImmutableArray<string> LengthUnits { get; }
@@ -107,8 +103,7 @@ public partial class LengthEntryControl : ContentView
         LengthUnits = UnitConst.LengthUnits;
         UnitPicker.ItemsSource = LengthUnits;
         SetLengthText(lengthMM);
-        if (LengthUnits.Length > 0)
-            UnitPicker.SelectedItem = LengthUnits[0];
+        UnitPicker.SelectedItem = LengthUnits[SelectedUnitIndex];
     }
 
     private void LengthEntry_Completed(object sender, EventArgs e)
@@ -127,11 +122,8 @@ public partial class LengthEntryControl : ContentView
 
         if (index >= 0 && index < LengthUnits.Length)
         {
-            SelectedUnit = LengthUnits[index];
+            SelectedUnitIndex = index;
             SetLengthText(lengthMM);
-
-            if (UnitChangedCommand?.CanExecute(null) ?? false)
-                UnitChangedCommand.Execute(this);
         }
     }
 
@@ -139,7 +131,7 @@ public partial class LengthEntryControl : ContentView
     {
         if (ParseHelper.TryParseDoubleDifferentCulture(LengthEntry.Text, out double newValue))
         {
-            if (SetLenghtMMAndNotify(UnitHelper.ConvertUnitsToMM(newValue, SelectedUnit)))
+            if (SetLenghtMMAndNotify(UnitHelper.ConvertUnitsToMM(newValue, LengthUnits[SelectedUnitIndex])))
                 return;
         }
 
@@ -166,9 +158,9 @@ public partial class LengthEntryControl : ContentView
 
     private void SetLengthText(double value)
     {
-        value = UnitHelper.ConvertMMToUnits(value, SelectedUnit);
+        value = UnitHelper.ConvertMMToUnits(value, LengthUnits[SelectedUnitIndex]);
         value = AcceptIntOnly ? Math.Round(value, 0) : Math.Round(value, DisplayPrecision);
-           
+
         LengthEntry.Text = value.ToString();
 #if DEBUG
         Debug.WriteLine(lengthMM);

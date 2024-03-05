@@ -4,79 +4,96 @@ namespace Photography_Tools.ViewModels;
 
 public partial class DofCalcViewModel : ObservableObject
 {
+    private const int VisualAcuityMin = 1, VisualAcuityMax = 100;
+
     private readonly IPhotographyCalculationsService photographyCalcService;
+    private readonly IPreferencesService preferencesService;
     private readonly ISensorsDataAccess sensorsDataAccess;
 
     [ObservableProperty]
-    private int visualAcuityLpPerMM;
-
-    [ObservableProperty]
-    private bool isAdvancedModeEnabled;
-
-    [ObservableProperty]
-    private string selectedSensorName, toggleText = string.Empty;
+    private string toggleText = string.Empty;
 
     [ObservableProperty]
     private DofCalcResult dofCalcResult;
 
     [ObservableProperty]
-    private DofCalcInput dofCalcInput;
+    private DofCalcUserInput dofCalcUserInput;
 
     public ImmutableArray<double> Apertures { get; }
 
     public ImmutableArray<string> SensorNames { get; }
 
-    public DofCalcViewModel(IPhotographyCalculationsService photographyCalcService, ISensorsDataAccess sensorsDataAccess)
+    public DofCalcViewModel(IPhotographyCalculationsService photographyCalcService, IPreferencesService preferencesService, ISensorsDataAccess sensorsDataAccess)
     {
         this.photographyCalcService = photographyCalcService;
+        this.preferencesService = preferencesService;
         this.sensorsDataAccess = sensorsDataAccess;
 
         Apertures = ApertureConst.AllStops;
         SensorNames = sensorsDataAccess.GetSensorNames();
-        SelectedSensorName = SensorNames[0];
-
         DofCalcResult = new();
-        DofCalcInput = new() { CameraInfo = sensorsDataAccess.GetSensor(SelectedSensorName), LensInfo = new() { Aperture = Apertures[8], FocalLengthMM = 50 }, FocusingDistanceMM = 500 };
+
+        DofCalcUserInput? userInput = preferencesService.GetDeserailizedPreference<DofCalcUserInput>(PreferencesKeys.DofCalcUserInputPreferencesKey);
+        DofCalcUserInput = userInput is not null ? userInput : new()
+        {
+            SelectedSensorName = SensorNames[0],
+            DofCalcInput = new()
+            {
+                FocusingDistanceMM = 500,
+                CameraInfo = sensorsDataAccess.GetSensor(SensorNames[0]),
+                LensInfo = new() { Aperture = Apertures[8], FocalLengthMM = 50 }
+            },
+            VisualAcuityLpPerMM = 5
+        };
 
         SetToggleText();
-
         CalculateValues();
+    }
+
+    [RelayCommand]
+    private void OnDisappearing()
+    {
+        preferencesService.SerializedAndSetPreference(PreferencesKeys.DofCalcUserInputPreferencesKey, DofCalcUserInput);
     }
 
     [RelayCommand]
     private void CalculateValues()
     {
-        DofCalcInput.CameraInfo = sensorsDataAccess.GetSensor(SelectedSensorName);
-        DofCalcResult = photographyCalcService.CalculateDofValues(DofCalcInput);
+        DofCalcUserInput.DofCalcInput.CameraInfo = sensorsDataAccess.GetSensor(DofCalcUserInput.SelectedSensorName);
+        DofCalcResult = photographyCalcService.CalculateDofValues(DofCalcUserInput.DofCalcInput);
     }
 
     [RelayCommand]
     private void OnVisualAcuityLpPerMMChanged()
     {
-        if (DofCalcInput.VisualAcuityLpPerMM != VisualAcuityLpPerMM)
+        if (DofCalcUserInput.VisualAcuityLpPerMM < VisualAcuityMin)
         {
-            DofCalcInput.VisualAcuityLpPerMM = VisualAcuityLpPerMM;
-            CalculateValues();
+            DofCalcUserInput.VisualAcuityLpPerMM = VisualAcuityMin;
+            OnPropertyChanged(nameof(DofCalcUserInput));
+        }
+        else if (DofCalcUserInput.VisualAcuityLpPerMM > VisualAcuityMax)
+        {
+            DofCalcUserInput.VisualAcuityLpPerMM = VisualAcuityMax;
+            OnPropertyChanged(nameof(DofCalcUserInput));
         }
 
-        OnPropertyChanged(nameof(VisualAcuityLpPerMM));
+        if (DofCalcUserInput.DofCalcInput.VisualAcuityLpPerMM != DofCalcUserInput.VisualAcuityLpPerMM)
+        {
+            DofCalcUserInput.DofCalcInput.VisualAcuityLpPerMM = DofCalcUserInput.VisualAcuityLpPerMM;
+            CalculateValues();
+        }
     }
 
     [RelayCommand]
     private void ChangeMode()
     {
-        IsAdvancedModeEnabled = !IsAdvancedModeEnabled;
+        DofCalcUserInput.IsAdvancedModeEnabled = !DofCalcUserInput.IsAdvancedModeEnabled;
+        OnPropertyChanged(nameof(DofCalcUserInput));
         SetToggleText();
-    }
-
-    [RelayCommand]
-    private void OnUnitChanged()
-    {
-
     }
 
     private void SetToggleText()
     {
-        ToggleText = IsAdvancedModeEnabled ? "Simple mode" : "Advanced mode";
+        ToggleText = DofCalcUserInput.IsAdvancedModeEnabled ? "Simple mode" : "Advanced mode";
     }
 }
