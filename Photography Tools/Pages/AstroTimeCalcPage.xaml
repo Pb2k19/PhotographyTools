@@ -122,7 +122,7 @@
                         HorizontalTextAlignment="Center"
                         FontSize="Medium">
                         <Entry.Behaviors>
-                            <toolkit:EventToCommandBehavior EventName="TextChanged" Command="{Binding DecilinationTextChangedCommand}"/>
+                            <toolkit:EventToCommandBehavior x:DataType="viewmodels:AstroTimeCalcViewModel" EventName="TextChanged" Command="{Binding DecilinationTextChangedCommand}"/>
                             <toolkit:NumericValidationBehavior MinimumValue="-90" MaximumValue="90" />
                         </Entry.Behaviors>
                     </Entry>
