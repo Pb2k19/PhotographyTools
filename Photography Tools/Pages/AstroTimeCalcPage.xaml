@@ -83,6 +83,7 @@
                     MaxLengthMM="9999"
                     LengthMM="{Binding UserInput.Lens.FocalLengthMM}"
                     LengthValueChangedCommand="{Binding CalculateAllValuesCommand}"
+                    SelectedUnitIndex="{Binding UserInput.FocalLengthUnitIndex}"
                 />
             </Border>
 
