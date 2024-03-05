@@ -5,37 +5,41 @@ namespace Photography_Tools.ViewModels;
 public partial class AstroTimeCalcViewModel : ObservableObject
 {
     private readonly IPhotographyCalculationsService photographyCalcService;
+    private readonly IPreferencesService preferencesService;
     private readonly ISensorsDataAccess sensorsDataAccess;
 
     [ObservableProperty]
-    private Lens lens;
+    private AstroTimeCalcInput userInput;
 
     [ObservableProperty]
-    private double rule200, rule300, rule500, npfRuleH, npfRuleM, npfRuleS, decilination;
+    private double rule200, rule300, rule500, npfRuleH, npfRuleM, npfRuleS;
 
-    [ObservableProperty]
-    private string selectedSensorName;
-
-    public ImmutableArray<double> Apertures { get; }
+    public ImmutableArray<double> Apertures { get; } = ApertureConst.AllStops;
 
     public ImmutableArray<string> SensorNames { get; }
 
-    public AstroTimeCalcViewModel(IPhotographyCalculationsService photographyCalculationsService, ISensorsDataAccess sensorsDataAccess)
+    public AstroTimeCalcViewModel(IPhotographyCalculationsService photographyCalculationsService, IPreferencesService preferencesService, ISensorsDataAccess sensorsDataAccess)
     {
         photographyCalcService = photographyCalculationsService;
+        this.preferencesService = preferencesService;
         this.sensorsDataAccess = sensorsDataAccess;
-        Apertures = ApertureConst.AllStops;
         SensorNames = sensorsDataAccess.GetSensorNames();
 
-        selectedSensorName = SensorNames[0];
-        lens = new() { Aperture = Apertures[8], FocalLengthMM = 20 };
+        AstroTimeCalcInput? input = preferencesService?.GetDeserailizedPreference<AstroTimeCalcInput>(PreferencesKeys.AstroTimeCalcUserInputPreferencesKey);
+
+        userInput = input is not null ? input : new()
+        {
+            SelectedSensorName = SensorNames[0],
+            Lens = new() { Aperture = Apertures[8], FocalLengthMM = 20 }
+        };
+
         CalculateAllValues();
     }
 
     [RelayCommand]
-    private void OnUnitChanged()
+    private void OnDisappearing()
     {
-
+        preferencesService?.SerializedAndSetPreference(PreferencesKeys.AstroTimeCalcUserInputPreferencesKey, UserInput);
     }
 
     [RelayCommand]
@@ -48,10 +52,10 @@ public partial class AstroTimeCalcViewModel : ObservableObject
     [RelayCommand]
     private void OnDecilinationTextChanged()
     {
-        if (Decilination > 90)
-            Decilination = 90;
-        else if (Decilination < -90)
-            Decilination = -90;
+        if (UserInput.Decilination > 90)
+            UserInput.Decilination = 90;
+        else if (UserInput.Decilination < -90)
+            UserInput.Decilination = -90;
 
         CalculateTimeForAstroWithNpfRule();
     }
@@ -59,14 +63,14 @@ public partial class AstroTimeCalcViewModel : ObservableObject
     [RelayCommand]
     private void CalculateTimeForAstroWithNpfRule()
     {
-        NpfRuleH = Math.Round(photographyCalcService.CalculateTimeForAstroWithNPFRule(sensorsDataAccess.GetSensor(SelectedSensorName), Lens, 1, Decilination), 3);
-        NpfRuleM = Math.Round(photographyCalcService.CalculateTimeForAstroWithNPFRule(sensorsDataAccess.GetSensor(SelectedSensorName), Lens, 2, Decilination), 3);
-        NpfRuleS = Math.Round(photographyCalcService.CalculateTimeForAstroWithNPFRule(sensorsDataAccess.GetSensor(SelectedSensorName), Lens, 3, Decilination), 3);
+        NpfRuleH = Math.Round(photographyCalcService.CalculateTimeForAstroWithNPFRule(sensorsDataAccess.GetSensor(UserInput.SelectedSensorName), UserInput.Lens, 1, UserInput.Decilination), 3);
+        NpfRuleM = Math.Round(photographyCalcService.CalculateTimeForAstroWithNPFRule(sensorsDataAccess.GetSensor(UserInput.SelectedSensorName), UserInput.Lens, 2, UserInput.Decilination), 3);
+        NpfRuleS = Math.Round(photographyCalcService.CalculateTimeForAstroWithNPFRule(sensorsDataAccess.GetSensor(UserInput.SelectedSensorName), UserInput.Lens, 3, UserInput.Decilination), 3);
     }
 
     private void CalculateTimeForAstro()
     {
-        (double r200, double r300, double r500) = photographyCalcService.CalculateTimeForAstro(sensorsDataAccess.GetSensor(SelectedSensorName).CropFactor, Lens.FocalLengthMM);
+        (double r200, double r300, double r500) = photographyCalcService.CalculateTimeForAstro(sensorsDataAccess.GetSensor(UserInput.SelectedSensorName).CropFactor, UserInput.Lens.FocalLengthMM);
         Rule200 = Math.Round(r200, 3);
         Rule300 = Math.Round(r300, 3);
         Rule500 = Math.Round(r500, 3);

@@ -31,6 +31,7 @@ public static class MauiProgram
 
         // Services
         builder.Services.AddSingleton<IPhotographyCalculationsService, PhotographyCalculationsService>();
+        builder.Services.AddSingleton<IPreferencesService, PreferencesService>();
 
         // ViewModel
         builder.Services.AddSingleton<AstroTimeCalcViewModel>();

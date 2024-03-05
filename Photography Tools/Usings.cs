@@ -7,4 +7,5 @@ global using Photography_Tools.Helpers;
 global using Photography_Tools.Models;
 global using Photography_Tools.Pages;
 global using Photography_Tools.Services.PhotographyCalculationsService;
+global using Photography_Tools.Services.PreferencesService;
 global using Photography_Tools.ViewModels;
