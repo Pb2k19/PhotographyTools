@@ -3,7 +3,7 @@
 public static class PreferencesKeys
 {
     public const string
-        AstroTimeCalcViewModelPreferencesKey = "AstroTimeCalcViewModelPreferences",
-        DofCalcViewModelPreferencesKey = "DofCalcViewModelPreferences",
-        NDFilterCalcViewModelPreferencesKey = "NDFilterCalcViewModelPreferences";
+        AstroTimeCalcUserInputPreferencesKey = "AstroTimeCalcUserInput",
+        DofCalcUserInputPreferencesKey = "DofCalcUserInput",
+        NDFilterCalcUserInputPreferencesKey = "NDFilterCalcUserInput";
 }
