@@ -2,10 +2,9 @@
 
 namespace Photography_Tools.ViewModels;
 
-public partial class AstroTimeCalcViewModel : ObservableObject
+public partial class AstroTimeCalcViewModel : SaveableViewModel
 {
     private readonly IPhotographyCalculationsService photographyCalcService;
-    private readonly IPreferencesService preferencesService;
     private readonly ISensorsDataAccess sensorsDataAccess;
 
     [ObservableProperty]
@@ -18,11 +17,11 @@ public partial class AstroTimeCalcViewModel : ObservableObject
 
     public ImmutableArray<string> SensorNames { get; }
 
-    public AstroTimeCalcViewModel(IPhotographyCalculationsService photographyCalculationsService, IPreferencesService preferencesService, ISensorsDataAccess sensorsDataAccess)
+    public AstroTimeCalcViewModel(IPhotographyCalculationsService photographyCalculationsService, IPreferencesService preferencesService, ISensorsDataAccess sensorsDataAccess) : base(preferencesService)
     {
         photographyCalcService = photographyCalculationsService;
-        this.preferencesService = preferencesService;
         this.sensorsDataAccess = sensorsDataAccess;
+
         SensorNames = sensorsDataAccess.GetSensorNames();
 
         AstroTimeCalcUserInput? input = preferencesService?.GetDeserailizedPreference<AstroTimeCalcUserInput>(PreferencesKeys.AstroTimeCalcUserInputPreferencesKey);
@@ -34,12 +33,6 @@ public partial class AstroTimeCalcViewModel : ObservableObject
         };
 
         CalculateAllValues();
-    }
-
-    [RelayCommand]
-    private void OnDisappearing()
-    {
-        preferencesService?.SerializedAndSetPreference(PreferencesKeys.AstroTimeCalcUserInputPreferencesKey, UserInput);
     }
 
     [RelayCommand]
@@ -74,5 +67,10 @@ public partial class AstroTimeCalcViewModel : ObservableObject
         Rule200 = Math.Round(r200, 3);
         Rule300 = Math.Round(r300, 3);
         Rule500 = Math.Round(r500, 3);
+    }
+
+    protected override void SaveUserInput()
+    {
+        preferencesService?.SerializedAndSetPreference(PreferencesKeys.AstroTimeCalcUserInputPreferencesKey, UserInput);
     }
 }

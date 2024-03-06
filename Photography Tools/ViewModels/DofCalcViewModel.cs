@@ -2,12 +2,11 @@
 
 namespace Photography_Tools.ViewModels;
 
-public partial class DofCalcViewModel : ObservableObject
+public partial class DofCalcViewModel : SaveableViewModel
 {
     private const int VisualAcuityMin = 1, VisualAcuityMax = 100;
 
     private readonly IPhotographyCalculationsService photographyCalcService;
-    private readonly IPreferencesService preferencesService;
     private readonly ISensorsDataAccess sensorsDataAccess;
 
     [ObservableProperty]
@@ -23,10 +22,9 @@ public partial class DofCalcViewModel : ObservableObject
 
     public ImmutableArray<string> SensorNames { get; }
 
-    public DofCalcViewModel(IPhotographyCalculationsService photographyCalcService, IPreferencesService preferencesService, ISensorsDataAccess sensorsDataAccess)
+    public DofCalcViewModel(IPhotographyCalculationsService photographyCalcService, IPreferencesService preferencesService, ISensorsDataAccess sensorsDataAccess) : base(preferencesService)
     {
         this.photographyCalcService = photographyCalcService;
-        this.preferencesService = preferencesService;
         this.sensorsDataAccess = sensorsDataAccess;
 
         Apertures = ApertureConst.AllStops;
@@ -48,12 +46,6 @@ public partial class DofCalcViewModel : ObservableObject
 
         SetToggleText();
         CalculateValues();
-    }
-
-    [RelayCommand]
-    private void OnDisappearing()
-    {
-        preferencesService.SerializedAndSetPreference(PreferencesKeys.DofCalcUserInputPreferencesKey, UserInput);
     }
 
     [RelayCommand]
@@ -95,5 +87,10 @@ public partial class DofCalcViewModel : ObservableObject
     private void SetToggleText()
     {
         ToggleText = UserInput.IsAdvancedModeEnabled ? "Simple mode" : "Advanced mode";
+    }
+
+    protected override void SaveUserInput()
+    {
+        preferencesService.SerializedAndSetPreference(PreferencesKeys.DofCalcUserInputPreferencesKey, UserInput);
     }
 }

@@ -2,10 +2,9 @@
 
 namespace Photography_Tools.ViewModels;
 
-public partial class NDFilterCalcViewModel : ObservableObject
+public partial class NDFilterCalcViewModel : SaveableViewModel
 {
     private readonly IPhotographyCalculationsService photographyCalculationsService;
-    private readonly IPreferencesService preferencesServcie;
     private readonly INDFiltersDataAccess ndFiltersDataAccess;
 
     private TimeSpan inputTime, resultTime;
@@ -20,26 +19,19 @@ public partial class NDFilterCalcViewModel : ObservableObject
 
     public ImmutableArray<string> AllShutterSpeedsNames { get; }
 
-    public NDFilterCalcViewModel(IPhotographyCalculationsService photographyCalculationsService, IPreferencesService preferencesServcie, INDFiltersDataAccess ndFiltersDataAccess)
+    public NDFilterCalcViewModel(IPhotographyCalculationsService photographyCalculationsService, IPreferencesService preferencesService, INDFiltersDataAccess ndFiltersDataAccess) : base(preferencesService)
     {
         this.photographyCalculationsService = photographyCalculationsService;
-        this.preferencesServcie = preferencesServcie;
         this.ndFiltersDataAccess = ndFiltersDataAccess;
 
         AllShutterSpeedsNames = ShutterSpeedConst.AllShutterSpeedsNamesSorted;
         AvaliableNDFiltersNames = ndFiltersDataAccess.GetFilterNames();
         FilterToAddName = AvaliableNDFiltersNames[0];
 
-        NDFilterCalcUserInput? input = preferencesServcie.GetDeserailizedPreference<NDFilterCalcUserInput>(PreferencesKeys.NDFilterCalcUserInputPreferencesKey);
+        NDFilterCalcUserInput? input = preferencesService.GetDeserailizedPreference<NDFilterCalcUserInput>(PreferencesKeys.NDFilterCalcUserInputPreferencesKey);
         userInput = input is not null ? input : new() { TimeText = ShutterSpeedConst.AllShutterSpeedsNamesSorted[9], NdFilters = [] };
 
         CalculateTime();
-    }
-
-    [RelayCommand]
-    private void OnDisappearing()
-    {
-        preferencesServcie.SerializedAndSetPreference(PreferencesKeys.NDFilterCalcUserInputPreferencesKey, UserInput);
     }
 
     [RelayCommand]
@@ -108,5 +100,10 @@ public partial class NDFilterCalcViewModel : ObservableObject
             return $"{time.Minutes}m, {time.Seconds}s, {time.Milliseconds}ms";
         else
             return $"{time.Seconds}s, {time.Milliseconds}ms";
+    }
+
+    protected override void SaveUserInput()
+    {
+        preferencesService.SerializedAndSetPreference(PreferencesKeys.NDFilterCalcUserInputPreferencesKey, UserInput);
     }
 }
