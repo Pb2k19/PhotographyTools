@@ -17,7 +17,7 @@ public partial class DofCalcViewModel : ObservableObject
     private DofCalcResult dofCalcResult;
 
     [ObservableProperty]
-    private DofCalcUserInput dofCalcUserInput;
+    private DofCalcUserInput userInput;
 
     public ImmutableArray<double> Apertures { get; }
 
@@ -34,7 +34,7 @@ public partial class DofCalcViewModel : ObservableObject
         DofCalcResult = new();
 
         DofCalcUserInput? userInput = preferencesService.GetDeserailizedPreference<DofCalcUserInput>(PreferencesKeys.DofCalcUserInputPreferencesKey);
-        DofCalcUserInput = userInput is not null ? userInput : new()
+        UserInput = userInput is not null ? userInput : new()
         {
             SelectedSensorName = SensorNames[0],
             DofCalcInput = new()
@@ -53,33 +53,33 @@ public partial class DofCalcViewModel : ObservableObject
     [RelayCommand]
     private void OnDisappearing()
     {
-        preferencesService.SerializedAndSetPreference(PreferencesKeys.DofCalcUserInputPreferencesKey, DofCalcUserInput);
+        preferencesService.SerializedAndSetPreference(PreferencesKeys.DofCalcUserInputPreferencesKey, UserInput);
     }
 
     [RelayCommand]
     private void CalculateValues()
     {
-        DofCalcUserInput.DofCalcInput.CameraInfo = sensorsDataAccess.GetSensor(DofCalcUserInput.SelectedSensorName);
-        DofCalcResult = photographyCalcService.CalculateDofValues(DofCalcUserInput.DofCalcInput);
+        UserInput.DofCalcInput.CameraInfo = sensorsDataAccess.GetSensor(UserInput.SelectedSensorName);
+        DofCalcResult = photographyCalcService.CalculateDofValues(UserInput.DofCalcInput);
     }
 
     [RelayCommand]
     private void OnVisualAcuityLpPerMMChanged()
     {
-        if (DofCalcUserInput.VisualAcuityLpPerMM < VisualAcuityMin)
+        if (UserInput.VisualAcuityLpPerMM < VisualAcuityMin)
         {
-            DofCalcUserInput.VisualAcuityLpPerMM = VisualAcuityMin;
-            OnPropertyChanged(nameof(DofCalcUserInput));
+            UserInput.VisualAcuityLpPerMM = VisualAcuityMin;
+            OnPropertyChanged(nameof(UserInput));
         }
-        else if (DofCalcUserInput.VisualAcuityLpPerMM > VisualAcuityMax)
+        else if (UserInput.VisualAcuityLpPerMM > VisualAcuityMax)
         {
-            DofCalcUserInput.VisualAcuityLpPerMM = VisualAcuityMax;
-            OnPropertyChanged(nameof(DofCalcUserInput));
+            UserInput.VisualAcuityLpPerMM = VisualAcuityMax;
+            OnPropertyChanged(nameof(UserInput));
         }
 
-        if (DofCalcUserInput.DofCalcInput.VisualAcuityLpPerMM != DofCalcUserInput.VisualAcuityLpPerMM)
+        if (UserInput.DofCalcInput.VisualAcuityLpPerMM != UserInput.VisualAcuityLpPerMM)
         {
-            DofCalcUserInput.DofCalcInput.VisualAcuityLpPerMM = DofCalcUserInput.VisualAcuityLpPerMM;
+            UserInput.DofCalcInput.VisualAcuityLpPerMM = UserInput.VisualAcuityLpPerMM;
             CalculateValues();
         }
     }
@@ -87,13 +87,13 @@ public partial class DofCalcViewModel : ObservableObject
     [RelayCommand]
     private void ChangeMode()
     {
-        DofCalcUserInput.IsAdvancedModeEnabled = !DofCalcUserInput.IsAdvancedModeEnabled;
-        OnPropertyChanged(nameof(DofCalcUserInput));
+        UserInput.IsAdvancedModeEnabled = !UserInput.IsAdvancedModeEnabled;
+        OnPropertyChanged(nameof(UserInput));
         SetToggleText();
     }
 
     private void SetToggleText()
     {
-        ToggleText = DofCalcUserInput.IsAdvancedModeEnabled ? "Simple mode" : "Advanced mode";
+        ToggleText = UserInput.IsAdvancedModeEnabled ? "Simple mode" : "Advanced mode";
     }
 }
