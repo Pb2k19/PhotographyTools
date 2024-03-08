@@ -7,8 +7,7 @@
     xmlns:controls="clr-namespace:Photography_Tools.Components.Controls"
     x:Class="Photography_Tools.Pages.DofCalcPage"
     x:DataType="viewmodels:DofCalcViewModel"
-    Title="Depth of Field Calculator" 
-    Background="Black">
+    Title="Depth of Field Calculator">
 
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior

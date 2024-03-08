@@ -9,8 +9,7 @@
     xmlns:datatemplate="clr-namespace:Photography_Tools.Components.DataTemplateSelectors"
     x:Class="Photography_Tools.Pages.NdFilterCalcPage"
     x:DataType="viewmodels:NDFilterCalcViewModel"
-    Title="ND Filter Time Calculator"
-    Background="Black">
+    Title="ND Filter Time Calculator">
 
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior
