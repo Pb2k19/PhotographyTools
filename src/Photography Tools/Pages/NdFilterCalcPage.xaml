@@ -38,6 +38,7 @@
                                     Style="{StaticResource LabelSmallBold}" 
                                     HorizontalTextAlignment="Center"
                                     VerticalTextAlignment="Center"
+                                    TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
                                     Text="Remove"
                                 />
                             </Border>
