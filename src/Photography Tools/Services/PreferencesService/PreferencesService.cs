@@ -4,9 +4,16 @@ namespace Photography_Tools.Services.PreferencesService;
 
 public class PreferencesService : IPreferencesService
 {
+    private readonly IPreferences preferences;
+
+    public PreferencesService(IPreferences preferences)
+    {
+        this.preferences = preferences;
+    }
+
     public T? GetPreference<T>(string key, T? defaultValue = default)
     {
-        return Preferences.Default.Get(key, defaultValue);
+        return preferences.Get(key, defaultValue);
     }
 
     public bool SetPreference<T>(string key, T value)
@@ -17,7 +24,7 @@ public class PreferencesService : IPreferencesService
         if (value.Equals(GetPreference<T>(key)))
             return true;
 
-        Preferences.Default.Set(key, value);
+        preferences.Set(key, value);
         return true;
     }
 
@@ -41,7 +48,7 @@ public class PreferencesService : IPreferencesService
         }
         catch (JsonException)
         {
-            return default;
+            return defaultValue;
         }
     }
 }

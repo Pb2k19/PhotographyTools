@@ -23,6 +23,7 @@ public static class MauiProgram
         //DataAccess
         builder.Services.AddSingleton<INDFiltersDataAccess, StaticNDFiltersDataAccess>();
         builder.Services.AddSingleton<ISensorsDataAccess, StaticSensorsDataAccess>();
+        builder.Services.AddSingleton(Preferences.Default);
 
         // Pages
         builder.Services.AddSingleton<AstroTimeCalcPage>();
