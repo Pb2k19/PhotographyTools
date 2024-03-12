@@ -2,7 +2,7 @@
 
 public class TestObject
 {
-    public string Name { get; set; } = "TestObject";
+    public required string Name { get; set; }
     public double FocalLengthMM { get; set; }
     public double Aperture { get; set; }
 }

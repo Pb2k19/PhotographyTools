@@ -17,9 +17,7 @@ public class PreferencesServiceTests
     [Fact]
     public void GetPreference_ShouldReturnPreferenceStringValue_WhenKeyExists()
     {
-        const string
-            expected = "Test Value String 123 @#$",
-            key = "test";
+        const string key = "test", expected = "Test Value String 123 @#$";
         preferences.Get(key, string.Empty).Returns(expected);
 
         string? actual = preferencesService.GetPreference(key, string.Empty);
@@ -41,9 +39,7 @@ public class PreferencesServiceTests
     [Fact]
     public void GetPreference_ShouldReturnCustomDefaultString_WhenKeyDoesNotExists()
     {
-        const string
-            expected = "CustomDefault",
-            key = "test";
+        const string key = "test", expected = "CustomDefault";
         preferences.Get<string?>(key, expected).Returns(expected);
 
         string? actual = preferencesService.GetPreference(key, expected);
@@ -78,9 +74,7 @@ public class PreferencesServiceTests
     [Fact]
     public void SetPreferences_ShouldReturnTrue_WhenValueIsNotNull()
     {
-        const string
-            value = "Test Value String 123 @#$",
-            key = "test";
+        const string key = "test", value = "Test Value String 123 @#$";
         preferences.Get<string?>(key, null).ReturnsNull();
 
         bool actual = preferencesService.SetPreference(key, value);
@@ -93,9 +87,7 @@ public class PreferencesServiceTests
     [Fact]
     public void SetPreferences_ShouldReturnTrue_WhenKeyHasSameValue()
     {
-        const string
-            value = "Test Value String 123 @#$",
-            key = "test";
+        const string key = "test", value = "Test Value String 123 @#$";
         preferences.Get<string?>(key, null).Returns(value);
 
         bool actual = preferencesService.SetPreference(key, value);
@@ -118,10 +110,8 @@ public class PreferencesServiceTests
     [Fact]
     public void SerializedAndSetPreference_ShouldReturnTrue()
     {
-        const string
-            expectedSerialized = """{"Name":"TestObject","FocalLengthMM":55,"Aperture":2.2}""",
-            key = "test";
-        TestObject obj = new() { Aperture = 2.2, FocalLengthMM = 55 };
+        const string key = "test", expectedSerialized = """{"Name":"TestObject0","FocalLengthMM":55,"Aperture":2.2}""";
+        TestObject obj = new() { Name = "TestObject0", Aperture = 2.2, FocalLengthMM = 55 };
         preferences.Get<string?>(key, null).ReturnsNull();
 
         bool actual = preferencesService.SerializedAndSetPreference(key, obj);
@@ -134,10 +124,9 @@ public class PreferencesServiceTests
     [Fact]
     public void GetDeserailizedPreference_ShouldReturnDeserializedObject()
     {
-        const string
-            serialized = """{"FocalLengthMM":55,"Aperture":2.2}""",
-            key = "test";
-        TestObject expected = new() { Aperture = 2.2, FocalLengthMM = 55 };
+        const string key = "test", serialized = """{"Name":"TestObject1","FocalLengthMM":55,"Aperture":2.2}""";
+
+        TestObject expected = new() { Name = "TestObject1", Aperture = 2.2, FocalLengthMM = 55 };
         preferences.Get<string?>(key, string.Empty).Returns(serialized);
 
         TestObject? actual = preferencesService.GetDeserailizedPreference<TestObject>(key);
@@ -161,7 +150,6 @@ public class PreferencesServiceTests
         Assert.Null(actual);
     }
 
-
     [Fact]
     public void GetDeserailizedPreference_ShouldReturnNull_WhenValueIsNotJson()
     {
@@ -179,7 +167,7 @@ public class PreferencesServiceTests
     {
         const string key = "test";
         preferences.Get<string?>(key, string.Empty).ReturnsNull();
-        TestObject expected = new() { Aperture = 2.8, FocalLengthMM = 75 };
+        TestObject expected = new() { Name = "TestObject2", Aperture = 2.8, FocalLengthMM = 75 };
 
         TestObject? actual = preferencesService.GetDeserailizedPreference(key, expected);
 
@@ -195,7 +183,7 @@ public class PreferencesServiceTests
     {
         const string key = "test";
         preferences.Get<string?>(key, string.Empty).Returns("NOT A JSON");
-        TestObject expected = new() { Aperture = 2.8, FocalLengthMM = 75 };
+        TestObject expected = new() { Name = "TestObject3", Aperture = 2.8, FocalLengthMM = 75 };
 
         TestObject? actual = preferencesService.GetDeserailizedPreference(key, expected);
 
