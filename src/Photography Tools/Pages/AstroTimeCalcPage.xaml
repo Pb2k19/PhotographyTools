@@ -11,7 +11,6 @@
 
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior
-            x:DataType="viewmodels:AstroTimeCalcViewModel"
             EventName="Disappearing"
             Command="{Binding DisappearingCommand}"
         />
@@ -26,7 +25,7 @@
             RowDefinitions="auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto">
 
             <Label
-                Margin="0,10"
+                Margin="0,0,0,10"
                 Text="Camera Sensor"
                 Grid.ColumnSpan="6"
                 Style="{StaticResource LabelMediumBold}"
@@ -129,7 +128,7 @@
                         HorizontalTextAlignment="Center"
                         FontSize="Medium">
                         <Entry.Behaviors>
-                            <toolkit:EventToCommandBehavior x:DataType="viewmodels:AstroTimeCalcViewModel" EventName="TextChanged" Command="{Binding DecilinationTextChangedCommand}"/>
+                            <toolkit:EventToCommandBehavior EventName="TextChanged" Command="{Binding DecilinationTextChangedCommand}"/>
                             <toolkit:NumericValidationBehavior MinimumValue="-90" MaximumValue="90" />
                         </Entry.Behaviors>
                     </Entry>

@@ -502,4 +502,22 @@
         <Setter Property="FontSize" Value="Medium" />
     </Style>
 
+    <Style x:Key="ShellTitleGrid" TargetType="Grid">
+        <Setter Property="Margin">
+            <Setter.Value>
+                <OnPlatform x:TypeArguments="Thickness">
+                    <On Platform="WinUI">10, 0, 10, 0</On>
+                    <On Platform="Default">0, 0, 10, 0</On>
+                </OnPlatform>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ShellTitleLabel" TargetType="Label" 
+                BasedOn="{StaticResource LabelMediumBold}">
+        <Setter Property="FontSize" Value="{OnPlatform Default=Medium, WinUI=28}"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="VerticalTextAlignment" Value="Center"/>
+
+    </Style>
 </ResourceDictionary>

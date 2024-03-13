@@ -13,7 +13,6 @@
 
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior
-            x:DataType="viewmodels:NDFilterCalcViewModel"
             EventName="Disappearing"
             Command="{Binding DisappearingCommand}"
         />
@@ -45,62 +44,67 @@
                         </SwipeItemView>
                     </SwipeView.RightItems>
 
-                    <VerticalStackLayout>
+                    <Grid
+                        ColumnDefinitions="*,*,*"
+                        RowDefinitions="auto, auto, auto"
+                        ColumnSpacing="5">
+
                         <Label
+                            Margin="0,5,0,10"
+                            Grid.ColumnSpan="3"
                             Style="{StaticResource LabelMediumBold}"
                             HorizontalTextAlignment="Center"
                             Text="{Binding Name}"
                         />
 
-                        <Grid
-                            ColumnDefinitions="*,*,*"
-                            RowDefinitions="auto, auto"
-                            ColumnSpacing="5">
-                            <Label
-                                Style="{StaticResource LabelSmall}"
-                                HorizontalTextAlignment="Center"
-                                VerticalTextAlignment="Center"
-                                Text="F Stop Reduction"
-                            />
-                            <Label
-                                Grid.Column="1"
-                                Style="{StaticResource LabelSmall}"
-                                HorizontalTextAlignment="Center"
-                                VerticalTextAlignment="Center"
-                                Text="Factor"
-                            />
-                            <Label
-                                Grid.Column="2"
-                                Style="{StaticResource LabelSmall}"
-                                HorizontalTextAlignment="Center"
-                                VerticalTextAlignment="Center"
-                                Text="Optical Density"
-                            />
-                            <Label
-                                Grid.Row="1"
-                                Style="{StaticResource LabelSmall}"
-                                HorizontalTextAlignment="Center"
-                                VerticalTextAlignment="Center"
-                                Text="{Binding Factor}"
-                            />
-                            <Label
-                                Grid.Row="1"
-                                Grid.Column="1"
-                                Style="{StaticResource LabelSmall}"
-                                HorizontalTextAlignment="Center"
-                                VerticalTextAlignment="Center"
-                                Text="{Binding FStopReduction}"
-                            />
-                            <Label
-                                Grid.Row="1"
-                                Grid.Column="2"
-                                Style="{StaticResource LabelSmall}"
-                                HorizontalTextAlignment="Center"
-                                VerticalTextAlignment="Center"
-                                Text="{Binding OpticalDensity}"
-                            />
-                        </Grid>
-                    </VerticalStackLayout>
+                        <Label
+                            Grid.Row="1"
+                            Style="{StaticResource LabelSmall}"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            Text="F Stop Reduction"
+                        />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelSmall}"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            Text="Factor"
+                        />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            Style="{StaticResource LabelSmall}"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            Text="Optical Density"
+                        />
+
+                        <Label
+                            Grid.Row="2"
+                            Style="{StaticResource LabelSmall}"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            Text="{Binding Factor}"
+                        />
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Style="{StaticResource LabelSmall}"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            Text="{Binding FStopReduction}"
+                        />
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="2"
+                            Style="{StaticResource LabelSmall}"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            Text="{Binding OpticalDensity}"
+                        />
+                    </Grid>
                 </SwipeView>
             </Border>
         </DataTemplate>
@@ -131,7 +135,7 @@
                             </Label.GestureRecognizers>
                         </Label>
                     </Grid>
-                    
+
                     <Grid
                         ColumnDefinitions="*,*,*"
                         RowDefinitions="auto, auto"
@@ -189,106 +193,111 @@
             MobileTemplate="{StaticResource MobileTemplate}" 
         />
     </ContentPage.Resources>
-    
-    <ScrollView
-        Padding="10">
-        <VerticalStackLayout>
-            <Label
-                Text="Exposure Without Filters"
-                Style="{StaticResource LabelMediumBold}"
-            />
+
+    <Grid
+        Padding="20"
+        ColumnDefinitions="*,auto"
+        RowDefinitions="auto,auto,auto,auto,auto,auto,*">
+
+        <Label
+            Margin="0,0,0,10"
+            Text="Exposure Without Filters"
+            Style="{StaticResource LabelMediumBold}"
+        />
+
+        <Border
+            Grid.Row="1"
+            Style="{StaticResource StandardBorder}">
+            <Picker
+                ItemsSource="{Binding AllShutterSpeedsNames}"
+                SelectedItem="{Binding UserInput.TimeText}"
+                HorizontalOptions="FillAndExpand"
+                HorizontalTextAlignment="Center"
+                FontSize="Medium">
+                <Picker.Behaviors>
+                    <toolkit:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding CalculateTimeCommand}"/>
+                </Picker.Behaviors>
+            </Picker>
+        </Border>
+
+        <Label
+            Grid.Row="2"
+            Margin="0,20,0,10"
+            Text="Exposure With Filters"
+            Style="{StaticResource LabelMediumBold}"
+        />
+
+        <Border
+            Grid.Row="3"
+            Style="{StaticResource StandardBorder}">
+            <Entry
+                HorizontalTextAlignment="Center"
+                FontSize="Medium"
+                IsReadOnly="True"
+                Text="{Binding ResultTimeText}"/>
+        </Border>
+
+        <Label
+            x:Name="FilterLabel"
+            Grid.Row="4"
+            Margin="0,20,0,10"
+            Text="Filters"
+            Style="{StaticResource LabelMediumBold}"
+        />
+
+        <Grid
+            x:Name="AddGrid"
+            Grid.Row="5"
+            Margin="0,0,0,5"
+            ColumnSpacing="10"
+            ColumnDefinitions="*,auto">
 
             <Border
-                Margin="5"
-                Style="{StaticResource StandardBorder}">
+                Style="{StaticResource EntryBorder}">
                 <Picker
-                    ItemsSource="{Binding AllShutterSpeedsNames}"
-                    SelectedItem="{Binding UserInput.TimeText}"
+                    ItemsSource="{Binding AvaliableNDFiltersNames}"
+                    SelectedItem="{Binding FilterToAddName}"
                     HorizontalOptions="FillAndExpand"
                     HorizontalTextAlignment="Center"
-                    FontSize="Medium">
-                    <Picker.Behaviors>
-                        <toolkit:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding CalculateTimeCommand}"/>
-                    </Picker.Behaviors>
-                </Picker>
-            </Border>
-
-            <Label
-                Text="Exposure With Filters"
-                Style="{StaticResource LabelMediumBold}"
-            />
-
-            <Border
-                Margin="5"
-                Style="{StaticResource StandardBorder}">
-                <Entry
-                    HorizontalTextAlignment="Center"
                     FontSize="Medium"
-                    IsReadOnly="True"
-                    Text="{Binding ResultTimeText}"/>
+                />
             </Border>
 
-            <Label
-                Text="Add filter"
-                Style="{StaticResource LabelMediumBold}"
+            <Button
+                Grid.Column="1"
+                Text="Add"
+                Command="{Binding AddFilterCommand}"
+                CommandParameter="{Binding FilterToAddName}"
             />
+        </Grid>
 
-            <Grid
-                Margin="5,19"
-                ColumnSpacing="10"
-                ColumnDefinitions="*,auto">
+        <CollectionView
+            Grid.Row="6"
+            x:Name="FiltersCollectionView"
+            SelectionMode="None"
+            ItemTemplate="{StaticResource PlatformSelector}"
+            ItemsSource="{Binding UserInput.NdFilters, Mode=OneWay}"
+            ItemSizingStrategy="MeasureFirstItem">
 
-                <Border
-                    Style="{StaticResource EntryBorder}">
-                    <Picker
-                        ItemsSource="{Binding AvaliableNDFiltersNames}"
-                        SelectedItem="{Binding FilterToAddName}"
-                        HorizontalOptions="FillAndExpand"
-                        HorizontalTextAlignment="Center"
-                        FontSize="Medium"
+            <CollectionView.EmptyView>
+                <VerticalStackLayout Padding="0,20,0,0">
+                    <Label 
+                        HorizontalOptions="Center" 
+                        Text="No filters selected" 
+                        Style="{StaticResource LabelMediumBold}"
                     />
-                </Border>
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
 
-                <Button
-                    Grid.Column="1"
-                    Text="Add"
-                    Command="{Binding AddFilterCommand}"
-                    CommandParameter="{Binding FilterToAddName}"
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout
+                    x:Name="GridItemsLayout"
+                    Span="{OnPlatform WinUI=2, Default=1}" 
+                    HorizontalItemSpacing="10" 
+                    VerticalItemSpacing="{OnPlatform WinUI=5, Default=0}" 
+                    Orientation="Vertical"
                 />
-            </Grid>
-
-            <Label
-                Text="Filters"
-                Style="{StaticResource LabelMediumBold}"
-            />
-
-            <CollectionView
-                x:Name="FiltersCollectionView"
-                SelectionMode="None"
-                ItemTemplate="{StaticResource PlatformSelector}"
-                ItemsSource="{Binding UserInput.NdFilters, Mode=OneWay}"
-                ItemSizingStrategy="MeasureFirstItem">
-
-                <CollectionView.EmptyView>
-                    <VerticalStackLayout Padding="0,20,0,0">
-                        <Label 
-                            HorizontalOptions="Center" 
-                            Text="No filters selected" 
-                            Style="{StaticResource LabelMediumBold}"
-                        />
-                    </VerticalStackLayout>
-                </CollectionView.EmptyView>
-
-                <CollectionView.ItemsLayout>
-                    <GridItemsLayout
-                        x:Name="GridItemsLayout"
-                        Span="{OnPlatform WinUI=2, Default=1}" 
-                        HorizontalItemSpacing="10" 
-                        VerticalItemSpacing="{OnPlatform WinUI=5, Default=0}" 
-                        Orientation="Vertical"
-                    />
-                </CollectionView.ItemsLayout>
-            </CollectionView>
-        </VerticalStackLayout>
-    </ScrollView>
+            </CollectionView.ItemsLayout>
+        </CollectionView>
+    </Grid>
 </ContentPage>
