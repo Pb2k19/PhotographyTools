@@ -14,7 +14,7 @@ public partial class NdFilterCalcPage : ContentPage
     private Thickness
         filterLabelMarginVertical = new(0, 20, 0, 10),
         filterLabelMarginHorizontal = new(0, 0, 0, 10),
-        addGridMarginVertical = new(0, 0, 0, 5),
+        addGridMarginVertical = new(0, 0, 0, 10),
         addGridMarginHorizontal = new(0, 10, 0, 0);
 
     protected override void OnSizeAllocated(double width, double height)

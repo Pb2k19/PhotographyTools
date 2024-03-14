@@ -234,7 +234,26 @@
                 HorizontalTextAlignment="Center"
                 FontSize="Medium"
                 IsReadOnly="True"
-                Text="{Binding ResultTimeText}"/>
+                Text="{Binding ResultTimeText}">
+                <Entry.GestureRecognizers>
+                    <TapGestureRecognizer NumberOfTapsRequired="2" Command="{Binding StartCountdownCommand}"/>
+                    <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding StopCountdownCommand}"/>
+                </Entry.GestureRecognizers>
+                <FlyoutBase.ContextFlyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="Start" Command="{Binding StartCountdownCommand}">
+                            <MenuFlyoutItem.IconImageSource>
+                                <FontImageSource Glyph="🏁" Size="24"/>
+                            </MenuFlyoutItem.IconImageSource>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutItem Text="Stop" Command="{Binding StopCountdownCommand}">
+                            <MenuFlyoutItem.IconImageSource>
+                                <FontImageSource Glyph="🛑" Size="24"/>
+                            </MenuFlyoutItem.IconImageSource>
+                        </MenuFlyoutItem>
+                    </MenuFlyout> 
+                </FlyoutBase.ContextFlyout>
+            </Entry>
         </Border>
 
         <Label
@@ -248,7 +267,7 @@
         <Grid
             x:Name="AddGrid"
             Grid.Row="5"
-            Margin="0,0,0,5"
+            Margin="0,0,0,10"
             ColumnSpacing="10"
             ColumnDefinitions="*,auto">
 

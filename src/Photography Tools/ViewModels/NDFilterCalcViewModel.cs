@@ -7,6 +7,9 @@ public partial class NDFilterCalcViewModel : SaveableViewModel
     private readonly IPhotographyCalculationsService photographyCalculationsService;
     private readonly INDFiltersDataAccess ndFiltersDataAccess;
 
+    private bool isCountdownRunning = false;
+    private CancellationTokenSource? cancellationTokenSource;
+
     private TimeSpan inputTime, resultTime;
 
     [ObservableProperty]
@@ -78,6 +81,55 @@ public partial class NDFilterCalcViewModel : SaveableViewModel
         CalculateTime();
     }
 
+    [RelayCommand]
+    private async Task StartCountdownAsync()
+    {
+        if (isCountdownRunning)
+            return;
+
+        isCountdownRunning = true;
+        try
+        {
+            cancellationTokenSource ??= new();
+            await CountdownAsync(cancellationTokenSource.Token);
+        }
+        catch (TaskCanceledException)
+        {
+            ResultTimeText = "Canceled";
+            await Task.Delay(2000);
+        }
+        finally
+        {
+            ResultTimeText = GetTimeText(resultTime);
+            cancellationTokenSource?.Dispose();
+            cancellationTokenSource = null;
+            isCountdownRunning = false;
+        }
+    }
+
+    [RelayCommand]
+    private void StopCountdown()
+    {
+        if (isCountdownRunning && cancellationTokenSource is not null && !cancellationTokenSource.IsCancellationRequested)
+        {
+            cancellationTokenSource.Cancel();
+        }
+    }
+
+    private async Task CountdownAsync(CancellationToken cancellationToken)
+    {
+        DateTime endDateTime = DateTime.Now.Add(resultTime);
+
+        while (endDateTime > DateTime.Now)
+        {
+            ResultTimeText = GetTimeTextCore(endDateTime - DateTime.Now);
+            await Task.Delay(32, cancellationToken);
+        }
+
+        ResultTimeText = "STOP";
+        await Task.Delay(3000, cancellationToken);
+    }
+
     private static string GetTimeText(TimeSpan time)
     {
         if (time == TimeSpan.Zero)
@@ -92,6 +144,11 @@ public partial class NDFilterCalcViewModel : SaveableViewModel
 #endif
         }
 
+        return GetTimeTextCore(time);
+    }
+
+    public static string GetTimeTextCore(TimeSpan time)
+    {
         if (time.Days > 0)
             return $"{time.Days} days, {time.Hours}h, {time.Minutes}m, {time.Seconds}s, {time.Milliseconds}ms";
         else if (time.Hours > 0)
