@@ -25,7 +25,8 @@
                 Padding="15,10"
                 Style="{StaticResource StandardBorder}">
                 <SwipeView
-                    android:SwipeView.SwipeTransitionMode="Drag">
+                    android:SwipeView.SwipeTransitionMode="Drag"
+                    MinimumHeightRequest="75">
                     <SwipeView.RightItems>
                         <SwipeItemView
                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:NDFilterCalcViewModel}}, Path=RemoveFilterCommand}"
@@ -195,7 +196,7 @@
     </ContentPage.Resources>
 
     <Grid
-        Padding="20"
+        Padding="15,15,15,0"
         ColumnDefinitions="*,auto"
         RowDefinitions="auto,auto,auto,auto,auto,auto,*">
 

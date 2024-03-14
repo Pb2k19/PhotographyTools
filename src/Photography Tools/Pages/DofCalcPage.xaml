@@ -16,10 +16,9 @@
         />
     </ContentPage.Behaviors>
 
-    <ScrollView
-        Padding="20">
-
+    <ScrollView>
         <Grid
+            Padding="15"
             ColumnSpacing="10"
             ColumnDefinitions="*,*,*,*,*,*"
             RowDefinitions="auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto">
