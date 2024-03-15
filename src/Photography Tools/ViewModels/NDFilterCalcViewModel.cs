@@ -98,6 +98,11 @@ public partial class NDFilterCalcViewModel : SaveableViewModel
             ResultTimeText = "Canceled";
             await Task.Delay(2000);
         }
+        catch (ArgumentOutOfRangeException)
+        {
+            ResultTimeText = "Exposure With Filters is too big";
+            await Task.Delay(2000);
+        }
         finally
         {
             ResultTimeText = GetTimeText(resultTime);
