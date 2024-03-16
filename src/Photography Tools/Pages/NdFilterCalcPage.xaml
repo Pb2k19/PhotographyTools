@@ -195,129 +195,122 @@
         />
     </ContentPage.Resources>
 
-    <Grid
-        Padding="15,15,15,0"
-        ColumnDefinitions="*,auto"
-        RowDefinitions="auto,auto,auto,auto,auto,auto,*">
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="15,15,15,0">
 
-        <Label
-            Margin="0,0,0,10"
-            Text="Exposure Without Filters"
-            Style="{StaticResource LabelMediumBold}"
-        />
-
-        <Border
-            Grid.Row="1"
-            Style="{StaticResource StandardBorder}">
-            <Picker
-                ItemsSource="{Binding AllShutterSpeedsNames}"
-                SelectedItem="{Binding UserInput.TimeText}"
-                HorizontalOptions="FillAndExpand"
-                HorizontalTextAlignment="Center"
-                FontSize="Medium">
-                <Picker.Behaviors>
-                    <toolkit:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding CalculateTimeCommand}"/>
-                </Picker.Behaviors>
-            </Picker>
-        </Border>
-
-        <Label
-            Grid.Row="2"
-            Margin="0,20,0,10"
-            Text="Exposure With Filters"
-            Style="{StaticResource LabelMediumBold}"
-        />
-
-        <Border
-            Grid.Row="3"
-            Style="{StaticResource StandardBorder}">
-            <Entry
-                HorizontalTextAlignment="Center"
-                FontSize="Medium"
-                IsReadOnly="True"
-                Text="{Binding ResultTimeText}">
-                <Entry.GestureRecognizers>
-                    <TapGestureRecognizer NumberOfTapsRequired="2" Command="{Binding StartCountdownCommand}"/>
-                    <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding StopCountdownCommand}"/>
-                </Entry.GestureRecognizers>
-                <FlyoutBase.ContextFlyout>
-                    <MenuFlyout>
-                        <MenuFlyoutItem Text="Start" Command="{Binding StartCountdownCommand}">
-                            <MenuFlyoutItem.IconImageSource>
-                                <FontImageSource Glyph="🏁" Size="24"/>
-                            </MenuFlyoutItem.IconImageSource>
-                        </MenuFlyoutItem>
-                        <MenuFlyoutItem Text="Stop" Command="{Binding StopCountdownCommand}">
-                            <MenuFlyoutItem.IconImageSource>
-                                <FontImageSource Glyph="🛑" Size="24"/>
-                            </MenuFlyoutItem.IconImageSource>
-                        </MenuFlyoutItem>
-                    </MenuFlyout> 
-                </FlyoutBase.ContextFlyout>
-            </Entry>
-        </Border>
-
-        <Label
-            x:Name="FilterLabel"
-            Grid.Row="4"
-            Margin="0,20,0,10"
-            Text="Filters"
-            Style="{StaticResource LabelMediumBold}"
-        />
-
-        <Grid
-            x:Name="AddGrid"
-            Grid.Row="5"
-            Margin="0,0,0,10"
-            ColumnSpacing="10"
-            ColumnDefinitions="*,auto">
+            <Label
+                Margin="0,0,0,10"
+                Text="Exposure Without Filters"
+                Style="{StaticResource LabelMediumBold}"
+            />
 
             <Border
-                Style="{StaticResource EntryBorder}">
+                Style="{StaticResource StandardBorder}">
                 <Picker
-                    ItemsSource="{Binding AvaliableNDFiltersNames}"
-                    SelectedItem="{Binding FilterToAddName}"
+                    ItemsSource="{Binding AllShutterSpeedsNames}"
+                    SelectedItem="{Binding UserInput.TimeText}"
                     HorizontalOptions="FillAndExpand"
                     HorizontalTextAlignment="Center"
-                    FontSize="Medium"
-                />
+                    FontSize="Medium">
+                    <Picker.Behaviors>
+                        <toolkit:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding CalculateTimeCommand}"/>
+                    </Picker.Behaviors>
+                </Picker>
             </Border>
 
-            <Button
-                Grid.Column="1"
-                Text="Add"
-                Command="{Binding AddFilterCommand}"
-                CommandParameter="{Binding FilterToAddName}"
+            <Label
+                Margin="0,20,0,10"
+                Text="Exposure With Filters"
+                Style="{StaticResource LabelMediumBold}"
             />
-        </Grid>
 
-        <CollectionView
-            Grid.Row="6"
-            x:Name="FiltersCollectionView"
-            SelectionMode="None"
-            ItemTemplate="{StaticResource PlatformSelector}"
-            ItemsSource="{Binding UserInput.NdFilters, Mode=OneWay}"
-            ItemSizingStrategy="MeasureFirstItem">
+            <Border
+                Style="{StaticResource StandardBorder}">
+                <Entry
+                    HorizontalTextAlignment="Center"
+                    FontSize="Medium"
+                    IsReadOnly="True"
+                    Text="{Binding ResultTimeText}">
+                    <Entry.GestureRecognizers>
+                        <TapGestureRecognizer NumberOfTapsRequired="2" Command="{Binding StartCountdownCommand}"/>
+                        <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding StopCountdownCommand}"/>
+                    </Entry.GestureRecognizers>
+                    <FlyoutBase.ContextFlyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem Text="Start" Command="{Binding StartCountdownCommand}">
+                                <MenuFlyoutItem.IconImageSource>
+                                    <FontImageSource Glyph="🏁" Size="24"/>
+                                </MenuFlyoutItem.IconImageSource>
+                            </MenuFlyoutItem>
+                            <MenuFlyoutItem Text="Stop" Command="{Binding StopCountdownCommand}">
+                                <MenuFlyoutItem.IconImageSource>
+                                    <FontImageSource Glyph="🛑" Size="24"/>
+                                </MenuFlyoutItem.IconImageSource>
+                            </MenuFlyoutItem>
+                        </MenuFlyout>
+                    </FlyoutBase.ContextFlyout>
+                </Entry>
+            </Border>
 
-            <CollectionView.EmptyView>
-                <VerticalStackLayout Padding="0,20,0,0">
-                    <Label 
+            <Label
+                Margin="0,20,0,10"
+                Text="Filters"
+                Style="{StaticResource LabelMediumBold}"
+            />
+
+            <Grid
+                Margin="0,0,0,10"
+                ColumnSpacing="10"
+                ColumnDefinitions="*,auto">
+
+                <Border
+                    Style="{StaticResource EntryBorder}">
+                    <Picker
+                        ItemsSource="{Binding AvaliableNDFiltersNames}"
+                        SelectedItem="{Binding FilterToAddName}"
+                        HorizontalOptions="FillAndExpand"
+                        HorizontalTextAlignment="Center"
+                        FontSize="Medium"
+                    />
+                </Border>
+
+                <Button
+                    Grid.Column="1"
+                    Text="Add"
+                    Command="{Binding AddFilterCommand}"
+                    CommandParameter="{Binding FilterToAddName}"
+                />
+            </Grid>
+  
+            <CollectionView
+                Grid.Row="6"
+                x:Name="FiltersCollectionView"
+                SelectionMode="None"
+                ItemTemplate="{StaticResource PlatformSelector}"
+                ItemsSource="{Binding UserInput.NdFilters, Mode=OneWay}"
+                ItemSizingStrategy="MeasureFirstItem">
+
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout Padding="0,20,0,0">
+                        <Label 
                         HorizontalOptions="Center" 
                         Text="No filters selected" 
                         Style="{StaticResource LabelMediumBold}"
                     />
-                </VerticalStackLayout>
-            </CollectionView.EmptyView>
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
 
-            <CollectionView.ItemsLayout>
-                <GridItemsLayout
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout
                     x:Name="GridItemsLayout"
                     Span="{OnPlatform WinUI=2, Default=1}" 
                     HorizontalItemSpacing="10" 
                     VerticalItemSpacing="{OnPlatform WinUI=5, Default=0}" 
                     Orientation="Vertical"
                 />
-            </CollectionView.ItemsLayout>
-        </CollectionView>
-    </Grid>
+                </CollectionView.ItemsLayout>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
