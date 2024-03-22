@@ -294,21 +294,21 @@
                 <CollectionView.EmptyView>
                     <VerticalStackLayout Padding="0,20,0,0">
                         <Label 
-                        HorizontalOptions="Center" 
-                        Text="No filters selected" 
-                        Style="{StaticResource LabelMediumBold}"
-                    />
+                            HorizontalOptions="Center" 
+                            Text="No filters selected" 
+                            Style="{StaticResource LabelMediumBold}"
+                        />
                     </VerticalStackLayout>
                 </CollectionView.EmptyView>
 
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout
-                    x:Name="GridItemsLayout"
-                    Span="{OnPlatform WinUI=2, Default=1}" 
-                    HorizontalItemSpacing="10" 
-                    VerticalItemSpacing="{OnPlatform WinUI=5, Default=0}" 
-                    Orientation="Vertical"
-                />
+                        x:Name="GridItemsLayout"
+                        Span="{OnPlatform WinUI=2, Default=1}" 
+                        HorizontalItemSpacing="10" 
+                        VerticalItemSpacing="{OnPlatform WinUI=5, Default=0}" 
+                        Orientation="Vertical"
+                    />
                 </CollectionView.ItemsLayout>
             </CollectionView>
         </VerticalStackLayout>
