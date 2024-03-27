@@ -50,6 +50,7 @@ public class LengthUnitConverterTests
     [Theory]
     [InlineData(0, 0)]
     [InlineData(10, 254)]
+    [InlineData(-150, -3810)]
     [InlineData(23.706, 602.1324)]
     public void ConvertToBaseUnit_ShouldReturnConvertedValueFromINToMM(double inputValue, double expected)
     {
