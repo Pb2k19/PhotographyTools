@@ -68,13 +68,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Components\Controls\LengthEntryControl.xaml.cs">
-	    <DependentUpon>LengthEntryControl.xaml</DependentUpon>
-	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <MauiXaml Update="Components\Controls\LengthEntryControl.xaml">
+	  <MauiXaml Update="Components\Controls\UnitEntry\UnitEntryControl.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\AstroTimeCalcPage.xaml">

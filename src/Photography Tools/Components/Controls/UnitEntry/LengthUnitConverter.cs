@@ -1,8 +1,14 @@
-﻿namespace Photography_Tools.Helpers;
+﻿using System.Collections.Immutable;
 
-public static class UnitHelper
+namespace Photography_Tools.Components.Controls.UnitEntry;
+
+public class LengthUnitConverter : IUnitConverter
 {
-    public static double ConvertUnitsToMM(double inputValue, string inputUnit)
+    public string BaseUnitName => UnitConst.LengthMM;
+
+    public ImmutableArray<string> Units => UnitConst.LengthUnits;
+
+    public double ConvertToBaseUnit(double inputValue, string inputUnit)
     {
         if (inputValue == 0)
             return 0;
@@ -18,7 +24,7 @@ public static class UnitHelper
         };
     }
 
-    public static double ConvertMMToUnits(double inputValue, string outputUnit)
+    public double ConvertBaseToSelectedUnit(double inputValue, string outputUnit)
     {
         if (inputValue == 0)
             return 0;

@@ -2,22 +2,22 @@
 <ContentView 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:Photography_Tools.Components.Controls"
-    x:Class="Photography_Tools.Components.Controls.LengthEntryControl"
-    x:DataType="local:LengthEntryControl">
+    xmlns:local="clr-namespace:Photography_Tools.Components.Controls.UnitEntry"
+    x:Class="Photography_Tools.Components.Controls.UnitEntry.UnitEntryControl"
+    x:DataType="local:UnitEntryControl">
 
     <Grid
         Margin="5"
         ColumnDefinitions="{OnPlatform WinUI='*,75', Default='*,50'}">
-        
+
         <Entry
-            x:Name="LengthEntry"
+            x:Name="UnitEntry"
             FontSize="Medium"
             HorizontalTextAlignment="Center"
-            Completed="LengthEntry_Completed"
-            Unfocused="LengthEntry_Unfocused"
+            Completed="UnitEntry_Completed"
+            Unfocused="UnitEntry_Unfocused"
         />
-        
+
         <Picker
             Grid.Column="1"
             x:Name="UnitPicker"
