@@ -4,9 +4,9 @@ namespace Photography_Tools.Components.Controls.UnitEntry;
 
 public class LengthUnitConverter : IUnitConverter
 {
-    public string BaseUnitName => UnitConst.LengthMM;
+    public string BaseUnitName => LengthUnitsConst.LengthMM;
 
-    public ImmutableArray<string> Units => UnitConst.LengthUnits;
+    public ImmutableArray<string> Units => LengthUnitsConst.LengthUnits;
 
     public double ConvertToBaseUnit(double inputValue, string inputUnit)
     {
@@ -15,11 +15,11 @@ public class LengthUnitConverter : IUnitConverter
 
         return inputUnit switch
         {
-            UnitConst.LengthMM => inputValue,
-            UnitConst.LengthCM => inputValue * 10,
-            UnitConst.LengthM => inputValue * 1000,
-            UnitConst.LengthIN => inputValue * 25.4,
-            UnitConst.LengthFT => UnitConverters.InternationalFeetToMeters(inputValue) * 1000,
+            LengthUnitsConst.LengthMM => inputValue,
+            LengthUnitsConst.LengthCM => inputValue * 10,
+            LengthUnitsConst.LengthM => inputValue * 1000,
+            LengthUnitsConst.LengthIN => inputValue * 25.4,
+            LengthUnitsConst.LengthFT => UnitConverters.InternationalFeetToMeters(inputValue) * 1000,
             _ => throw new ArgumentException("Unsupported unit", nameof(inputUnit)),
         };
     }
@@ -31,11 +31,11 @@ public class LengthUnitConverter : IUnitConverter
 
         return outputUnit switch
         {
-            UnitConst.LengthMM => inputValue,
-            UnitConst.LengthCM => inputValue / 10,
-            UnitConst.LengthM => inputValue / 1000,
-            UnitConst.LengthIN => inputValue / 25.4,
-            UnitConst.LengthFT => UnitConverters.MetersToInternationalFeet(inputValue / 1000),
+            LengthUnitsConst.LengthMM => inputValue,
+            LengthUnitsConst.LengthCM => inputValue / 10,
+            LengthUnitsConst.LengthM => inputValue / 1000,
+            LengthUnitsConst.LengthIN => inputValue / 25.4,
+            LengthUnitsConst.LengthFT => UnitConverters.MetersToInternationalFeet(inputValue / 1000),
             _ => throw new ArgumentException("Unsupported unit", nameof(outputUnit)),
         };
     }

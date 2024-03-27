@@ -4,18 +4,18 @@ namespace Photography_Tools.Components.Controls.UnitEntry;
 
 public class TimeUnitConverter : IUnitConverter
 {
-    public string BaseUnitName => UnitConst.TimeS;
+    public string BaseUnitName => TimeUnitsConst.TimeS;
 
-    public ImmutableArray<string> Units => UnitConst.TimeUnits;
+    public ImmutableArray<string> Units => TimeUnitsConst.TimeUnits;
 
     public double ConvertBaseToSelectedUnit(double inputValue, string outputUnit)
     {
         return outputUnit switch
         {
-            UnitConst.TimeMs => inputValue * 1000,
-            UnitConst.TimeS => inputValue,
-            UnitConst.TimeMin => inputValue / 60,
-            UnitConst.TimeH => inputValue / 3600,
+            TimeUnitsConst.TimeMs => inputValue * 1000,
+            TimeUnitsConst.TimeS => inputValue,
+            TimeUnitsConst.TimeMin => inputValue / 60,
+            TimeUnitsConst.TimeH => inputValue / 3600,
             _ => throw new ArgumentException("Unsupported unit", nameof(outputUnit))
         };
     }
@@ -24,10 +24,10 @@ public class TimeUnitConverter : IUnitConverter
     {
         return inputUnit switch
         {
-            UnitConst.TimeMs => inputValue / 1000,
-            UnitConst.TimeS => inputValue,
-            UnitConst.TimeMin => inputValue * 60,
-            UnitConst.TimeH => inputValue * 3600,
+            TimeUnitsConst.TimeMs => inputValue / 1000,
+            TimeUnitsConst.TimeS => inputValue,
+            TimeUnitsConst.TimeMin => inputValue * 60,
+            TimeUnitsConst.TimeH => inputValue * 3600,
             _ => throw new ArgumentException("Unsupported unit", nameof(inputUnit))
         };
     }
