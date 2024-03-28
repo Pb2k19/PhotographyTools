@@ -14,7 +14,7 @@ public class LengthUnitConverterTests
     {
         LengthUnitConverter converter = new();
 
-        double actual = converter.ConvertToBaseUnit(inputValue, LengthUnitsConst.LengthMM);
+        double actual = converter.ConvertToBaseUnit(inputValue, LengthUnitsConst.Millimeter);
 
         Assert.Equal(expected, actual);
     }
@@ -28,7 +28,7 @@ public class LengthUnitConverterTests
     {
         LengthUnitConverter converter = new();
 
-        double actual = converter.ConvertToBaseUnit(inputValue, LengthUnitsConst.LengthCM);
+        double actual = converter.ConvertToBaseUnit(inputValue, LengthUnitsConst.Centimeter);
 
         Assert.Equal(expected, actual);
     }
@@ -42,7 +42,7 @@ public class LengthUnitConverterTests
     {
         LengthUnitConverter converter = new();
 
-        double actual = converter.ConvertToBaseUnit(inputValue, LengthUnitsConst.LengthM);
+        double actual = converter.ConvertToBaseUnit(inputValue, LengthUnitsConst.Meter);
 
         Assert.Equal(expected, actual);
     }
@@ -56,7 +56,7 @@ public class LengthUnitConverterTests
     {
         LengthUnitConverter converter = new();
 
-        double actual = converter.ConvertToBaseUnit(inputValue, LengthUnitsConst.LengthIN);
+        double actual = converter.ConvertToBaseUnit(inputValue, LengthUnitsConst.Inch);
 
         Assert.Equal(expected, actual);
     }
@@ -70,7 +70,7 @@ public class LengthUnitConverterTests
     {
         LengthUnitConverter converter = new();
 
-        double actual = converter.ConvertToBaseUnit(inputValue, LengthUnitsConst.LengthFT);
+        double actual = converter.ConvertToBaseUnit(inputValue, LengthUnitsConst.Foot);
 
         Assert.Equal(expected, actual);
     }
@@ -84,7 +84,7 @@ public class LengthUnitConverterTests
     {
         LengthUnitConverter converter = new();
 
-        double actual = converter.ConvertBaseToSelectedUnit(inputValue, LengthUnitsConst.LengthMM);
+        double actual = converter.ConvertBaseToSelectedUnit(inputValue, LengthUnitsConst.Millimeter);
 
         Assert.Equal(expected, actual);
     }
@@ -98,7 +98,7 @@ public class LengthUnitConverterTests
     {
         LengthUnitConverter converter = new();
 
-        double actual = converter.ConvertBaseToSelectedUnit(inputValue, LengthUnitsConst.LengthCM);
+        double actual = converter.ConvertBaseToSelectedUnit(inputValue, LengthUnitsConst.Centimeter);
 
         Assert.Equal(expected, actual);
     }
@@ -112,7 +112,7 @@ public class LengthUnitConverterTests
     {
         LengthUnitConverter converter = new();
 
-        double actual = converter.ConvertBaseToSelectedUnit(inputValue, LengthUnitsConst.LengthM);
+        double actual = converter.ConvertBaseToSelectedUnit(inputValue, LengthUnitsConst.Meter);
 
         Assert.Equal(expected, actual, 15);
     }
@@ -126,7 +126,7 @@ public class LengthUnitConverterTests
     {
         LengthUnitConverter converter = new();
 
-        double actual = converter.ConvertBaseToSelectedUnit(inputValue, LengthUnitsConst.LengthIN);
+        double actual = converter.ConvertBaseToSelectedUnit(inputValue, LengthUnitsConst.Inch);
 
         Assert.Equal(expected, actual, 8);
     }
@@ -140,7 +140,7 @@ public class LengthUnitConverterTests
     {
         LengthUnitConverter converter = new();
 
-        double actual = converter.ConvertBaseToSelectedUnit(inputValue, LengthUnitsConst.LengthFT);
+        double actual = converter.ConvertBaseToSelectedUnit(inputValue, LengthUnitsConst.Foot);
 
         Assert.Equal(expected, actual, 8);
     }

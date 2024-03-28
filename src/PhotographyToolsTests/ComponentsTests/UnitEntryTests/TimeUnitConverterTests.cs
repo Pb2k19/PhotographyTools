@@ -14,7 +14,7 @@ public class TimeUnitConverterTests
     {
         TimeUnitConverter converter = new();
 
-        double actual = converter.ConvertToBaseUnit(inputValue, TimeUnitsConst.TimeMs);
+        double actual = converter.ConvertToBaseUnit(inputValue, TimeUnitsConst.Millisecond);
 
         Assert.Equal(expected, actual);
     }
@@ -28,7 +28,7 @@ public class TimeUnitConverterTests
     {
         TimeUnitConverter converter = new();
 
-        double actual = converter.ConvertToBaseUnit(inputValue, TimeUnitsConst.TimeS);
+        double actual = converter.ConvertToBaseUnit(inputValue, TimeUnitsConst.Second);
 
         Assert.Equal(expected, actual);
     }
@@ -42,7 +42,7 @@ public class TimeUnitConverterTests
     {
         TimeUnitConverter converter = new();
 
-        double actual = converter.ConvertToBaseUnit(inputValue, TimeUnitsConst.TimeMin);
+        double actual = converter.ConvertToBaseUnit(inputValue, TimeUnitsConst.Minute);
 
         Assert.Equal(expected, actual);
     }
@@ -56,7 +56,7 @@ public class TimeUnitConverterTests
     {
         TimeUnitConverter converter = new();
 
-        double actual = converter.ConvertToBaseUnit(inputValue, TimeUnitsConst.TimeH);
+        double actual = converter.ConvertToBaseUnit(inputValue, TimeUnitsConst.Hour);
 
         Assert.Equal(expected, actual, 10);
     }
@@ -70,7 +70,7 @@ public class TimeUnitConverterTests
     {
         TimeUnitConverter converter = new();
 
-        double actual = converter.ConvertBaseToSelectedUnit(inputValue, TimeUnitsConst.TimeMs);
+        double actual = converter.ConvertBaseToSelectedUnit(inputValue, TimeUnitsConst.Millisecond);
 
         Assert.Equal(expected, actual);
     }
@@ -84,7 +84,7 @@ public class TimeUnitConverterTests
     {
         TimeUnitConverter converter = new();
 
-        double actual = converter.ConvertBaseToSelectedUnit(inputValue, TimeUnitsConst.TimeS);
+        double actual = converter.ConvertBaseToSelectedUnit(inputValue, TimeUnitsConst.Second);
 
         Assert.Equal(expected, actual);
     }
@@ -98,7 +98,7 @@ public class TimeUnitConverterTests
     {
         TimeUnitConverter converter = new();
 
-        double actual = converter.ConvertBaseToSelectedUnit(inputValue, TimeUnitsConst.TimeMin);
+        double actual = converter.ConvertBaseToSelectedUnit(inputValue, TimeUnitsConst.Minute);
 
         Assert.Equal(expected, actual, 10);
     }
@@ -112,7 +112,7 @@ public class TimeUnitConverterTests
     {
         TimeUnitConverter converter = new();
 
-        double actual = converter.ConvertBaseToSelectedUnit(inputValue, TimeUnitsConst.TimeH);
+        double actual = converter.ConvertBaseToSelectedUnit(inputValue, TimeUnitsConst.Hour);
 
         Assert.Equal(expected, actual, 10);
     }

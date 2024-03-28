@@ -4,9 +4,9 @@ namespace Photography_Tools.Components.Controls.UnitEntry;
 
 public class LengthUnitConverter : IUnitConverter
 {
-    public string BaseUnitName => LengthUnitsConst.LengthMM;
+    public string BaseUnitName => LengthUnitsConst.Millimeter;
 
-    public ImmutableArray<string> Units => LengthUnitsConst.LengthUnits;
+    public ImmutableArray<string> Units => LengthUnitsConst.Units;
 
     public double ConvertToBaseUnit(double inputValue, string inputUnit)
     {
@@ -15,11 +15,11 @@ public class LengthUnitConverter : IUnitConverter
 
         return inputUnit switch
         {
-            LengthUnitsConst.LengthMM => inputValue,
-            LengthUnitsConst.LengthCM => inputValue * 10,
-            LengthUnitsConst.LengthM => inputValue * 1000,
-            LengthUnitsConst.LengthIN => inputValue * 25.4,
-            LengthUnitsConst.LengthFT => UnitConverters.InternationalFeetToMeters(inputValue) * 1000,
+            LengthUnitsConst.Millimeter => inputValue,
+            LengthUnitsConst.Centimeter => inputValue * 10,
+            LengthUnitsConst.Meter => inputValue * 1000,
+            LengthUnitsConst.Inch => inputValue * 25.4,
+            LengthUnitsConst.Foot => UnitConverters.InternationalFeetToMeters(inputValue) * 1000,
             _ => throw new ArgumentException("Unsupported unit", nameof(inputUnit)),
         };
     }
@@ -31,11 +31,11 @@ public class LengthUnitConverter : IUnitConverter
 
         return outputUnit switch
         {
-            LengthUnitsConst.LengthMM => inputValue,
-            LengthUnitsConst.LengthCM => inputValue / 10,
-            LengthUnitsConst.LengthM => inputValue / 1000,
-            LengthUnitsConst.LengthIN => inputValue / 25.4,
-            LengthUnitsConst.LengthFT => UnitConverters.MetersToInternationalFeet(inputValue / 1000),
+            LengthUnitsConst.Millimeter => inputValue,
+            LengthUnitsConst.Centimeter => inputValue / 10,
+            LengthUnitsConst.Meter => inputValue / 1000,
+            LengthUnitsConst.Inch => inputValue / 25.4,
+            LengthUnitsConst.Foot => UnitConverters.MetersToInternationalFeet(inputValue / 1000),
             _ => throw new ArgumentException("Unsupported unit", nameof(outputUnit)),
         };
     }
