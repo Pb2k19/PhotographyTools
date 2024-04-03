@@ -4,4 +4,5 @@ public static class StaticConverters
 {
     public static readonly LengthUnitConverter LengthUnitConverter = new();
     public static readonly TimeUnitConverter TimeUnitConverter = new();
+    public static readonly InformationUnitConverter InformationUnitConverter = new();
 }
