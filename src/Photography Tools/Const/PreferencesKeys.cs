@@ -5,5 +5,6 @@ public static class PreferencesKeys
     public const string
         AstroTimeCalcUserInputPreferencesKey = "AstroTimeCalcUserInput",
         DofCalcUserInputPreferencesKey = "DofCalcUserInput",
-        NDFilterCalcUserInputPreferencesKey = "NDFilterCalcUserInput";
+        NDFilterCalcUserInputPreferencesKey = "NDFilterCalcUserInput",
+        TimeLapseCalcUserInputPreferencesKey = "TimeLapseCalcUserInput";
 }

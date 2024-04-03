@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:Photography_Tools.ViewModels"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:controls="clr-namespace:Photography_Tools.Components.Controls.UnitEntry"
+    x:Class="Photography_Tools.Pages.TimeLapseCalcPage"
+    x:DataType="viewmodels:TimeLapseCalculatorViewModel"
+    Title="Time-lapse Calculator">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior
+            EventName="Disappearing"
+            Command="{Binding DisappearingCommand}"
+        />
+    </ContentPage.Behaviors>
+
+    <ScrollView>
+        <Grid
+            Padding="15"
+            ColumnSpacing="10"
+            ColumnDefinitions="*,*,*,*,*,*"
+            RowDefinitions="auto, auto, auto, auto, auto, auto">
+
+            <Label
+                Grid.ColumnSpan="2"
+                Margin="0,20,0,10"
+                Text="Interval"
+                Style="{StaticResource LabelMediumBold}"
+            />
+
+            <Label
+                Grid.Column="2"
+                Grid.ColumnSpan="2"
+                Margin="0,20,0,10"
+                Text="Length"
+                Style="{StaticResource LabelMediumBold}"
+            />
+
+            <Label
+                Grid.Column="4"
+                Grid.ColumnSpan="2"
+                Margin="0,20,0,10"
+                Text="Shots Count"
+                Style="{StaticResource LabelMediumBold}"
+            />
+
+            <Border
+                Grid.Row="1"
+                Grid.ColumnSpan="2"
+                Style="{StaticResource EntryBorder}">
+                <controls:UnitEntryControl
+                    MinValueBaseUnit="0"
+                    MaxValueBaseUnit="999999"
+                    BaseUnitValue="{Binding UserInput.TimeLapseCalcValues.ShootingIntervalSeconds}"
+                    UnitConverter="{Static controls:StaticConverters.TimeUnitConverter}"
+                    ValueChangedCommand="{Binding ShootingIntervalChangedCommand}"
+                    SelectedUnitIndex="{Binding UserInput.ShootingIntervalSelectedUnitIndex}"
+                />
+            </Border>
+
+            <Border
+                Grid.Row="1"
+                Grid.Column="2"
+                Grid.ColumnSpan="2"
+                Style="{StaticResource EntryBorder}">
+                <controls:UnitEntryControl
+                    MinValueBaseUnit="0"
+                    MaxValueBaseUnit="2000000000"
+                    BaseUnitValue="{Binding UserInput.TimeLapseCalcValues.ShootingLengthSeconds}"
+                    UnitConverter="{Static controls:StaticConverters.TimeUnitConverter}"
+                    ValueChangedCommand="{Binding ShootingLengthChanegedCommand}"
+                    SelectedUnitIndex="{Binding UserInput.ShootingLengthSelectedUnitIndex}"
+                />
+            </Border>
+
+            <Border
+                Grid.Row="1"
+                Grid.Column="4"
+                Grid.ColumnSpan="2"
+                Style="{StaticResource EntryBorder}">
+                <Entry
+                    Margin="0,5"
+                    Keyboard="Numeric"                    
+                    Text="{Binding UserInput.EnteredShootsCount}"
+                    HorizontalTextAlignment="Center"
+                    FontSize="Medium">
+                    <Entry.Behaviors>
+                        <toolkit:EventToCommandBehavior EventName="TextChanged" Command="{Binding ShootsCountChangedCommand}"/>
+                    </Entry.Behaviors>
+                </Entry>
+            </Border>
+
+            <Label
+                Grid.Row="2"
+                Grid.ColumnSpan="3"
+                Margin="0,20,0,10"
+                Text="Clip Frame Rate"
+                Style="{StaticResource LabelMediumBold}"
+            />
+
+            <Label
+                Grid.Row="2"
+                Grid.Column="3"
+                Grid.ColumnSpan="3"
+                Margin="0,20,0,10"
+                Text="Clip Length"
+                Style="{StaticResource LabelMediumBold}"
+            />
+
+            <Border
+                Grid.Row="3"
+                Grid.ColumnSpan="3"
+                Style="{StaticResource EntryBorder}">
+                <StackLayout
+                    Orientation="Horizontal">
+                    <Entry
+                        Margin="0,5"
+                        Text="{Binding UserInput.EnteredClipFrameRateFPS}"
+                        HorizontalOptions="FillAndExpand"
+                        HorizontalTextAlignment="Center"
+                        FontSize="Medium">
+                        <Entry.Behaviors>
+                            <toolkit:EventToCommandBehavior EventName="TextChanged" Command="{Binding ClipFrameRateFPSChangedCommand}"/>
+                        </Entry.Behaviors>
+                    </Entry>
+                    <Label 
+                        Text="FPS"
+                        Style="{StaticResource LabelSmall}"
+                        VerticalTextAlignment="Center"
+                        Margin="5,0"
+                    />
+                </StackLayout>
+            </Border>
+
+
+            <Border
+                Grid.Row="3"
+                Grid.Column="3"
+                Grid.ColumnSpan="3"
+                Style="{StaticResource EntryBorder}">
+                <controls:UnitEntryControl
+                    MinValueBaseUnit="0"
+                    MaxValueBaseUnit="999999"
+                    BaseUnitValue="{Binding UserInput.TimeLapseCalcValues.ClipLengthSeconds}"
+                    UnitConverter="{Static controls:StaticConverters.TimeUnitConverter}"
+                    ValueChangedCommand="{Binding ClipLengthChangedCommand}"
+                    SelectedUnitIndex="{Binding UserInput.ClipLengthSelectedUnitIndex}"
+                />
+            </Border>
+
+            <Label
+                Grid.Row="4"
+                Grid.ColumnSpan="3"
+                Margin="0,20,0,10"
+                Text="Photo Size"
+                Style="{StaticResource LabelMediumBold}"
+            />
+
+            <Label
+                Grid.Row="4"
+                Grid.Column="3"
+                Grid.ColumnSpan="3"
+                Margin="0,20,0,10"
+                Text="Storage Size"
+                Style="{StaticResource LabelMediumBold}"
+            />
+
+            <Border
+                Grid.Row="5"
+                Grid.ColumnSpan="3"
+                Style="{StaticResource EntryBorder}">
+                <controls:UnitEntryControl
+                    MinValueBaseUnit="0"
+                    MaxValueBaseUnit="9999999"
+                    BaseUnitValue="{Binding UserInput.TimeLapseCalcValues.PhotoSizeMB}"
+                    UnitConverter="{Static controls:StaticConverters.InformationUnitConverter}"
+                    ValueChangedCommand="{Binding PhotoSizeChangedCommand}"
+                    SelectedUnitIndex="{Binding UserInput.PhotoSizeSelectedUnitIndex}"
+                />
+            </Border>
+
+            <Border
+                Grid.Row="5"
+                Grid.Column="3"
+                Grid.ColumnSpan="3"
+                Style="{StaticResource EntryBorder}">
+                <controls:UnitEntryControl
+                    MinValueBaseUnit="0"
+                    MaxValueBaseUnit="2000000000"
+                    BaseUnitValue="{Binding UserInput.TimeLapseCalcValues.TotalStorageSizeMB}"
+                    UnitConverter="{Static controls:StaticConverters.InformationUnitConverter}"
+                    ValueChangedCommand="{Binding TotalStorageSizeChangedCommand}"
+                    SelectedUnitIndex="{Binding UserInput.TotalStorageSelectedUnitIndex}"
+                />
+            </Border>
+        </Grid>
+    </ScrollView>
+</ContentPage>

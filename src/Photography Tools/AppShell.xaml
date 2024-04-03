@@ -35,5 +35,10 @@
         ContentTemplate="{DataTemplate pages:NdFilterCalcPage}"
         Route="NdFilterCalcPage"
     />
-    
+
+    <ShellContent
+        Title="Time-lapse Calculator"
+        ContentTemplate="{DataTemplate pages:TimeLapseCalcPage}"
+        Route="TimeLapseCalcPage"
+    />
 </Shell>
