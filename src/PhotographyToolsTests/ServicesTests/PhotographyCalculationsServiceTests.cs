@@ -7,22 +7,6 @@ namespace PhotographyToolsTests.ServicesTests;
 public class PhotographyCalculationsServiceTests
 {
     [Theory]
-    [InlineData(1, 0.0174532925)]
-    [InlineData(15, 0.261799388)]
-    [InlineData(-15, -0.261799388)]
-    [InlineData(90, 1.57079633)]
-    [InlineData(180, 3.14159265)]
-    [InlineData(270, 4.71238898)]
-    [InlineData(360, 6.28318531)]
-    [InlineData(370, 6.45771823)]
-    public void DegreesToRadians_ShouldReturnValueInRadians(double input, double expected)
-    {
-        double actaul = PhotographyCalculationsService.DegreesToRadians(input);
-
-        Assert.Equal(expected, actaul, 8);
-    }
-
-    [Theory]
     [InlineData(11, ApertureConst.FullStopsMultiplier)]
     [InlineData(9.5, ApertureConst.SecondStopsMultiplier)]
     [InlineData(25, ApertureConst.ThirdStopsMultiplier)]
@@ -61,8 +45,8 @@ public class PhotographyCalculationsServiceTests
     [Fact]
     public void CalculateTimeForAstro_ShouldReturnTimeInSecondsForRule200and300and500()
     {
-        const double 
-            expected200 = 5.55555555555556, 
+        const double
+            expected200 = 5.55555555555556,
             expected300 = 8.33333333333334,
             expected500 = 13.88888888888889;
         PhotographyCalculationsService service = new();
@@ -145,7 +129,7 @@ public class PhotographyCalculationsServiceTests
     {
         PhotographyCalculationsService service = new();
 
-        Assert.Throws<OverflowException>(() => service.CalculateTimeWithNDFilters(TimeSpan.FromSeconds(1), 
+        Assert.Throws<OverflowException>(() => service.CalculateTimeWithNDFilters(TimeSpan.FromSeconds(1),
             [new NDFilter { Factor = 4000000000, Name = "ND40K" }, new NDFilter { Factor = 4000000000, Name = "ND40K" }, new NDFilter { Factor = 4000000000, Name = "ND40K" }, new NDFilter { Factor = 4000000000, Name = "ND40K" }]));
     }
 }

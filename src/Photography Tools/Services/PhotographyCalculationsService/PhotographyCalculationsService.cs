@@ -30,7 +30,9 @@ public class PhotographyCalculationsService : IPhotographyCalculationsService
     // Source: Frederic Michaud from Le Havre Astronomical Society, https://sahavre.fr/wp/regle-npf-rule/ access date: 19.02.2024
     public double CalculateTimeForAstroWithNPFRule(Sensor sensor, Lens lens, int accuracy, double declinationDegrees = 0)
     {
-        return accuracy * (16.856 * CalculateFullApertureValue(lens.Aperture) + 0.0997 * lens.FocalLengthMM + 13.713 * sensor.PixelPitch) / (lens.FocalLengthMM * Math.Cos(DegreesToRadians(declinationDegrees)));
+        return accuracy * (16.856 * CalculateFullApertureValue(lens.Aperture) + 0.0997 *
+            lens.FocalLengthMM + 13.713 * sensor.PixelPitch) / (lens.FocalLengthMM *
+            Math.Cos(MathHelper.DegreesToRadians(declinationDegrees)));
     }
 
     public (double rule200, double rule300, double rule500) CalculateTimeForAstro(double sensorCrop, double focalLength)
@@ -88,6 +90,4 @@ public class PhotographyCalculationsService : IPhotographyCalculationsService
         else
             return ApertureConst.Undefined;
     }
-
-    public static double DegreesToRadians(double degrees) => degrees * Math.PI / 180.0;
 }
