@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:Photography_Tools.ViewModels"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    x:Class="Photography_Tools.Pages.MoonPhasePage"
+    x:DataType="viewmodels:MoonPhaseViewModel"
+    Title="MoonPhasePage">
+    
+    <VerticalStackLayout>
+        <DatePicker
+            Date="{Binding SelectedDate}">
+            <DatePicker.Behaviors>
+                <toolkit:EventToCommandBehavior 
+                    EventName="DateSelected" 
+                    Command="{Binding CalculateCommand}" 
+                />
+            </DatePicker.Behaviors>
+        </DatePicker>
+
+        <TimePicker
+            Format="HH:mm"
+            Time="{Binding SelectedTime}">
+            <TimePicker.Behaviors>
+                <toolkit:EventToCommandBehavior 
+                    EventName="PropertyChanged" 
+                    Command="{Binding SelectedTimeChangedCommand}" 
+                />
+            </TimePicker.Behaviors>
+        </TimePicker>
+
+        <Label Style="{StaticResource LabelMedium}" Text="{Binding MoonImage}" FontSize="200"/>
+        <Label Style="{StaticResource LabelMedium}" Text="{Binding MoonPhaseName}"/>
+        <Label Style="{StaticResource LabelMedium}" Text="{Binding IlluminationPerc}"/>
+        <Label Style="{StaticResource LabelMedium}" Text="{Binding MoonAge}"/>
+    </VerticalStackLayout>
+</ContentPage>

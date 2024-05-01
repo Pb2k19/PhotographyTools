@@ -41,4 +41,10 @@
         ContentTemplate="{DataTemplate pages:TimeLapseCalcPage}"
         Route="TimeLapseCalcPage"
     />
+
+    <ShellContent
+        Title="Moon Phase"
+        ContentTemplate="{DataTemplate pages:MoonPhasePage}"
+        Route="MoonPhasePage"
+    />
 </Shell>

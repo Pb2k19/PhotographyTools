@@ -29,6 +29,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<AstroTimeCalcPage>();
         builder.Services.AddSingleton<DofCalcPage>();
         builder.Services.AddSingleton<NdFilterCalcPage>();
+        builder.Services.AddSingleton<MoonPhasePage>();
         builder.Services.AddSingleton<TimeLapseCalcPage>();
 
         // Services
@@ -39,6 +40,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<AstroTimeCalcViewModel>();
         builder.Services.AddSingleton<DofCalcViewModel>();
         builder.Services.AddSingleton<NDFilterCalcViewModel>();
+        builder.Services.AddSingleton<MoonPhaseViewModel>();
         builder.Services.AddSingleton<TimeLapseCalculatorViewModel>();
 
         return builder.Build();

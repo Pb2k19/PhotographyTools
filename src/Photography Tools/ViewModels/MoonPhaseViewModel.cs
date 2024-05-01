@@ -8,8 +8,13 @@ public partial class MoonPhaseViewModel : ObservableObject
 
     private static readonly ImmutableArray<Models.Phase> AllMoonPhases;
 
+    private TimeSpan lastSelectedTime = TimeSpan.Zero;
+
     [ObservableProperty]
-    private DateTime selectedTime = DateTime.Now;
+    private DateTime selectedDate = DateTime.Today;
+
+    [ObservableProperty]
+    private TimeSpan selectedTime = DateTime.Now.TimeOfDay;
 
     [ObservableProperty]
     private string moonPhaseName = string.Empty, moonImage = string.Empty;
@@ -22,7 +27,6 @@ public partial class MoonPhaseViewModel : ObservableObject
 
     [ObservableProperty]
     private bool isNorthernHemisphere = true;
-
 
     static MoonPhaseViewModel()
     {
@@ -38,11 +42,20 @@ public partial class MoonPhaseViewModel : ObservableObject
         AllMoonPhases = [.. phases];
     }
 
+    [RelayCommand]
+    private void OnSelectedTimeChanged()
+    {
+        if (lastSelectedTime != SelectedTime)
+        {
+            lastSelectedTime = SelectedTime;
+            Calculate();
+        }
+    }
 
     [RelayCommand]
     private void Calculate()
     {
-        (double fraction, double phase, _) = AstroHelper.CalculateMoonPhase(SelectedTime.ToUniversalTime());
+        (double fraction, double phase, _) = AstroHelper.CalculateMoonPhase(SelectedDate.Date.Add(SelectedTime).ToUniversalTime());
 
         int index = -1;
         for (int i = 0; i < AllMoonPhases.Length; i++)
