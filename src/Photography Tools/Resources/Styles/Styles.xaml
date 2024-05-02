@@ -474,6 +474,11 @@
         <Setter Property="FontSize" Value="Medium"/>
     </Style>
 
+    <Style x:Key="LabelLarge" TargetType="Label" 
+                BasedOn="{StaticResource BaseLabelBold}">
+        <Setter Property="FontSize" Value="Large"/>
+    </Style>
+
     <Style x:Key="StandardBorder" TargetType="Border">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark={StaticResource Gray700}, Light = {StaticResource Gray50}}"/>
         <Setter Property="Padding" Value="10"/>
