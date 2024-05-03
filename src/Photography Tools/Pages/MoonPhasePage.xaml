@@ -6,7 +6,7 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     x:Class="Photography_Tools.Pages.MoonPhasePage"
     x:DataType="viewmodels:MoonPhaseViewModel"
-    Title="MoonPhasePage">
+    Title="Moon Phase">
     
     <VerticalStackLayout
         Padding="15"
@@ -64,7 +64,6 @@
                 Grid.Row="1"
                 Grid.Column="1"
                 Style="{StaticResource EntryBorder}">
-                
                 <TimePicker                    
                     Format="HH:mm"
                     Time="{Binding SelectedTime}"
@@ -97,22 +96,14 @@
             <Border
                 Grid.Row="3"
                 Style="{StaticResource EntryBorder}">
-                <StackLayout
-                    Orientation="Horizontal">
-                    <Entry
-                        Margin="0,5"
-                        IsReadOnly="True"
-                        Text="{Binding IlluminationPerc}"
-                        HorizontalOptions="FillAndExpand"
-                        HorizontalTextAlignment="Center"
-                        FontSize="Medium">
-                    </Entry>
-                    <Label 
-                        Text="%"
-                        Style="{StaticResource LabelMedium}"
-                        Margin="5,10"
-                    />
-                </StackLayout>                
+                <Entry
+                    Margin="0,5"
+                    IsReadOnly="True"
+                    Text="{Binding IlluminationPerc}"
+                    HorizontalOptions="FillAndExpand"
+                    HorizontalTextAlignment="Center"
+                    FontSize="Medium">
+                </Entry>
             </Border>
 
             <Border

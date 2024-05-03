@@ -17,13 +17,7 @@ public partial class MoonPhaseViewModel : ObservableObject
     private TimeSpan selectedTime = DateTime.Now.TimeOfDay;
 
     [ObservableProperty]
-    private string moonPhaseName = string.Empty, moonImage = string.Empty;
-
-    [ObservableProperty]
-    private int illuminationPerc = 0;
-
-    [ObservableProperty]
-    private double moonAge = 0.0;
+    private string moonPhaseName = string.Empty, moonImage = string.Empty, illuminationPerc = string.Empty, moonAge = string.Empty;
 
     [ObservableProperty]
     private bool isNorthernHemisphere = true;
@@ -69,7 +63,11 @@ public partial class MoonPhaseViewModel : ObservableObject
 
         MoonPhaseName = AllMoonPhases[index].Name;
         MoonImage = MoonImages[IsNorthernHemisphere ? index : ^(index + 1)];
-        IlluminationPerc = (int)Math.Round(fraction * 100, 0);
-        MoonAge = Math.Round(phase, 2);
+        SetIlluminationPerc(Math.Round(fraction * 100, 0));
+        SetMoonAge(Math.Round(phase, 2));
     }
+
+    private void SetIlluminationPerc<T>(T value) => IlluminationPerc = $"{value}%";
+
+    private void SetMoonAge(double value) => MoonAge = value < 2 ? $"{value} day" : $"{value} days";
 }
