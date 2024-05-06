@@ -33,6 +33,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<TimeLapseCalcPage>();
 
         // Services
+        builder.Services.AddSingleton<IAstroDataService, OfflineAstroDataService>();
         builder.Services.AddSingleton<IPhotographyCalculationsService, PhotographyCalculationsService>();
         builder.Services.AddSingleton<IPreferencesService, PreferencesService>();
 

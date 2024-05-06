@@ -8,6 +8,8 @@ public partial class MoonPhaseViewModel : ObservableObject
 
     private static readonly ImmutableArray<AstroPhase> AllMoonPhases;
 
+    private readonly IAstroDataService astroDataService;
+
     private TimeSpan lastSelectedTime = TimeSpan.Zero;
 
     [ObservableProperty]
@@ -42,6 +44,11 @@ public partial class MoonPhaseViewModel : ObservableObject
         AllMoonPhases = [.. phases];
     }
 
+    public MoonPhaseViewModel(IAstroDataService astroDataService)
+    {
+        this.astroDataService = astroDataService;
+    }
+
     [RelayCommand]
     private void OnSelectedTimeChanged()
     {
@@ -55,8 +62,12 @@ public partial class MoonPhaseViewModel : ObservableObject
     [RelayCommand]
     private void Calculate()
     {
-        (double fraction, double phase, _) = AstroHelper.CalculateMoonPhase(SelectedDate.Date.Add(SelectedTime));
+        MoonDataResult result = astroDataService.GetMoonData(SelectedDate.Date.Add(SelectedTime), 52.23, 21.01); //tmp location
 
+        if (!result.IsSuccess || result.RiseAndSet is null || result.Phase is null)
+            return;
+
+        (double fraction, double phase, _) = result.Phase.Value;
         int index = -1;
         for (int i = 0; i < AllMoonPhases.Length; i++)
         {
@@ -72,7 +83,7 @@ public partial class MoonPhaseViewModel : ObservableObject
         SetIlluminationPerc(Math.Round(fraction * 100, 0));
         SetMoonAge(Math.Round(phase, 2));
 
-        MoonRiseAndSet = AstroHelper.CalculateMoonRiseAndDown(DateTime.Now, 52.232222, 21.008333); //tmp location
+        MoonRiseAndSet = result.RiseAndSet.Value;
     }
 
     private void SetIlluminationPerc<T>(T value) => IlluminationPerc = $"{value}%";
