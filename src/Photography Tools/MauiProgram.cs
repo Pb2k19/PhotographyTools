@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+using Photography_Tools.DataAccess.AstroDataAccess;
 
 namespace Photography_Tools;
 public static class MauiProgram
@@ -20,7 +21,8 @@ public static class MauiProgram
         builder.Logging.AddDebug();
 #endif
 
-        //DataAccess
+        // DataAccess
+        builder.Services.AddSingleton<IAstroDataAccess, UsnoAstroDataAccess>();
         builder.Services.AddSingleton<INDFiltersDataAccess, StaticNDFiltersDataAccess>();
         builder.Services.AddSingleton<ISensorsDataAccess, StaticSensorsDataAccess>();
         builder.Services.AddSingleton(Preferences.Default);
@@ -33,7 +35,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<TimeLapseCalcPage>();
 
         // Services
-        builder.Services.AddSingleton<IAstroDataService, OfflineAstroDataService>();
+        builder.Services.AddKeyedSingleton<IAstroDataService, OfflineAstroDataService>("offlineAstroData");
+        builder.Services.AddKeyedSingleton<IAstroDataService, OnlineAstroDataService>("onlineAstroData");
         builder.Services.AddSingleton<IPhotographyCalculationsService, PhotographyCalculationsService>();
         builder.Services.AddSingleton<IPreferencesService, PreferencesService>();
 
@@ -43,6 +46,12 @@ public static class MauiProgram
         builder.Services.AddSingleton<NDFilterCalcViewModel>();
         builder.Services.AddSingleton<MoonPhaseViewModel>();
         builder.Services.AddSingleton<TimeLapseCalculatorViewModel>();
+
+        // HttpClient
+        builder.Services.AddHttpClient<IAstroDataAccess, UsnoAstroDataAccess>(client =>
+        {
+            client.BaseAddress = new Uri("https://aa.usno.navy.mil/api/");
+        });
 
         return builder.Build();
     }

@@ -4,7 +4,12 @@ namespace Photography_Tools.Const;
 
 public class AstroConst
 {
-    public const int EarthToSunDistanceKM = 149598000;
+    public const int
+        EarthToSunDistanceKM = 149598000,
+        LatitudeMaxValue = 90,
+        LatitudeMinValue = -90,
+        LongitudeMaxValue = 180,
+        LongitudeMinValue = -180;
 
     public const double
         EarthObliquity = MathHelper.ToRadianMultiplier * 23.4397,
@@ -22,6 +27,5 @@ public class AstroConst
         ThirdQuarter = "Third Quarter",
         WaningCrescent = "Waning Crescent";
 
-    public static readonly ImmutableArray<string> AllMoonPhases = [ NewMoon, WaxingCrescent, FirstQuarter,
-        WaxingGibbous, FullMoon, WaningGibbous, ThirdQuarter, WaningCrescent ];
+    public static readonly ImmutableArray<string> AllMoonPhases = [NewMoon, WaxingCrescent, FirstQuarter, WaxingGibbous, FullMoon, WaningGibbous, ThirdQuarter, WaningCrescent];
 }

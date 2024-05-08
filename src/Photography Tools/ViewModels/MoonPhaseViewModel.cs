@@ -1,22 +1,22 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Frozen;
+using System.Diagnostics;
+using System.Text.Json;
 
 namespace Photography_Tools.ViewModels;
 
 public partial class MoonPhaseViewModel : ObservableObject
 {
-    private static readonly ImmutableArray<string> MoonImages = ["🌑", "🌒", "🌓", "🌔", "🌕", "🌖", "🌗", "🌘", "🌑"];
+    private static readonly FrozenDictionary<string, string> MoonImages;
 
-    private static readonly ImmutableArray<AstroPhase> AllMoonPhases;
-
-    private readonly IAstroDataService astroDataService;
-
+    private readonly IAstroDataService onlineAstroDataService;
+    private readonly IAstroDataService offlineAstroDataService;
     private TimeSpan lastSelectedTime = TimeSpan.Zero;
 
     [ObservableProperty]
     private DateTime selectedDate = DateTime.Today;
 
     [ObservableProperty]
-    private TimeSpan selectedTime = DateTime.Now.TimeOfDay;
+    private TimeSpan selectedTime = new(DateTime.Now.TimeOfDay.Hours, DateTime.Now.TimeOfDay.Minutes, 0);
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsMoonCyclicallyVisible))]
@@ -32,58 +32,74 @@ public partial class MoonPhaseViewModel : ObservableObject
 
     static MoonPhaseViewModel()
     {
-        int numberOfPhases = AstroConst.AllMoonPhases.Length;
-        double phaseLength = AstroConst.SynodicMonthLength / numberOfPhases;
-        AstroPhase[] phases = new AstroPhase[numberOfPhases];
-
-        for (int i = 0; i < numberOfPhases; i++)
+        MoonImages = new Dictionary<string, string>
         {
-            phases[i] = new AstroPhase { Name = AstroConst.AllMoonPhases[i], Start = phaseLength * i, End = phaseLength * (i + 1) };
-        }
-
-        AllMoonPhases = [.. phases];
+            {"New Moon", "🌑"},
+            {"Waxing Crescent", "🌒"},
+            {"First Quarter", "🌓"},
+            {"Waxing Gibbous", "🌔"},
+            {"Full Moon", "🌕"},
+            {"Waning Gibbous", "🌖"},
+            {"Third Quarter", "🌗"},
+            {"Waning Crescent", "🌘"},
+        }.ToFrozenDictionary();
     }
 
-    public MoonPhaseViewModel(IAstroDataService astroDataService)
+    public MoonPhaseViewModel([FromKeyedServices("onlineAstroData")] IAstroDataService onlineAstroDataService, [FromKeyedServices("offlineAstroData")] IAstroDataService offlineAstroDataService)
     {
-        this.astroDataService = astroDataService;
+        this.onlineAstroDataService = onlineAstroDataService;
+        this.offlineAstroDataService = offlineAstroDataService;
     }
 
     [RelayCommand]
-    private void OnSelectedTimeChanged()
+    private async Task OnSelectedTimeChangedAsync()
     {
         if (lastSelectedTime != SelectedTime)
         {
             lastSelectedTime = SelectedTime;
-            Calculate();
+            await CalculateAsync();
         }
     }
 
     [RelayCommand]
-    private void Calculate()
+    private async Task CalculateAsync()
     {
-        MoonDataResult result = astroDataService.GetMoonData(SelectedDate.Date.Add(SelectedTime), 52.23, 21.01); //tmp location
+        DateTime date = SelectedDate.Date.Add(SelectedTime);
 
-        if (!result.IsSuccess || result.RiseAndSet is null || result.Phase is null)
-            return;
+        ServiceResponse<MoonData?> offlineResult = await offlineAstroDataService.GetMoonDataAsync(date, 52.23, 21.01);
 
-        (double fraction, double phase, _) = result.Phase.Value;
-        int index = -1;
-        for (int i = 0; i < AllMoonPhases.Length; i++)
+        if (offlineResult.IsSuccess && offlineResult.Data is not null)
+            DisplayResoult(offlineResult.Data);
+        //else display error message
+
+        try
         {
-            if (phase >= AllMoonPhases[i].Start && phase <= AllMoonPhases[i].End)
+            ServiceResponse<MoonData?> onlineResult = await onlineAstroDataService.GetMoonDataAsync(date, 52.23, 21.01);
+
+            if (onlineResult.IsSuccess && onlineResult.Data is not null)
             {
-                index = i;
-                break;
+                DisplayResoult(onlineResult.Data);
+                return;
             }
         }
+        catch (Exception ex)
+        {
+            if (ex is IndexOutOfRangeException or ArgumentNullException or JsonException or HttpRequestException)
+                Debug.Write(ex); //display error
+            else
+                throw;
+        }
+    }
 
-        MoonPhaseName = AllMoonPhases[index].Name;
-        MoonImage = MoonImages[IsNorthernHemisphere ? index : ^(index + 1)];
-        SetIlluminationPerc(Math.Round(fraction * 100, 0));
-        SetMoonAge(Math.Round(phase, 2));
+    public void DisplayResoult(MoonData data)
+    {
+        MoonPhaseName = data.Phase;
+        MoonImage = MoonImages[data.Phase];
+        SetIlluminationPerc(Math.Round(data.Illumination));
+        SetMoonAge(Math.Round(data.MoonAge, 2));
 
-        MoonRiseAndSet = result.RiseAndSet.Value;
+        DateTime dateTimeUtc = SelectedDate.Date.ToUniversalTime();
+        MoonRiseAndSet = new(dateTimeUtc.Add(data.Rise).ToLocalTime(), dateTimeUtc.Add(data.Set));
     }
 
     private void SetIlluminationPerc<T>(T value) => IlluminationPerc = $"{value}%";

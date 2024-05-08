@@ -1,16 +1,49 @@
-﻿namespace Photography_Tools.Services.AstroDataService;
+﻿using System.Collections.Immutable;
+
+namespace Photography_Tools.Services.AstroDataService;
 
 public class OfflineAstroDataService : IAstroDataService
 {
     private const double
         Hc = 0.133 * MathHelper.ToRadianMultiplier;
 
-    public MoonDataResult GetMoonData(DateTime date, double latitude, double longitude)
-    {
-        MoonPhaseResult moonPhase = CalculateMoonPhase(date);
-        RiseAndSetResult moonRiseAndDown = CalculateMoonRiseAndDown(date, latitude, longitude);
+    private static readonly ImmutableArray<AstroPhase> AllMoonPhases;
 
-        return new MoonDataResult(moonRiseAndDown, moonPhase, true);
+    static OfflineAstroDataService()
+    {
+        int numberOfPhases = AstroConst.AllMoonPhases.Length;
+        double phaseLength = AstroConst.SynodicMonthLength / numberOfPhases;
+        AstroPhase[] phases = new AstroPhase[numberOfPhases];
+
+        for (int i = 0; i < numberOfPhases; i++)
+        {
+            phases[i] = new AstroPhase { Name = AstroConst.AllMoonPhases[i], Start = phaseLength * i, End = phaseLength * (i + 1) };
+        }
+
+        AllMoonPhases = [.. phases];
+    }
+
+    public async Task<ServiceResponse<MoonData?>> GetMoonDataAsync(DateTime date, double latitude, double longitude)
+    {
+        MoonPhaseResult? moonPhase = null;
+        RiseAndSetResult? moonRiseAndSet = null;
+
+        await Task.WhenAll(Task.Run(() => moonPhase = CalculateMoonPhase(date)), Task.Run(() => moonRiseAndSet = CalculateMoonRiseAndDown(date, latitude, longitude)));
+
+        if (moonPhase is null || moonRiseAndSet is null)
+            return IAstroDataService.ErrorMoonResult;
+
+        int index = -1;
+        for (int i = 0; i < AllMoonPhases.Length; i++)
+        {
+            if (moonPhase.Value.Phase >= AllMoonPhases[i].Start && moonPhase.Value.Phase <= AllMoonPhases[i].End)
+            {
+                index = i;
+                break;
+            }
+        }
+
+        return new(new MoonData(moonRiseAndSet.Value.Rise?.TimeOfDay ?? TimeSpan.Zero, TimeSpan.Zero, moonRiseAndSet.Value.Set?.TimeOfDay ?? TimeSpan.Zero, moonPhase.Value.Fraction * 100, moonPhase.Value.Phase, AllMoonPhases[index].Name), true, 1);
     }
 
     public static double CalculateRightAscension(double longitude, double b) =>
