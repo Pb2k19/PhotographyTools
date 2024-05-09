@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using Photography_Tools.DataAccess.AstroDataAccess;
+using Photography_Tools.Services.KeyValueStoreService;
 
 namespace Photography_Tools;
 public static class MauiProgram
@@ -37,6 +38,7 @@ public static class MauiProgram
         // Services
         builder.Services.AddKeyedSingleton<IAstroDataService, OfflineAstroDataService>("offlineAstroData");
         builder.Services.AddKeyedSingleton<IAstroDataService, OnlineAstroDataService>("onlineAstroData");
+        builder.Services.AddSingleton<IKeyValueStore<AstroData>, CacheKeyValueStore<AstroData>>();
         builder.Services.AddSingleton<IPhotographyCalculationsService, PhotographyCalculationsService>();
         builder.Services.AddSingleton<IPreferencesService, PreferencesService>();
 

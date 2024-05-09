@@ -99,7 +99,7 @@ public partial class MoonPhaseViewModel : ObservableObject
         SetMoonAge(Math.Round(data.MoonAge, 2));
 
         DateTime dateTimeUtc = SelectedDate.Date.ToUniversalTime();
-        MoonRiseAndSet = new(dateTimeUtc.Add(data.Rise).ToLocalTime(), dateTimeUtc.Add(data.Set));
+        MoonRiseAndSet = new(dateTimeUtc.Add(data.Rise).ToLocalTime(), dateTimeUtc.Add(data.Set).ToLocalTime());
     }
 
     private void SetIlluminationPerc<T>(T value) => IlluminationPerc = $"{value}%";

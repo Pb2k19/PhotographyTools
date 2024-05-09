@@ -38,6 +38,9 @@ public class UsnoAstroDataAccess : IAstroDataAccess
 
         try
         {
+#if DEBUG
+            Debug.WriteLine($"USNO API CALL: rstt/oneday?date={universalDate:yyyy-MM-dd}&time={universalDate:HH:mm}&coords={latitude.ToString("0.000", CultureInfo.InvariantCulture)},{longitude.ToString("0.00", CultureInfo.InvariantCulture)}");
+#endif
             using HttpResponseMessage response = await httpClient.GetAsync($"rstt/oneday?date={universalDate:yyyy-MM-dd}&time={universalDate:HH:mm}&coords={latitude.ToString("0.000", CultureInfo.InvariantCulture)},{longitude.ToString("0.00", CultureInfo.InvariantCulture)}");
 
             if (!response.IsSuccessStatusCode)
@@ -65,6 +68,9 @@ public class UsnoAstroDataAccess : IAstroDataAccess
 
     private async Task<double> GetMoonAgeAsync(DateTime universalDate)
     {
+#if DEBUG
+        Debug.WriteLine($"USNO API CALL: moon/phases/date?date={universalDate:yyyy-MM-dd}&nump=4");
+#endif
         using HttpResponseMessage response = await httpClient.GetAsync($"moon/phases/date?date={universalDate:yyyy-MM-dd}&nump=4");
 
         if (!response.IsSuccessStatusCode)
@@ -191,7 +197,7 @@ public class UsnoAstroDataAccess : IAstroDataAccess
         public required string CurrentPhase { get; set; }
 
         [JsonIgnore]
-        public double Fracillum { get => double.TryParse(FracillumString.AsSpan()[..^1], out double value) ? value : double.NaN; }
+        public double Fracillum { get => double.Parse(FracillumString.AsSpan()[..^1]); }
     }
 
     public class ShortPhaseData
@@ -202,7 +208,7 @@ public class UsnoAstroDataAccess : IAstroDataAccess
         public required string TimeString { get; set; }
 
         [JsonIgnore]
-        public TimeSpan Time => TimeSpan.TryParseExact(TimeString, "HH:mm", CultureInfo.InvariantCulture, out TimeSpan result) ? result : TimeSpan.Zero;
+        public TimeSpan Time => TimeSpan.ParseExact(TimeString, "g", CultureInfo.InvariantCulture);
     }
 
     public class ClosestPhase
