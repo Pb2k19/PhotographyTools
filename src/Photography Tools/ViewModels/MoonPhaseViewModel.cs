@@ -84,7 +84,7 @@ public partial class MoonPhaseViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            if (ex is IndexOutOfRangeException or ArgumentNullException or JsonException or HttpRequestException)
+            if (ex is IndexOutOfRangeException or ArgumentNullException or JsonException or HttpRequestException or IOException)
                 Debug.Write(ex); //display error
             else
                 throw;
