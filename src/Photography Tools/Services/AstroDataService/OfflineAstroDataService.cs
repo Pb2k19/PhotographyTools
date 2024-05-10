@@ -11,16 +11,15 @@ public class OfflineAstroDataService : IAstroDataService
 
     static OfflineAstroDataService()
     {
-        int numberOfPhases = AstroConst.AllMoonPhases.Length;
-        double phaseLength = AstroConst.SynodicMonthLength / numberOfPhases;
-        AstroPhase[] phases = new AstroPhase[numberOfPhases];
-
-        for (int i = 0; i < numberOfPhases; i++)
-        {
-            phases[i] = new AstroPhase { Name = AstroConst.AllMoonPhases[i], Start = phaseLength * i, End = phaseLength * (i + 1) };
-        }
-
-        AllMoonPhases = [.. phases];
+        AllMoonPhases = [
+            new AstroPhase(0, AstroConst.SynodicMonthLength * -0.02, AstroConst.SynodicMonthLength * 0.025),    // 0%
+            new AstroPhase(1, AstroConst.SynodicMonthLength * 0.025, AstroConst.SynodicMonthLength * 0.23),
+            new AstroPhase(2, AstroConst.SynodicMonthLength * 0.23, AstroConst.SynodicMonthLength * 0.275),     // 50%
+            new AstroPhase(3, AstroConst.SynodicMonthLength * 0.275, AstroConst.SynodicMonthLength * 0.48),
+            new AstroPhase(4, AstroConst.SynodicMonthLength * 0.48, AstroConst.SynodicMonthLength * 0.525),     // 100%
+            new AstroPhase(5, AstroConst.SynodicMonthLength * 0.525, AstroConst.SynodicMonthLength * 0.73),
+            new AstroPhase(6, AstroConst.SynodicMonthLength * 0.73, AstroConst.SynodicMonthLength * 0.775),     // 50%
+            new AstroPhase(7, AstroConst.SynodicMonthLength * 0.775, AstroConst.SynodicMonthLength * 0.98)];
     }
 
     public async Task<ServiceResponse<MoonData?>> GetMoonDataAsync(DateTime date, double latitude, double longitude)
@@ -36,14 +35,17 @@ public class OfflineAstroDataService : IAstroDataService
         int index = -1;
         for (int i = 0; i < AllMoonPhases.Length; i++)
         {
-            if (moonPhase.Value.Phase >= AllMoonPhases[i].Start && moonPhase.Value.Phase <= AllMoonPhases[i].End)
+            if (moonPhase.Value.Phase >= AllMoonPhases[i].MinValue && moonPhase.Value.Phase < AllMoonPhases[i].MaxValue)
             {
                 index = i;
                 break;
             }
         }
 
-        return new(new MoonData(moonRiseAndSet.Value.Rise?.TimeOfDay ?? TimeSpan.Zero, TimeSpan.Zero, moonRiseAndSet.Value.Set?.TimeOfDay ?? TimeSpan.Zero, moonPhase.Value.Fraction * 100, moonPhase.Value.Phase, AllMoonPhases[index].Name), true, 1);
+        if (index == -1 && moonPhase.Value.Phase <= AstroConst.SynodicMonthLength)
+            index = 0;
+
+        return new(new MoonData(moonRiseAndSet.Value.Rise?.TimeOfDay ?? TimeSpan.Zero, TimeSpan.Zero, moonRiseAndSet.Value.Set?.TimeOfDay ?? TimeSpan.Zero, moonPhase.Value.Fraction * 100, moonPhase.Value.Phase, AstroConst.AllMoonPhases[index]), true, 1);
     }
 
     public static double CalculateRightAscension(double longitude, double b) =>
@@ -204,4 +206,6 @@ public class OfflineAstroDataService : IAstroDataService
 
         return new RiseAndSetResult(rise.HasValue ? date.AddHours(rise.Value) : null, set.HasValue ? date.AddHours(set.Value) : null, ye);
     }
+
+    private record struct AstroPhase(int Index, double MinValue, double MaxValue);
 }
