@@ -4,6 +4,7 @@ namespace Photography_Tools.Services.KeyValueStoreService;
 
 public class CacheKeyValueStore<T> : IKeyValueStore<T> where T : class
 {
+    private const int SempahoreTimeout = 5000;
     private const string FileNameConst = "Cache.json", FolderName = "AppCache";
 
     private readonly SemaphoreSlim semaphore = new(1);
@@ -21,7 +22,7 @@ public class CacheKeyValueStore<T> : IKeyValueStore<T> where T : class
     {
         if (dictionary.Count == 0)
         {
-            if (await semaphore.WaitAsync(3000))
+            if (await semaphore.WaitAsync(SempahoreTimeout))
             {
                 try
                 {
@@ -42,17 +43,14 @@ public class CacheKeyValueStore<T> : IKeyValueStore<T> where T : class
 
     public async Task<bool> AddAsync(string key, T value)
     {
-        if (!await semaphore.WaitAsync(2000))
+        if (!await semaphore.WaitAsync(SempahoreTimeout))
             return false;
-
-        if (!dictionary.TryAdd(key, value))
-        {
-            semaphore.Release();
-            return false;
-        }
 
         try
         {
+            if (!dictionary.TryAdd(key, value))
+                return false;
+
             await SaveToFileAsync();
         }
         catch (Exception)
@@ -70,17 +68,14 @@ public class CacheKeyValueStore<T> : IKeyValueStore<T> where T : class
 
     public async Task<bool> RemoveAsync(string key)
     {
-        if (!await semaphore.WaitAsync(2000))
+        if (!await semaphore.WaitAsync(SempahoreTimeout))
             return false;
-
-        if (!dictionary.Remove(key))
-        {
-            semaphore.Release();
-            return false;
-        }
 
         try
         {
+            if (!dictionary.Remove(key))
+                return false;
+
             await SaveToFileAsync();
         }
         catch (Exception)
@@ -98,19 +93,15 @@ public class CacheKeyValueStore<T> : IKeyValueStore<T> where T : class
 
     public async Task<bool> UpdateAsync(string key, T value)
     {
-        if (!await semaphore.WaitAsync(2000))
+        if (!await semaphore.WaitAsync(SempahoreTimeout))
             return false;
-
-        if (!dictionary.ContainsKey(key))
-        {
-            semaphore.Release();
-            return false;
-        }
-
-        dictionary[key] = value;
 
         try
         {
+            if (!dictionary.ContainsKey(key))
+                return false;
+
+            dictionary[key] = value;
             await SaveToFileAsync();
         }
         catch (Exception)
