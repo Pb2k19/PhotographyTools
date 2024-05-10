@@ -85,7 +85,7 @@ public class UsnoAstroDataAccess : IAstroDataAccess
         foreach (var item in result.PhaseData)
         {
             if (item.Name.Equals("New Moon"))
-                return AstroConst.SynodicMonthLength - (item.Time - universalDate).TotalDays;
+                return AstroConst.SynodicMonthLength - (item.DateTime - universalDate).TotalDays;
         }
 
         return double.NaN;
@@ -93,27 +93,27 @@ public class UsnoAstroDataAccess : IAstroDataAccess
 
     public static AstroData ConvertUsnoResponseToAstroData(UsnoSoonMoonResponse response, double moonAge)
     {
-        TimeSpan rise, civilStart, civilEnd, transit, set;
-        rise = civilEnd = civilStart = transit = set = TimeSpan.Zero;
+        DateTime rise, civilStart, civilEnd, transit, set;
+        rise = civilEnd = civilStart = transit = set = response.Properties.Data.Date;
 
         foreach (ShortPhaseData item in response.Properties.Data.SunData)
         {
             switch (item.Phen)
             {
                 case "Set":
-                    set = item.Time;
+                    set = response.Properties.Data.Date.Add(item.Time);
                     break;
                 case "End Civil Twilight":
-                    civilEnd = item.Time;
+                    civilEnd = response.Properties.Data.Date.Add(item.Time);
                     break;
                 case "Begin Civil Twilight":
-                    civilStart = item.Time;
+                    civilStart = response.Properties.Data.Date.Add(item.Time);
                     break;
                 case "Rise":
-                    rise = item.Time;
+                    rise = response.Properties.Data.Date.Add(item.Time);
                     break;
                 case "Upper Transit":
-                    transit = item.Time;
+                    transit = response.Properties.Data.Date.Add(item.Time);
                     break;
                 default:
                     break;
@@ -122,20 +122,20 @@ public class UsnoAstroDataAccess : IAstroDataAccess
 
         SunData sundData = new(rise, civilStart, civilEnd, transit, set);
 
-        rise = transit = set = TimeSpan.Zero;
+        rise = transit = set = response.Properties.Data.Date;
 
         foreach (ShortPhaseData item in response.Properties.Data.MoonData)
         {
             switch (item.Phen)
             {
                 case "Set":
-                    set = item.Time;
+                    set = response.Properties.Data.Date.Add(item.Time);
                     break;
                 case "Rise":
-                    rise = item.Time;
+                    rise = response.Properties.Data.Date.Add(item.Time);
                     break;
                 case "Upper Transit":
-                    transit = item.Time;
+                    transit = response.Properties.Data.Date.Add(item.Time);
                     break;
                 default:
                     break;
@@ -168,7 +168,7 @@ public class UsnoAstroDataAccess : IAstroDataAccess
         public required string TimeString { get; set; }
 
         [JsonIgnore]
-        public DateTime Time { get => new(Year, Month, Day, int.Parse(TimeString.AsSpan().Trim()[..2]), int.Parse(TimeString.AsSpan().Trim()[^2..]), 0); }
+        public DateTime DateTime { get => new(Year, Month, Day, int.Parse(TimeString.AsSpan().Trim()[..2]), int.Parse(TimeString.AsSpan().Trim()[^2..]), 0, DateTimeKind.Utc); }
     }
 
     public class UsnoSoonMoonResponse
@@ -185,8 +185,6 @@ public class UsnoAstroDataAccess : IAstroDataAccess
 
     public class Data
     {
-        [JsonPropertyName("closestphase")]
-        public required ClosestPhase ClosestPhase { get; set; }
         [JsonPropertyName("moondata")]
         public required ShortPhaseData[] MoonData { get; set; }
         [JsonPropertyName("sundata")]
@@ -195,9 +193,18 @@ public class UsnoAstroDataAccess : IAstroDataAccess
         public required string FracillumString { get; set; }
         [JsonPropertyName("curphase")]
         public required string CurrentPhase { get; set; }
+        [JsonPropertyName("day")]
+        public int Day { get; set; }
+        [JsonPropertyName("month")]
+        public int Month { get; set; }
+        [JsonPropertyName("year")]
+        public int Year { get; set; }
 
         [JsonIgnore]
         public double Fracillum { get => double.Parse(FracillumString.AsSpan()[..^1]); }
+        [JsonIgnore]
+        public DateTime Date { get => new(Year, Month, Day, 0, 0, 0, DateTimeKind.Utc); }
+
     }
 
     public class ShortPhaseData
@@ -209,11 +216,5 @@ public class UsnoAstroDataAccess : IAstroDataAccess
 
         [JsonIgnore]
         public TimeSpan Time => TimeSpan.ParseExact(TimeString, "g", CultureInfo.InvariantCulture);
-    }
-
-    public class ClosestPhase
-    {
-        [JsonPropertyName("phase")]
-        public required string Phase { get; set; }
     }
 }

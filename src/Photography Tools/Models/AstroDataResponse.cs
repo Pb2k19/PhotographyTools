@@ -2,6 +2,6 @@
 
 public record AstroData(SunData SunData, MoonData MoonData);
 
-public record MoonData(TimeSpan Rise, TimeSpan UpperTransit, TimeSpan Set, double Illumination, double MoonAge, string Phase);
+public record MoonData(DateTime Rise, DateTime UpperTransit, DateTime Set, double Illumination, double MoonAge, string Phase);
 
-public record SunData(TimeSpan Rise, TimeSpan CivilTwilightStart, TimeSpan CivilTwilightEnd, TimeSpan UpperTransit, TimeSpan Set);
+public record SunData(DateTime Rise, DateTime CivilTwilightStart, DateTime CivilTwilightEnd, DateTime UpperTransit, DateTime Set);

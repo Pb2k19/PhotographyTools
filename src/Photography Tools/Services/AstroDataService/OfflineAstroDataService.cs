@@ -45,7 +45,7 @@ public class OfflineAstroDataService : IAstroDataService
         if (index == -1 && moonPhase.Value.Phase <= AstroConst.SynodicMonthLength)
             index = 0;
 
-        return new(new MoonData(moonRiseAndSet.Value.Rise?.TimeOfDay ?? TimeSpan.Zero, TimeSpan.Zero, moonRiseAndSet.Value.Set?.TimeOfDay ?? TimeSpan.Zero, moonPhase.Value.Fraction * 100, moonPhase.Value.Phase, AstroConst.AllMoonPhases[index]), true, 1);
+        return new(new MoonData(moonRiseAndSet?.Rise ?? date, date, moonRiseAndSet?.Set ?? date, moonPhase.Value.Fraction * 100, moonPhase.Value.Phase, AstroConst.AllMoonPhases[index]), true, 1);
     }
 
     public static double CalculateRightAscension(double longitude, double b) =>
