@@ -48,6 +48,10 @@ public class OfflineAstroDataService : IAstroDataService
         return new(new MoonData(moonRiseAndSet?.Rise ?? date, date, moonRiseAndSet?.Set ?? date, moonPhase.Value.Fraction * 100, moonPhase.Value.Phase, AstroConst.AllMoonPhases[index]), true, 1);
     }
 
+    private record struct AstroPhase(int Index, double MinValue, double MaxValue);
+
+    #region SunCalcNet Calculations
+    // Source: SunCalcNet, https://github.com/kostebudinoski/SunCalcNet, access date: 30.04.2024
     public static double CalculateRightAscension(double longitude, double b) =>
         Math.Atan2(Math.Sin(longitude) * Math.Cos(AstroConst.EarthObliquity) -
             Math.Tan(b) * Math.Sin(AstroConst.EarthObliquity), Math.Cos(longitude));
@@ -206,6 +210,5 @@ public class OfflineAstroDataService : IAstroDataService
 
         return new RiseAndSetResult(rise.HasValue ? date.AddHours(rise.Value) : null, set.HasValue ? date.AddHours(set.Value) : null, ye);
     }
-
-    private record struct AstroPhase(int Index, double MinValue, double MaxValue);
+    #endregion
 }
