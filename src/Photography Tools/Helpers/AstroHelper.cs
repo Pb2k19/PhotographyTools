@@ -22,8 +22,38 @@ public static class AstroHelper
         primeSearchValues = SearchValues.Create(['′', '\'', '‘', '´', '`']),
         quotationSearchValues = SearchValues.Create(['″', '"', '〃']);
 
-    public static double ToJulianDate(this DateTime date) =>
-        date.ToUniversalTime().ToOADate() + AstroConst.JulianAndOADateDif;
+    public static bool IsJulianDate(this DateTime date)
+    {
+        if (date.Year < 1582 || (date.Year == 1582 && date.Month < 10) || (date.Year == 1582 && date.Month == 10 && date.Day < 5))
+            return true;
+
+        if (date.Year > 1582 || (date.Year == 1582 && date.Month > 10) || (date.Year == 1582 && date.Month == 10 && date.Day > 14))
+            return false;
+
+        throw new ArgumentOutOfRangeException(nameof(date), "Dates between 5-10-1582 and 14-10-1582 are incorrect");
+    }
+
+    // Source: ASTRONOMICAL ALGORITHMS SECOND EDITION, Jean Meeus, Published by Willmann-Bell, Inc. Page: 60-61
+    public static double ToJulianDate(this DateTime date)
+    {
+        int y, m;
+        double d = date.Day + date.Hour / 24.0 + date.Minute / 1440.0 + (date.Second + date.Millisecond / 1000.0) / 86400.0;
+
+        if (date.Month > 2)
+        {
+            y = date.Year;
+            m = date.Month;
+        }
+        else
+        {
+            y = date.Year - 1;
+            m = date.Month + 12;
+        }
+
+        int b = IsJulianDate(date) ? 0 : 2 - y / 100 + y / 400;
+
+        return (int)(365.25 * (y + 4716)) + (int)(30.6001 * (m + 1)) + d + b - 1524.5;
+    }
 
     public static (double latitude, double longitude) ConvertDdStringToDd(ReadOnlySpan<char> input)
     {

@@ -15,8 +15,7 @@ public class AstroConst
         EarthObliquity = MathHelper.ToRadianMultiplier * 23.4397,
         EarthPerihelion = MathHelper.ToRadianMultiplier * 102.9372,
         SynodicMonthLength = 29.53058770576,
-        JulianDay01_01_2000_Noon = 2451545.0,
-        JulianAndOADateDif = 2415018.5;
+        JulianDay01_01_2000_Noon = 2451545.0;
 
     public const string
         NewMoon = "New Moon",
