@@ -5,19 +5,54 @@ namespace Photography_Tools.Helpers;
 
 public static class AstroHelper
 {
+    private const char
+        NorthUpper = 'N',
+        NorthLower = 'n',
+        SouthUpper = 'S',
+        SouthLower = 's',
+        WestUpper = 'W',
+        WestLower = 'w',
+        EastUpper = 'E',
+        EastLower = 'e';
+
     private static readonly SearchValues<char>
-        directionsChars = SearchValues.Create(['N', 'S', 'W', 'E', 'n', 's', 'w', 'e']),
-        separators = SearchValues.Create([',', ';']);
+        directionsSearchValues = SearchValues.Create([NorthUpper, SouthUpper, WestUpper, EastUpper, NorthLower, SouthLower, WestLower, EastLower]),
+        separatorsSearchValues = SearchValues.Create([',', ';']),
+        degreeSearchValues = SearchValues.Create(['°', '*']),
+        primeSearchValues = SearchValues.Create(['′', '\'', '‘', '´', '`']),
+        quotationSearchValues = SearchValues.Create(['″', '"', '〃']);
 
     public static double ToJulianDate(this DateTime date) =>
         date.ToUniversalTime().ToOADate() + AstroConst.JulianAndOADateDif;
 
-    public static (double latitude, double longitude) ConvertDmsToDd(ReadOnlySpan<char> input)
+    public static (double latitude, double longitude) ConvertDdStringToDd(ReadOnlySpan<char> input)
     {
-        int indexOfSecondPart = input.IndexOfAny(separators);
+        int indexOfSecondPart = input.IndexOfAny(separatorsSearchValues);
 
         if (indexOfSecondPart == -1)
+        {
             indexOfSecondPart = input.IndexOf(' ');
+            if (indexOfSecondPart == -1)
+                return (double.NaN, double.NaN);
+        }
+
+        ReadOnlySpan<char> latitudePart = input[..indexOfSecondPart].Trim();
+        indexOfSecondPart++;
+        ReadOnlySpan<char> longitudePart = input[indexOfSecondPart..].Trim();
+
+        return (double.Parse(latitudePart, CultureInfo.InvariantCulture), double.Parse(longitudePart, CultureInfo.InvariantCulture));
+    }
+
+    public static (double latitude, double longitude) ConvertDmsStringToDd(ReadOnlySpan<char> input)
+    {
+        int indexOfSecondPart = input.IndexOfAny(separatorsSearchValues);
+
+        if (indexOfSecondPart == -1)
+        {
+            indexOfSecondPart = input.IndexOf(' ');
+            if (indexOfSecondPart == -1)
+                return (double.NaN, double.NaN);
+        }
 
         ReadOnlySpan<char> latitudePart = input[..indexOfSecondPart].Trim();
         indexOfSecondPart++;
@@ -28,10 +63,10 @@ public static class AstroHelper
 
     public static double ConvertDmsPartToDd(ReadOnlySpan<char> chars)
     {
-        int degIndex = chars.IndexOf('°');
-        int primeIndex = chars.IndexOf('\'');
-        int quotationIndex = chars.IndexOf('"');
-        int direction = chars.IndexOfAny(directionsChars);
+        int degIndex = chars.IndexOfAny(degreeSearchValues);
+        int primeIndex = chars.IndexOfAny(primeSearchValues);
+        int quotationIndex = chars.IndexOfAny(quotationSearchValues);
+        int direction = chars.IndexOfAny(directionsSearchValues);
 
         if (direction == -1)
             return double.NaN;
@@ -67,9 +102,8 @@ public static class AstroHelper
 
         return chars[direction] switch
         {
-            'N' or 'n' or 'E' or 'e' => result,
-            'S' or 's' or 'W' or 'w' => result * -1,
-            _ => double.NaN
+            NorthUpper or NorthLower or EastUpper or EastLower => result,
+            _ => result * -1
         };
     }
 }
