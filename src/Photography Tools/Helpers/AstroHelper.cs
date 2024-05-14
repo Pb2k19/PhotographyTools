@@ -57,6 +57,7 @@ public static class AstroHelper
 
     public static (double latitude, double longitude) ConvertDdStringToDd(ReadOnlySpan<char> input)
     {
+        input = input.Trim();
         int indexOfSecondPart = input.IndexOfAny(separatorsSearchValues);
 
         if (indexOfSecondPart == -1)
@@ -75,6 +76,7 @@ public static class AstroHelper
 
     public static (double latitude, double longitude) ConvertDmsStringToDd(ReadOnlySpan<char> input)
     {
+        input = input.Trim();
         int indexOfSecondPart = input.IndexOfAny(separatorsSearchValues);
 
         if (indexOfSecondPart == -1)
