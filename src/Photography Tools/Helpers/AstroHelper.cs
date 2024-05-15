@@ -55,7 +55,7 @@ public static class AstroHelper
         return (int)(365.25 * (y + 4716)) + (int)(30.6001 * (m + 1)) + d + b - 1524.5;
     }
 
-    public static (double latitude, double longitude) ConvertDdStringToDd(ReadOnlySpan<char> input)
+    public static GeographicalCoordinates ConvertDdStringToDd(ReadOnlySpan<char> input)
     {
         input = input.Trim();
         int indexOfSecondPart = input.IndexOfAny(separatorsSearchValues);
@@ -64,17 +64,17 @@ public static class AstroHelper
         {
             indexOfSecondPart = input.IndexOf(' ');
             if (indexOfSecondPart == -1)
-                return (double.NaN, double.NaN);
+                return new(double.NaN, double.NaN);
         }
 
         ReadOnlySpan<char> latitudePart = input[..indexOfSecondPart].Trim();
         indexOfSecondPart++;
         ReadOnlySpan<char> longitudePart = input[indexOfSecondPart..].Trim();
 
-        return (double.Parse(latitudePart, CultureInfo.InvariantCulture), double.Parse(longitudePart, CultureInfo.InvariantCulture));
+        return new(double.Parse(latitudePart, CultureInfo.InvariantCulture), double.Parse(longitudePart, CultureInfo.InvariantCulture));
     }
 
-    public static (double latitude, double longitude) ConvertDmsStringToDd(ReadOnlySpan<char> input)
+    public static GeographicalCoordinates ConvertDmsStringToDd(ReadOnlySpan<char> input)
     {
         input = input.Trim();
         int indexOfSecondPart = input.IndexOfAny(separatorsSearchValues);
@@ -83,14 +83,14 @@ public static class AstroHelper
         {
             indexOfSecondPart = input.IndexOf(' ');
             if (indexOfSecondPart == -1)
-                return (double.NaN, double.NaN);
+                return new(double.NaN, double.NaN);
         }
 
         ReadOnlySpan<char> latitudePart = input[..indexOfSecondPart].Trim();
         indexOfSecondPart++;
         ReadOnlySpan<char> longitudePart = input[indexOfSecondPart..].Trim();
 
-        return (ConvertDmsPartToDd(latitudePart), ConvertDmsPartToDd(longitudePart));
+        return new(ConvertDmsPartToDd(latitudePart), ConvertDmsPartToDd(longitudePart));
     }
 
     public static double ConvertDmsPartToDd(ReadOnlySpan<char> chars)
