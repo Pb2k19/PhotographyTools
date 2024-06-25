@@ -19,16 +19,17 @@ public partial class MoonPhaseViewModel : ObservableObject
     private TimeSpan selectedTime = new(DateTime.Now.TimeOfDay.Hours, DateTime.Now.TimeOfDay.Minutes, 0);
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsMoonCyclicallyVisible))]
-    private RiseAndSetResult moonRiseAndSet;
-
-    [ObservableProperty]
-    private string moonPhaseName = string.Empty, moonImage = string.Empty, illuminationPerc = string.Empty, moonAge = string.Empty;
+    private string
+        moonPhaseName = string.Empty,
+        moonImage = string.Empty,
+        illuminationPerc = string.Empty,
+        moonAge = string.Empty,
+        moonriseDate = string.Empty,
+        moonsetDate = string.Empty;
 
     [ObservableProperty]
     private bool isNorthernHemisphere = true;
 
-    public bool IsMoonCyclicallyVisible => !(MoonRiseAndSet.AlwaysUp || MoonRiseAndSet.AlwaysDown);
 
     static MoonPhaseViewModel()
     {
@@ -98,7 +99,8 @@ public partial class MoonPhaseViewModel : ObservableObject
         SetIlluminationPerc(Math.Round(data.Illumination));
         SetMoonAge(Math.Round(data.MoonAge, 2));
 
-        MoonRiseAndSet = new(data.Rise.ToLocalTime(), data.Set.ToLocalTime());
+        MoonriseDate = data.Rise.ToLocalTime().ToString("d MMM HH:mm");
+        MoonsetDate = data.Set.ToLocalTime().ToString("d MMM HH:mm");
     }
 
     private void SetIlluminationPerc<T>(T value) => IlluminationPerc = $"{value}%";
