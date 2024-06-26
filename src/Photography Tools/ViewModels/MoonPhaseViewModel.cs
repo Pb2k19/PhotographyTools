@@ -6,11 +6,14 @@ namespace Photography_Tools.ViewModels;
 
 public partial class MoonPhaseViewModel : ObservableObject
 {
-    private static readonly FrozenDictionary<string, string> MoonImages;
+    private static readonly FrozenDictionary<string, string> MoonImagesNorth, MoonImagesSouth;
 
     private readonly IAstroDataService onlineAstroDataService;
     private readonly IAstroDataService offlineAstroDataService;
     private TimeSpan lastSelectedTime = TimeSpan.Zero;
+
+    [ObservableProperty]
+    private Place place = new("Warsaw", new(-52.23, 21.01));
 
     [ObservableProperty]
     private DateTime selectedDate = DateTime.Today;
@@ -27,13 +30,9 @@ public partial class MoonPhaseViewModel : ObservableObject
         moonriseDate = string.Empty,
         moonsetDate = string.Empty;
 
-    [ObservableProperty]
-    private bool isNorthernHemisphere = true;
-
-
     static MoonPhaseViewModel()
     {
-        MoonImages = new Dictionary<string, string>
+        MoonImagesNorth = new Dictionary<string, string>
         {
             {"New Moon", "🌑"},
             {"Waxing Crescent", "🌒"},
@@ -43,6 +42,18 @@ public partial class MoonPhaseViewModel : ObservableObject
             {"Waning Gibbous", "🌖"},
             {"Third Quarter", "🌗"},
             {"Waning Crescent", "🌘"},
+        }.ToFrozenDictionary();
+
+        MoonImagesSouth = new Dictionary<string, string>
+        {
+            {"New Moon", "🌑"},
+            {"Waxing Crescent", "🌘"},
+            {"First Quarter", "🌗"},
+            {"Waxing Gibbous", "🌖"},
+            {"Full Moon", "🌕"},
+            {"Waning Gibbous", "🌔"},
+            {"Third Quarter", "🌓"},
+            {"Waning Crescent", "🌒"},
         }.ToFrozenDictionary();
     }
 
@@ -66,20 +77,21 @@ public partial class MoonPhaseViewModel : ObservableObject
     private async Task CalculateAsync()
     {
         DateTime date = SelectedDate.Date.Add(SelectedTime);
+        GeographicalCoordinates coordinates = Place.Coordinates;
 
-        ServiceResponse<MoonData?> offlineResult = await offlineAstroDataService.GetMoonDataAsync(date, 52.23, 21.01);
+        ServiceResponse<MoonData?> offlineResult = await offlineAstroDataService.GetMoonDataAsync(date, coordinates.Latitude, coordinates.Longitude);
 
         if (offlineResult.IsSuccess && offlineResult.Data is not null)
-            DisplayResoult(offlineResult.Data);
+            DisplayResoult(offlineResult.Data, coordinates.Latitude);
         //else display error message
 
         try
         {
-            ServiceResponse<MoonData?> onlineResult = await onlineAstroDataService.GetMoonDataAsync(date, 52.23, 21.01);
+            ServiceResponse<MoonData?> onlineResult = await onlineAstroDataService.GetMoonDataAsync(date, coordinates.Latitude, coordinates.Longitude);
 
             if (onlineResult.IsSuccess && onlineResult.Data is not null)
             {
-                DisplayResoult(onlineResult.Data);
+                DisplayResoult(onlineResult.Data, coordinates.Latitude);
                 return;
             }
         }
@@ -92,10 +104,10 @@ public partial class MoonPhaseViewModel : ObservableObject
         }
     }
 
-    public void DisplayResoult(MoonData data)
+    public void DisplayResoult(MoonData data, double latitude)
     {
         MoonPhaseName = data.Phase;
-        MoonImage = MoonImages[data.Phase];
+        SetMoonImage(data.Phase, latitude);
         SetIlluminationPerc(Math.Round(data.Illumination));
         SetMoonAge(Math.Round(data.MoonAge, 2));
 
@@ -103,7 +115,12 @@ public partial class MoonPhaseViewModel : ObservableObject
         MoonsetDate = data.Set.ToLocalTime().ToString("d MMM HH:mm");
     }
 
-    private void SetIlluminationPerc<T>(T value) => IlluminationPerc = $"{value}%";
+    public void SetMoonImage(string phaseName, double latitude)
+    {
+        MoonImage = latitude >= 0 ? MoonImagesNorth[phaseName] : MoonImagesSouth[phaseName];
+    }
 
-    private void SetMoonAge(double value) => MoonAge = value < 2 ? $"{value} day" : $"{value} days";
+    public void SetIlluminationPerc<T>(T value) => IlluminationPerc = $"{value}%";
+
+    public void SetMoonAge(double value) => MoonAge = value < 2 ? $"{value} day" : $"{value} days";
 }
