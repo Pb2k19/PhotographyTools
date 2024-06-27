@@ -138,4 +138,24 @@ public static class AstroHelper
             _ => result * -1
         };
     }
+
+    public static string ConvertDdToDmsString(GeographicalCoordinates coordinates)
+        => ConvertDdToDmsString(coordinates.Latitude, coordinates.Longitude);
+
+    public static string ConvertDdToDmsString(double latitude, double longitude)
+    {
+        double latitudeDeg, longitudeDeg, latitudeMin, longitudeMin, latitudeS, longitudeS;
+
+        latitudeDeg = Math.Abs((int)latitude);
+        latitudeMin = (Math.Abs(latitude) - latitudeDeg) * 60;
+        latitudeS = Math.Round((latitudeMin - ((int)latitudeMin)) * 60, 4);
+        latitudeMin = (int)latitudeMin;
+
+        longitudeDeg = Math.Abs((int)longitude);
+        longitudeMin = (Math.Abs(longitude) - longitudeDeg) * 60;
+        longitudeS = Math.Round((longitudeMin - ((int)longitudeMin)) * 60, 4);
+        longitudeMin = (int)longitudeMin;
+
+        return $"""{latitudeDeg}° {latitudeMin}' {latitudeS.ToString(CultureInfo.InvariantCulture)}" {(latitude >= 0 ? NorthUpper : SouthUpper)} {longitudeDeg}° {longitudeMin}' {longitudeS.ToString(CultureInfo.InvariantCulture)}" {(longitude >= 0 ? EastUpper : WestUpper)}""";
+    }
 }

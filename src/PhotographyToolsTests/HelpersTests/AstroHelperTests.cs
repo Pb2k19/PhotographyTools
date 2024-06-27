@@ -1,4 +1,5 @@
 ﻿using Photography_Tools.Helpers;
+using Photography_Tools.Models;
 
 namespace PhotographyToolsTests.HelpersTests;
 
@@ -75,6 +76,8 @@ public class AstroHelperTests
     [InlineData("47.219722, 14.764722", 47.219722, 14.764722)]
     [InlineData("  38.9679 -106.04517", 38.9679, -106.04517)]
     [InlineData("-23.703611, -46.699722", -23.703611, -46.699722)]
+    [InlineData("-23.703611,-46.699722", -23.703611, -46.699722)]
+    [InlineData(" -37.849722;144.968333  ", -37.849722, 144.968333)]
     [InlineData(" -37.849722; 144.968333  ", -37.849722, 144.968333)]
     public void ConvertDdStringToDd_ShouldReturnCorrectLatitudeAndLongitude(string input, double expectedLat, double expectedLong)
     {
@@ -112,5 +115,31 @@ public class AstroHelperTests
         double actual = AstroHelper.ConvertDmsPartToDd("38.9679");
 
         Assert.Equal(double.NaN, actual);
+    }
+
+    [Theory]
+    [InlineData(36.583602, -121.755501, """36° 35' 0.9672" N 121° 45' 19.8036" W""")]
+    [InlineData(-23.704627, -46.699262, """23° 42' 16.6572" S 46° 41' 57.3432" W""")]
+    [InlineData(35.887979, 76.512641, """35° 53' 16.7244" N 76° 30' 45.5076" E""")]
+    [InlineData(-37.850315, 144.969871, """37° 51' 1.134" S 144° 58' 11.5356" E""")]
+    [InlineData(0, 0, """0° 0' 0" N 0° 0' 0" E""")]
+    public void ConvertDdToDmsString_ShouldReturnCorrectDmsString(double inputLat, double inputLong, string expected)
+    {
+        string actual = AstroHelper.ConvertDdToDmsString(inputLat, inputLong);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory]
+    [InlineData(36.583602, -121.755501, """36° 35' 0.9672" N 121° 45' 19.8036" W""")]
+    [InlineData(-23.704627, -46.699262, """23° 42' 16.6572" S 46° 41' 57.3432" W""")]
+    [InlineData(35.887979, 76.512641, """35° 53' 16.7244" N 76° 30' 45.5076" E""")]
+    [InlineData(-37.850315, 144.969871, """37° 51' 1.134" S 144° 58' 11.5356" E""")]
+    [InlineData(0, 0, """0° 0' 0" N 0° 0' 0" E""")]
+    public void ConvertDdToDmsString_ShouldReturnCorrectDmsStringFromGeographicalCoordinates(double inputLat, double inputLong, string expected)
+    {
+        string actual = AstroHelper.ConvertDdToDmsString(new GeographicalCoordinates(inputLat, inputLong));
+
+        Assert.Equal(expected, actual);
     }
 }
