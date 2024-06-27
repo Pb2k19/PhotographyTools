@@ -17,6 +17,7 @@ public static class AstroHelper
 
     private static readonly SearchValues<char>
         directionsSearchValues = SearchValues.Create([NorthUpper, SouthUpper, WestUpper, EastUpper, NorthLower, SouthLower, WestLower, EastLower]),
+        latitudeDirectionsSearchValues = SearchValues.Create([NorthUpper, SouthUpper, NorthLower, SouthLower]),
         separatorsSearchValues = SearchValues.Create([',', ';']),
         degreeSearchValues = SearchValues.Create(['°', '*']),
         primeSearchValues = SearchValues.Create(['′', '\'', '‘', '´', '`']),
@@ -81,9 +82,11 @@ public static class AstroHelper
 
         if (indexOfSecondPart == -1)
         {
-            indexOfSecondPart = input.IndexOf(' ');
+            indexOfSecondPart = input.IndexOfAny(latitudeDirectionsSearchValues);
             if (indexOfSecondPart == -1)
                 return new(double.NaN, double.NaN);
+
+            indexOfSecondPart++;
         }
 
         ReadOnlySpan<char> latitudePart = input[..indexOfSecondPart].Trim();

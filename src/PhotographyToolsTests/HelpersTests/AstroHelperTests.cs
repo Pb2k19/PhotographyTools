@@ -54,6 +54,7 @@ public class AstroHelperTests
     [InlineData("  38° 58′ 4.44″ N, 106° 2′ 42.61″ W", 38.9679, -106.04517)]
     [InlineData("23° 42′ 13″ S; 46° 41′ 59″ W", -23.703611, -46.699722)]
     [InlineData(""" 37* 50' 59" S, 144° 58′ 6″ E  test""", -37.849722, 144.968333)]
+    [InlineData("""37° 51' 1.134" S 144° 58' 11.5356" E""", -37.850315, 144.969871)]
     public void ConvertDmsStringToDd_ShouldReturnCorrectLatitudeAndLongitude(string input, double expectedLat, double expectedLong)
     {
         (double latitude, double longitude) = AstroHelper.ConvertDmsStringToDd(input);
