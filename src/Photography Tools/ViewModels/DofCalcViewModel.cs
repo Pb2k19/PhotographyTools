@@ -32,7 +32,7 @@ public partial class DofCalcViewModel : SaveableViewModel
         DofCalcResult = new();
 
         DofCalcUserInput? userInput = preferencesService.GetDeserailizedPreference<DofCalcUserInput>(PreferencesKeys.DofCalcUserInputPreferencesKey);
-        UserInput = userInput is not null ? userInput : new()
+        UserInput = userInput is not null && userInput.Validate() ? userInput : new()
         {
             SelectedSensorName = SensorNames[0],
             DofCalcInput = new()
@@ -91,6 +91,7 @@ public partial class DofCalcViewModel : SaveableViewModel
 
     protected override void SaveUserInput()
     {
-        preferencesService.SerializedAndSetPreference(PreferencesKeys.DofCalcUserInputPreferencesKey, UserInput);
+        if (UserInput.Validate())
+            preferencesService.SerializedAndSetPreference(PreferencesKeys.DofCalcUserInputPreferencesKey, UserInput);
     }
 }

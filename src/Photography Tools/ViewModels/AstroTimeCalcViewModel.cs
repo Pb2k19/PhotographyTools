@@ -26,7 +26,7 @@ public partial class AstroTimeCalcViewModel : SaveableViewModel
 
         AstroTimeCalcUserInput? input = preferencesService?.GetDeserailizedPreference<AstroTimeCalcUserInput>(PreferencesKeys.AstroTimeCalcUserInputPreferencesKey);
 
-        userInput = input is not null ? input : new()
+        userInput = input is not null && input.Validate() ? input : new()
         {
             SelectedSensorName = SensorNames[0],
             Lens = new() { Aperture = Apertures[8], FocalLengthMM = 20 }
@@ -71,6 +71,7 @@ public partial class AstroTimeCalcViewModel : SaveableViewModel
 
     protected override void SaveUserInput()
     {
-        preferencesService?.SerializedAndSetPreference(PreferencesKeys.AstroTimeCalcUserInputPreferencesKey, UserInput);
+        if (UserInput.Validate())
+            preferencesService?.SerializedAndSetPreference(PreferencesKeys.AstroTimeCalcUserInputPreferencesKey, UserInput);
     }
 }

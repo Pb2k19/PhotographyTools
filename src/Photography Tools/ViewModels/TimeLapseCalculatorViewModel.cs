@@ -10,7 +10,8 @@ public partial class TimeLapseCalculatorViewModel : SaveableViewModel
 
     public TimeLapseCalculatorViewModel(IPreferencesService preferencesService) : base(preferencesService)
     {
-        UserInput = preferencesService?.GetDeserailizedPreference<TimeLapseUserInput>(PreferencesKeys.TimeLapseCalcUserInputPreferencesKey) ?? new() { TimeLapseCalcValues = new() };
+        TimeLapseUserInput? input = preferencesService?.GetDeserailizedPreference<TimeLapseUserInput>(PreferencesKeys.TimeLapseCalcUserInputPreferencesKey);
+        UserInput = input is not null && input.Validate() ? input : new() { TimeLapseCalcValues = new() };
     }
 
     [RelayCommand]
@@ -108,6 +109,7 @@ public partial class TimeLapseCalculatorViewModel : SaveableViewModel
 
     protected override void SaveUserInput()
     {
-        preferencesService?.SerializedAndSetPreference(PreferencesKeys.TimeLapseCalcUserInputPreferencesKey, UserInput);
+        if (UserInput.Validate())
+            preferencesService?.SerializedAndSetPreference(PreferencesKeys.TimeLapseCalcUserInputPreferencesKey, UserInput);
     }
 }

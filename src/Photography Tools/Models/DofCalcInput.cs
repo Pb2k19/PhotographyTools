@@ -1,6 +1,8 @@
-﻿namespace Photography_Tools.Models;
+﻿using Photography_Tools.Models.Interfaces;
 
-public class DofCalcInput
+namespace Photography_Tools.Models;
+
+public class DofCalcInput : IValidatable
 {
     public required Sensor CameraInfo { get; set; }
     public required Lens LensInfo { get; set; }
@@ -10,4 +12,9 @@ public class DofCalcInput
     public int VisualAcuityLpPerMM { get; set; } = 5;
     public int StandardViewingDistanceMM { get; set; } = 250;
     public int ActualViewingDistanceMM { get; set; } = 250;
+
+    public bool Validate()
+    {
+        return CameraInfo is not null && LensInfo is not null;
+    }
 }

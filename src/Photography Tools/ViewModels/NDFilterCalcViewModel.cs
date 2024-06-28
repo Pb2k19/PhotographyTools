@@ -32,7 +32,7 @@ public partial class NDFilterCalcViewModel : SaveableViewModel
         FilterToAddName = AvaliableNDFiltersNames[0];
 
         NDFilterCalcUserInput? input = preferencesService.GetDeserailizedPreference<NDFilterCalcUserInput>(PreferencesKeys.NDFilterCalcUserInputPreferencesKey);
-        userInput = input is not null ? input : new() { TimeText = ShutterSpeedConst.AllShutterSpeedsNamesSorted[9], NdFilters = [] };
+        userInput = input is not null && input.Validate() ? input : new() { TimeText = ShutterSpeedConst.AllShutterSpeedsNamesSorted[9], NdFilters = [] };
 
         CalculateTime();
     }
@@ -166,6 +166,7 @@ public partial class NDFilterCalcViewModel : SaveableViewModel
 
     protected override void SaveUserInput()
     {
-        preferencesService.SerializedAndSetPreference(PreferencesKeys.NDFilterCalcUserInputPreferencesKey, UserInput);
+        if (UserInput.Validate())
+            preferencesService.SerializedAndSetPreference(PreferencesKeys.NDFilterCalcUserInputPreferencesKey, UserInput);
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Photography_Tools.Models;
 
-public class DofCalcUserInput
+public class DofCalcUserInput : UserInput
 {
     public required DofCalcInput DofCalcInput { get; set; }
     public required string SelectedSensorName { get; set; }
@@ -18,4 +18,9 @@ public class DofCalcUserInput
     public int DofFarLimitUnitIndex { get; set; } = 2;
     public int DofInFrontOfSubjectUnitIndex { get; set; } = 1;
     public int DofInBackOfSubjectUnitIndex { get; set; } = 1;
+
+    public override bool Validate()
+    {
+        return !string.IsNullOrWhiteSpace(SelectedSensorName) && DofCalcInput is not null && DofCalcInput.Validate();
+    }
 }

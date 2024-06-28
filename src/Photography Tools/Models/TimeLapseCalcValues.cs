@@ -37,15 +37,3 @@ public class TimeLapseCalcValues
     public void CalculateStorageSize()
         => TotalStorageSizeMB = PhotoSizeMB * ShootsCount;
 }
-
-public class TimeLapseUserInput
-{
-    public required TimeLapseCalcValues TimeLapseCalcValues { get; set; }
-    public double EnteredClipFrameRateFPS { get; set; } = 30;
-    public int EnteredShootsCount { get; set; } = 150;
-    public int ShootingIntervalSelectedUnitIndex { get; set; } = 1;
-    public int ShootingLengthSelectedUnitIndex { get; set; } = 2;
-    public int ClipLengthSelectedUnitIndex { get; set; } = 1;
-    public int PhotoSizeSelectedUnitIndex { get; set; } = 2;
-    public int TotalStorageSelectedUnitIndex { get; set; } = 3;
-}
