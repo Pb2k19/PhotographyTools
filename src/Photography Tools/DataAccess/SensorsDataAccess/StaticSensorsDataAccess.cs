@@ -22,5 +22,5 @@ public class StaticSensorsDataAccess : ISensorsDataAccess
 
     public ImmutableArray<Sensor> GetSensors() => sensors.Values;
 
-    public Sensor GetSensor(string sensorName) => sensors[sensorName];
+    public Sensor? GetSensor(string sensorName) => sensors.TryGetValue(sensorName, out Sensor? sensor) ? sensor : null;
 }

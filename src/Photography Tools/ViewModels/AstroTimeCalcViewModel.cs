@@ -6,6 +6,7 @@ public partial class AstroTimeCalcViewModel : SaveableViewModel
 {
     private readonly IPhotographyCalculationsService photographyCalcService;
     private readonly ISensorsDataAccess sensorsDataAccess;
+    private readonly IUiMessageService messageService;
 
     [ObservableProperty]
     private AstroTimeCalcUserInput userInput;
@@ -17,10 +18,11 @@ public partial class AstroTimeCalcViewModel : SaveableViewModel
 
     public ImmutableArray<string> SensorNames { get; }
 
-    public AstroTimeCalcViewModel(IPhotographyCalculationsService photographyCalculationsService, IPreferencesService preferencesService, ISensorsDataAccess sensorsDataAccess) : base(preferencesService)
+    public AstroTimeCalcViewModel(IPhotographyCalculationsService photographyCalculationsService, IPreferencesService preferencesService, ISensorsDataAccess sensorsDataAccess, IUiMessageService messageService) : base(preferencesService)
     {
         photographyCalcService = photographyCalculationsService;
         this.sensorsDataAccess = sensorsDataAccess;
+        this.messageService = messageService;
 
         SensorNames = sensorsDataAccess.GetSensorNames();
 
@@ -38,8 +40,16 @@ public partial class AstroTimeCalcViewModel : SaveableViewModel
     [RelayCommand]
     private void CalculateAllValues()
     {
-        CalculateTimeForAstro();
-        CalculateTimeForAstroWithNpfRule();
+        Sensor? sensor = sensorsDataAccess.GetSensor(UserInput.SelectedSensorName);
+
+        if (sensor is null)
+        {
+            messageService.ShowMessageAndForget("Select sensor", "Select correct sensor and try again", "Ok");
+            return;
+        }
+
+        CalculateTimeForAstro(sensor);
+        CalculateTimeForAstroWithNpfRule(sensor);
     }
 
     [RelayCommand]
@@ -54,16 +64,32 @@ public partial class AstroTimeCalcViewModel : SaveableViewModel
     }
 
     [RelayCommand]
-    private void CalculateTimeForAstroWithNpfRule()
+    private void CalculateTimeForAstroWithNpfRule(Sensor? sensor = null)
     {
-        NpfRuleH = Math.Round(photographyCalcService.CalculateTimeForAstroWithNPFRule(sensorsDataAccess.GetSensor(UserInput.SelectedSensorName), UserInput.Lens, 1, UserInput.Decilination), 3);
-        NpfRuleM = Math.Round(photographyCalcService.CalculateTimeForAstroWithNPFRule(sensorsDataAccess.GetSensor(UserInput.SelectedSensorName), UserInput.Lens, 2, UserInput.Decilination), 3);
-        NpfRuleS = Math.Round(photographyCalcService.CalculateTimeForAstroWithNPFRule(sensorsDataAccess.GetSensor(UserInput.SelectedSensorName), UserInput.Lens, 3, UserInput.Decilination), 3);
+        sensor ??= sensorsDataAccess.GetSensor(UserInput.SelectedSensorName);
+
+        if (sensor is null)
+        {
+            messageService.ShowMessageAndForget("Select sensor", "Select correct sensor and try again", "Ok");
+            return;
+        }
+
+        NpfRuleH = Math.Round(photographyCalcService.CalculateTimeForAstroWithNPFRule(sensor, UserInput.Lens, 1, UserInput.Decilination), 3);
+        NpfRuleM = Math.Round(photographyCalcService.CalculateTimeForAstroWithNPFRule(sensor, UserInput.Lens, 2, UserInput.Decilination), 3);
+        NpfRuleS = Math.Round(photographyCalcService.CalculateTimeForAstroWithNPFRule(sensor, UserInput.Lens, 3, UserInput.Decilination), 3);
     }
 
-    private void CalculateTimeForAstro()
+    private void CalculateTimeForAstro(Sensor? sensor = null)
     {
-        (double r200, double r300, double r500) = photographyCalcService.CalculateTimeForAstro(sensorsDataAccess.GetSensor(UserInput.SelectedSensorName).CropFactor, UserInput.Lens.FocalLengthMM);
+        sensor ??= sensorsDataAccess.GetSensor(UserInput.SelectedSensorName);
+
+        if (sensor is null)
+        {
+            messageService.ShowMessageAndForget("Select sensor", "Select correct sensor and try again", "Ok");
+            return;
+        }
+
+        (double r200, double r300, double r500) = photographyCalcService.CalculateTimeForAstro(sensor.CropFactor, UserInput.Lens.FocalLengthMM);
         Rule200 = Math.Round(r200, 3);
         Rule300 = Math.Round(r300, 3);
         Rule500 = Math.Round(r500, 3);

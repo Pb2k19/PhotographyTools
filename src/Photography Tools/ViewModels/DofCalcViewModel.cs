@@ -8,6 +8,7 @@ public partial class DofCalcViewModel : SaveableViewModel
 
     private readonly IPhotographyCalculationsService photographyCalcService;
     private readonly ISensorsDataAccess sensorsDataAccess;
+    private readonly IUiMessageService messageService;
 
     [ObservableProperty]
     private string toggleText = string.Empty;
@@ -22,10 +23,11 @@ public partial class DofCalcViewModel : SaveableViewModel
 
     public ImmutableArray<string> SensorNames { get; }
 
-    public DofCalcViewModel(IPhotographyCalculationsService photographyCalcService, IPreferencesService preferencesService, ISensorsDataAccess sensorsDataAccess) : base(preferencesService)
+    public DofCalcViewModel(IPhotographyCalculationsService photographyCalcService, IPreferencesService preferencesService, ISensorsDataAccess sensorsDataAccess, IUiMessageService messageService) : base(preferencesService)
     {
         this.photographyCalcService = photographyCalcService;
         this.sensorsDataAccess = sensorsDataAccess;
+        this.messageService = messageService;
 
         Apertures = ApertureConst.AllStops;
         SensorNames = sensorsDataAccess.GetSensorNames();
@@ -38,7 +40,7 @@ public partial class DofCalcViewModel : SaveableViewModel
             DofCalcInput = new()
             {
                 FocusingDistanceMM = 500,
-                CameraInfo = sensorsDataAccess.GetSensor(SensorNames[0]),
+                CameraInfo = sensorsDataAccess.GetSensor(SensorNames[0]) ?? new Sensor(24, 36, 24),
                 LensInfo = new() { Aperture = Apertures[8], FocalLengthMM = 50 }
             },
             VisualAcuityLpPerMM = 5
@@ -51,7 +53,15 @@ public partial class DofCalcViewModel : SaveableViewModel
     [RelayCommand]
     private void CalculateValues()
     {
-        UserInput.DofCalcInput.CameraInfo = sensorsDataAccess.GetSensor(UserInput.SelectedSensorName);
+        Sensor? sensor = sensorsDataAccess.GetSensor(UserInput.SelectedSensorName);
+
+        if (sensor is null)
+        {
+            messageService.ShowMessageAndForget("Select sensor", "Select correct sensor and try again", "Ok");
+            return;
+        }
+
+        UserInput.DofCalcInput.CameraInfo = sensor;
         DofCalcResult = photographyCalcService.CalculateDofValues(UserInput.DofCalcInput);
     }
 
