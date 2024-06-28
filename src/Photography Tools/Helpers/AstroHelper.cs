@@ -142,21 +142,21 @@ public static class AstroHelper
         };
     }
 
-    public static string ConvertDdToDmsString(GeographicalCoordinates coordinates)
-        => ConvertDdToDmsString(coordinates.Latitude, coordinates.Longitude);
+    public static string ConvertDdToDmsString(GeographicalCoordinates coordinates, int secondsPrecision = 4)
+        => ConvertDdToDmsString(coordinates.Latitude, coordinates.Longitude, secondsPrecision);
 
-    public static string ConvertDdToDmsString(double latitude, double longitude)
+    public static string ConvertDdToDmsString(double latitude, double longitude, int secondsPrecision = 4)
     {
         double latitudeDeg, longitudeDeg, latitudeMin, longitudeMin, latitudeS, longitudeS;
 
         latitudeDeg = Math.Abs((int)latitude);
         latitudeMin = (Math.Abs(latitude) - latitudeDeg) * 60;
-        latitudeS = Math.Round((latitudeMin - ((int)latitudeMin)) * 60, 4);
+        latitudeS = Math.Round((latitudeMin - ((int)latitudeMin)) * 60, secondsPrecision);
         latitudeMin = (int)latitudeMin;
 
         longitudeDeg = Math.Abs((int)longitude);
         longitudeMin = (Math.Abs(longitude) - longitudeDeg) * 60;
-        longitudeS = Math.Round((longitudeMin - ((int)longitudeMin)) * 60, 4);
+        longitudeS = Math.Round((longitudeMin - ((int)longitudeMin)) * 60, secondsPrecision);
         longitudeMin = (int)longitudeMin;
 
         return $"""{latitudeDeg}° {latitudeMin}' {latitudeS.ToString(CultureInfo.InvariantCulture)}" {(latitude >= 0 ? NorthUpper : SouthUpper)} {longitudeDeg}° {longitudeMin}' {longitudeS.ToString(CultureInfo.InvariantCulture)}" {(longitude >= 0 ? EastUpper : WestUpper)}""";

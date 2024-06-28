@@ -144,4 +144,30 @@ public class AstroHelperTests
 
         Assert.Equal(expected, actual);
     }
+
+    [Theory]
+    [InlineData(36.583602, -121.755501, 4, """36° 35' 0.9672" N 121° 45' 19.8036" W""")]
+    [InlineData(-23.704627, -46.699262, 3, """23° 42' 16.657" S 46° 41' 57.343" W""")]
+    [InlineData(35.887979, 76.512641, 2, """35° 53' 16.72" N 76° 30' 45.51" E""")]
+    [InlineData(-37.850315, 144.969871, 1, """37° 51' 1.1" S 144° 58' 11.5" E""")]
+    [InlineData(-37.850315, 144.969871, 0, """37° 51' 1" S 144° 58' 12" E""")]
+    public void ConvertDdToDmsString_ShouldReturnCorrectDmsStringWithSelectedAccuracy(double inputLat, double inputLong, int accuracy, string expected)
+    {
+        string actual = AstroHelper.ConvertDdToDmsString(inputLat, inputLong, accuracy);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory]
+    [InlineData(36.583602, -121.755501, 4, """36° 35' 0.9672" N 121° 45' 19.8036" W""")]
+    [InlineData(-23.704627, -46.699262, 3, """23° 42' 16.657" S 46° 41' 57.343" W""")]
+    [InlineData(35.887979, 76.512641, 2, """35° 53' 16.72" N 76° 30' 45.51" E""")]
+    [InlineData(-37.850315, 144.969871, 1, """37° 51' 1.1" S 144° 58' 11.5" E""")]
+    [InlineData(-37.850315, 144.969871, 0, """37° 51' 1" S 144° 58' 12" E""")]
+    public void ConvertDdToDmsString_ShouldReturnCorrectDmsStringFromGeographicalCoordinatesWithSelectedAccuracy(double inputLat, double inputLong, int accuracy, string expected)
+    {
+        string actual = AstroHelper.ConvertDdToDmsString(new GeographicalCoordinates(inputLat, inputLong), accuracy);
+
+        Assert.Equal(expected, actual);
+    }
 }
