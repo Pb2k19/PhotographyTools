@@ -9,4 +9,5 @@ global using Photography_Tools.Pages;
 global using Photography_Tools.Services.AstroDataService;
 global using Photography_Tools.Services.PhotographyCalculationsService;
 global using Photography_Tools.Services.PreferencesService;
+global using Photography_Tools.Services.UiMessageService;
 global using Photography_Tools.ViewModels;

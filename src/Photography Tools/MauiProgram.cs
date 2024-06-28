@@ -41,6 +41,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IKeyValueStore<AstroData>, CacheKeyValueStore<AstroData>>();
         builder.Services.AddSingleton<IPhotographyCalculationsService, PhotographyCalculationsService>();
         builder.Services.AddSingleton<IPreferencesService, PreferencesService>();
+        builder.Services.AddSingleton<IUiMessageService, UiMessageService>();
 
         // ViewModel
         builder.Services.AddSingleton<AstroTimeCalcViewModel>();
