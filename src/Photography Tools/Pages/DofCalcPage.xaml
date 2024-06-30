@@ -37,7 +37,6 @@
                 <Picker 
                     ItemsSource="{Binding SensorNames}"
                     SelectedItem="{Binding UserInput.SelectedSensorName}"                        
-                    HorizontalOptions="FillAndExpand"
                     FontSize="Medium">
                     <Picker.Behaviors>
                         <toolkit:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding CalculateValuesCommand}"/>
@@ -104,26 +103,25 @@
                 Grid.ColumnSpan="2"
                 Padding="10"
                 Style="{StaticResource EntryBorder}">
-                <StackLayout
-                    Orientation="Horizontal">
+                <FlexLayout
+                    Direction="Row">
                     <Label 
                         Text="F"
                         Style="{StaticResource LabelMedium}"
                         VerticalTextAlignment="Center"
                         Margin="0,0,5,0"
                     />
-
                     <Picker
+                        FlexLayout.Grow="1"
                         ItemsSource="{Binding Apertures}"
                         SelectedItem="{Binding UserInput.DofCalcInput.LensInfo.Aperture}"
-                        HorizontalOptions="FillAndExpand"
                         HorizontalTextAlignment="Center"
                         FontSize="Medium">
                         <Picker.Behaviors>
                             <toolkit:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding CalculateValuesCommand}"/>
                         </Picker.Behaviors>
                     </Picker>
-                </StackLayout>
+                </FlexLayout>
             </Border>
             
             <Label
@@ -188,15 +186,14 @@
                 Grid.ColumnSpan="2"
                 IsVisible="{Binding UserInput.IsAdvancedModeEnabled}"
                 Style="{StaticResource EntryBorder}">
-                <StackLayout
-                    Orientation="Horizontal">
+                <FlexLayout
+                    Direction="Row">
                     <Entry
+                        FlexLayout.Grow="1"
                         Keyboard="Numeric"
                         Margin="0,5"
                         Text="{Binding UserInput.VisualAcuityLpPerMM}"
-                        HorizontalOptions="FillAndExpand"
-                        HorizontalTextAlignment="Center"
-                        FontSize="Medium">
+                        Style="{StaticResource StandardEntry}">
                         <Entry.Behaviors>
                             <toolkit:EventToCommandBehavior EventName="TextChanged" Command="{Binding VisualAcuityLpPerMMChangedCommand}"/>
                         </Entry.Behaviors>
@@ -207,7 +204,7 @@
                         VerticalTextAlignment="Center"
                         Margin="5,0"
                     />
-                </StackLayout>
+                </FlexLayout>
             </Border>
 
             <Label

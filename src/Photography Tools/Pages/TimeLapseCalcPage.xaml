@@ -84,8 +84,7 @@
                     Margin="0,5"
                     Keyboard="Numeric"                    
                     Text="{Binding UserInput.EnteredShootsCount}"
-                    HorizontalTextAlignment="Center"
-                    FontSize="Medium">
+                    Style="{StaticResource StandardEntry}">
                     <Entry.Behaviors>
                         <toolkit:EventToCommandBehavior EventName="TextChanged" Command="{Binding ShootsCountChangedCommand}"/>
                     </Entry.Behaviors>
@@ -113,14 +112,13 @@
                 Grid.Row="3"
                 Grid.ColumnSpan="3"
                 Style="{StaticResource EntryBorder}">
-                <StackLayout
-                    Orientation="Horizontal">
+                <FlexLayout
+                    Direction="Row">
                     <Entry
+                        FlexLayout.Grow="1"
                         Margin="0,5"
                         Text="{Binding UserInput.EnteredClipFrameRateFPS}"
-                        HorizontalOptions="FillAndExpand"
-                        HorizontalTextAlignment="Center"
-                        FontSize="Medium">
+                        Style="{StaticResource StandardEntry}">
                         <Entry.Behaviors>
                             <toolkit:EventToCommandBehavior EventName="TextChanged" Command="{Binding ClipFrameRateFPSChangedCommand}"/>
                         </Entry.Behaviors>
@@ -131,7 +129,7 @@
                         VerticalTextAlignment="Center"
                         Margin="5,0"
                     />
-                </StackLayout>
+                </FlexLayout>
             </Border>
 
 

@@ -504,6 +504,7 @@
         <Setter Property="TextColor" Value="{AppThemeBinding Dark = {StaticResource White},
                                                              Light = {StaticResource Black}}"/>
         <Setter Property="VerticalTextAlignment" Value="Center"/>
+        <Setter Property="HorizontalTextAlignment" Value="Center"/>
         <Setter Property="FontSize" Value="Medium" />
     </Style>
 

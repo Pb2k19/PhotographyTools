@@ -36,8 +36,7 @@
                 Style="{StaticResource EntryBorder}">
                 <Picker 
                     ItemsSource="{Binding SensorNames}"
-                    SelectedItem="{Binding UserInput.SelectedSensorName}"                        
-                    HorizontalOptions="FillAndExpand"
+                    SelectedItem="{Binding UserInput.SelectedSensorName}"
                     FontSize="Medium">
                     <Picker.Behaviors>
                         <toolkit:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding CalculateAllValuesCommand}"/>
@@ -90,26 +89,25 @@
                 Grid.ColumnSpan="2"
                 Padding="10"
                 Style="{StaticResource EntryBorder}">
-                <StackLayout
-                    Orientation="Horizontal">
-                    <Label 
+                <FlexLayout 
+                    Direction="Row">
+                    <Label
                         Text="F"
                         Style="{StaticResource LabelMedium}"
                         VerticalTextAlignment="Center"
-                        Margin="0,0,5,0"
+                        Margin="0,0,10,0"
                     />
-
                     <Picker
+                        FlexLayout.Grow="1"
                         ItemsSource="{Binding Apertures}"
                         SelectedItem="{Binding UserInput.Lens.Aperture}"
-                        HorizontalOptions="FillAndExpand"
                         HorizontalTextAlignment="Center"
                         FontSize="Medium">
                         <Picker.Behaviors>
                             <toolkit:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding CalculateTimeForAstroWithNpfRuleCommand}"/>
                         </Picker.Behaviors>
                     </Picker>
-                </StackLayout>
+                </FlexLayout>
             </Border>
 
             <Border
@@ -117,15 +115,15 @@
                 Grid.Column="4"
                 Grid.ColumnSpan="2"
                 Style="{StaticResource EntryBorder}">
-                <StackLayout
-                    Orientation="Horizontal">
+
+                <FlexLayout
+                    Direction="Row">
                     <Entry
-                        Keyboard="Numeric"
+                        FlexLayout.Grow="1"
                         Margin="0,5"
+                        Keyboard="Numeric"                        
                         Text="{Binding UserInput.Decilination}"
-                        HorizontalOptions="FillAndExpand"
-                        HorizontalTextAlignment="Center"
-                        FontSize="Medium">
+                        Style="{StaticResource StandardEntry}">
                         <Entry.Behaviors>
                             <toolkit:EventToCommandBehavior EventName="TextChanged" Command="{Binding DecilinationTextChangedCommand}"/>
                             <toolkit:NumericValidationBehavior MinimumValue="-90" MaximumValue="90" />
@@ -136,7 +134,7 @@
                         Style="{StaticResource LabelMediumBold}"
                         Margin="5,10"
                     />
-                </StackLayout>
+                </FlexLayout>
             </Border>
 
             <Label
@@ -169,15 +167,14 @@
                 Grid.Row="7"
                 Grid.ColumnSpan="2"
                 Style="{StaticResource EntryBorder}">
-                <StackLayout
-                    Orientation="Horizontal">
+                <FlexLayout 
+                    Direction="Row">
                     <Entry
+                        FlexLayout.Grow="1"
                         Margin="0,5"
                         IsReadOnly="True"
                         Text="{Binding NpfRuleH}"
-                        HorizontalOptions="FillAndExpand"
-                        HorizontalTextAlignment="Center"
-                        FontSize="Medium">
+                        Style="{StaticResource StandardEntry}">
                     </Entry>
                     <Label 
                         Text="s"
@@ -185,7 +182,7 @@
                         VerticalTextAlignment="Center"
                         Margin="5,0"
                     />
-                </StackLayout>
+                </FlexLayout>
             </Border>
 
             <Border
@@ -193,15 +190,14 @@
                 Grid.Column="2"
                 Grid.ColumnSpan="2"
                 Style="{StaticResource EntryBorder}">
-                <StackLayout
-                    Orientation="Horizontal">
+                <FlexLayout
+                    Direction="Row">
                     <Entry
+                        FlexLayout.Grow="1"
                         Margin="0,5"
                         IsReadOnly="True"
                         Text="{Binding NpfRuleM}"
-                        HorizontalOptions="FillAndExpand"
-                        HorizontalTextAlignment="Center"
-                        FontSize="Medium">
+                        Style="{StaticResource StandardEntry}">
                     </Entry>
                     <Label 
                         Text="s"
@@ -209,7 +205,7 @@
                         VerticalTextAlignment="Center"
                         Margin="5,0"
                     />
-                </StackLayout>
+                </FlexLayout>
             </Border>
 
             <Border
@@ -217,15 +213,14 @@
                 Grid.Column="4"
                 Grid.ColumnSpan="2"
                 Style="{StaticResource EntryBorder}">
-                <StackLayout
-                    Orientation="Horizontal">
+                <FlexLayout
+                    Direction="Row">
                     <Entry
+                        FlexLayout.Grow="1"
                         Margin="0,5"
                         IsReadOnly="True"
                         Text="{Binding NpfRuleS}"
-                        HorizontalOptions="FillAndExpand"
-                        HorizontalTextAlignment="Center"
-                        FontSize="Medium">
+                        Style="{StaticResource StandardEntry}">
                     </Entry>
                     <Label 
                         Text="s"
@@ -233,7 +228,7 @@
                         VerticalTextAlignment="Center"
                         Margin="5,0"
                     />
-                </StackLayout>
+                </FlexLayout>
             </Border>
 
             <Label
@@ -266,15 +261,14 @@
                 Grid.Row="9"
                 Grid.ColumnSpan="2"
                 Style="{StaticResource EntryBorder}">
-                <StackLayout
-                    Orientation="Horizontal">
+                <FlexLayout
+                    Direction="Row">
                     <Entry
+                        FlexLayout.Grow="1"
                         Margin="0,5"
                         IsReadOnly="True"
                         Text="{Binding Rule200}"
-                        HorizontalOptions="FillAndExpand"
-                        HorizontalTextAlignment="Center"
-                        FontSize="Medium">
+                        Style="{StaticResource StandardEntry}">
                     </Entry>
                     <Label 
                         Text="s"
@@ -282,7 +276,7 @@
                         VerticalTextAlignment="Center"
                         Margin="5,0"
                     />
-                </StackLayout>
+                </FlexLayout>
             </Border>
 
             <Border
@@ -290,15 +284,14 @@
                 Grid.Column="2"
                 Grid.ColumnSpan="2"
                 Style="{StaticResource EntryBorder}">
-                <StackLayout
-                    Orientation="Horizontal">
+                <FlexLayout
+                    Direction="Row">
                     <Entry
+                        FlexLayout.Grow="1"
                         Margin="0,5"
                         IsReadOnly="True"
                         Text="{Binding Rule300}"
-                        HorizontalOptions="FillAndExpand"
-                        HorizontalTextAlignment="Center"
-                        FontSize="Medium">
+                        Style="{StaticResource StandardEntry}">
                     </Entry>
                     <Label 
                         Text="s"
@@ -306,7 +299,7 @@
                         VerticalTextAlignment="Center"
                         Margin="5,0"
                     />
-                </StackLayout>
+                </FlexLayout>
             </Border>
 
             <Border
@@ -314,15 +307,14 @@
                 Grid.Column="4"
                 Grid.ColumnSpan="2"
                 Style="{StaticResource EntryBorder}">
-                <StackLayout
-                    Orientation="Horizontal">
+                <FlexLayout 
+                    Direction="Row">
                     <Entry
+                        FlexLayout.Grow="1"
                         IsReadOnly="True"
                         Margin="0,5"
                         Text="{Binding Rule500}"
-                        HorizontalOptions="FillAndExpand"
-                        HorizontalTextAlignment="Center"
-                        FontSize="Medium">
+                        Style="{StaticResource StandardEntry}">
                     </Entry>
                     <Label 
                         Text="s"
@@ -330,7 +322,7 @@
                         VerticalTextAlignment="Center"
                         Margin="5,0"
                     />
-                </StackLayout>
+                </FlexLayout>
             </Border>
         </Grid>
     </ScrollView>

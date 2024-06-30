@@ -208,7 +208,6 @@
                 <Picker
                     ItemsSource="{Binding AllShutterSpeedsNames}"
                     SelectedItem="{Binding UserInput.TimeText}"
-                    HorizontalOptions="FillAndExpand"
                     HorizontalTextAlignment="Center"
                     FontSize="Medium">
                     <Picker.Behaviors>
@@ -226,10 +225,9 @@
             <Border
                 Style="{StaticResource StandardBorder}">
                 <Entry
-                    HorizontalTextAlignment="Center"
-                    FontSize="Medium"
                     IsReadOnly="True"
-                    Text="{Binding ResultTimeText}">
+                    Text="{Binding ResultTimeText}"
+                    Style="{StaticResource StandardEntry}">
                     <Entry.GestureRecognizers>
                         <TapGestureRecognizer NumberOfTapsRequired="2" Command="{Binding StartCountdownCommand}"/>
                         <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding StopCountdownCommand}"/>
@@ -267,7 +265,6 @@
                     <Picker
                         ItemsSource="{Binding AvaliableNDFiltersNames}"
                         SelectedItem="{Binding FilterToAddName}"
-                        HorizontalOptions="FillAndExpand"
                         HorizontalTextAlignment="Center"
                         FontSize="Medium"
                     />
