@@ -225,9 +225,8 @@
             <Border
                 Style="{StaticResource StandardBorder}">
                 <Entry
-                    IsReadOnly="True"
                     Text="{Binding ResultTimeText}"
-                    Style="{StaticResource StandardEntry}">
+                    Style="{StaticResource StandardReadonlyEntry}">
                     <Entry.GestureRecognizers>
                         <TapGestureRecognizer NumberOfTapsRequired="2" Command="{Binding StartCountdownCommand}"/>
                         <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding StopCountdownCommand}"/>

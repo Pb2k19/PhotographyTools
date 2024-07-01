@@ -6,14 +6,14 @@
     x:Class="Photography_Tools.Components.Controls.UnitEntry.UnitEntryControl"
     x:DataType="local:UnitEntryControl">
 
-    <Grid
-        Margin="5"
-        ColumnDefinitions="{OnPlatform WinUI='*,75', Default='*,50'}">
+    <FlexLayout
+        Direction="Row"
+        Margin="5">
 
         <Entry
+            FlexLayout.Grow="1"
             x:Name="UnitEntry"
-            FontSize="Medium"
-            HorizontalTextAlignment="Center"
+            Style="{StaticResource StandardEntry}"
             Completed="UnitEntry_Completed"
             Unfocused="UnitEntry_Unfocused"
         />
@@ -24,5 +24,5 @@
             HorizontalTextAlignment="Center"
             SelectedIndexChanged="PickerIndexChanged"
         />
-    </Grid>
+    </FlexLayout>
 </ContentView>

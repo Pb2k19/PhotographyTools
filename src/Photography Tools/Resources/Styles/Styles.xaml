@@ -508,6 +508,10 @@
         <Setter Property="FontSize" Value="Medium" />
     </Style>
 
+    <Style x:Key="StandardReadonlyEntry" TargetType="Entry" BasedOn="{StaticResource StandardEntry}">
+        <Setter Property="IsReadOnly" Value="True"/>
+    </Style>
+
     <Style x:Key="ShellTitleGrid" TargetType="Grid">
         <Setter Property="Margin">
             <Setter.Value>

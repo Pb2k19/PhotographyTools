@@ -172,9 +172,8 @@
                     <Entry
                         FlexLayout.Grow="1"
                         Margin="0,5"
-                        IsReadOnly="True"
                         Text="{Binding NpfRuleH}"
-                        Style="{StaticResource StandardEntry}">
+                        Style="{StaticResource StandardReadonlyEntry}">
                     </Entry>
                     <Label 
                         Text="s"
@@ -195,9 +194,8 @@
                     <Entry
                         FlexLayout.Grow="1"
                         Margin="0,5"
-                        IsReadOnly="True"
                         Text="{Binding NpfRuleM}"
-                        Style="{StaticResource StandardEntry}">
+                        Style="{StaticResource StandardReadonlyEntry}">
                     </Entry>
                     <Label 
                         Text="s"
@@ -218,9 +216,8 @@
                     <Entry
                         FlexLayout.Grow="1"
                         Margin="0,5"
-                        IsReadOnly="True"
                         Text="{Binding NpfRuleS}"
-                        Style="{StaticResource StandardEntry}">
+                        Style="{StaticResource StandardReadonlyEntry}">
                     </Entry>
                     <Label 
                         Text="s"
@@ -266,9 +263,8 @@
                     <Entry
                         FlexLayout.Grow="1"
                         Margin="0,5"
-                        IsReadOnly="True"
                         Text="{Binding Rule200}"
-                        Style="{StaticResource StandardEntry}">
+                        Style="{StaticResource StandardReadonlyEntry}">
                     </Entry>
                     <Label 
                         Text="s"
@@ -289,9 +285,8 @@
                     <Entry
                         FlexLayout.Grow="1"
                         Margin="0,5"
-                        IsReadOnly="True"
                         Text="{Binding Rule300}"
-                        Style="{StaticResource StandardEntry}">
+                        Style="{StaticResource StandardReadonlyEntry}">
                     </Entry>
                     <Label 
                         Text="s"
@@ -311,10 +306,9 @@
                     Direction="Row">
                     <Entry
                         FlexLayout.Grow="1"
-                        IsReadOnly="True"
                         Margin="0,5"
                         Text="{Binding Rule500}"
-                        Style="{StaticResource StandardEntry}">
+                        Style="{StaticResource StandardReadonlyEntry}">
                     </Entry>
                     <Label 
                         Text="s"
