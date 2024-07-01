@@ -15,7 +15,7 @@ public class SensorTests
             expectedDiagonal = 43.2666153055679,
             expectedCropFactor = 1,
             expectedResolutionHorizontal = 6000,
-            expectedResoultionVertical = 4000,
+            expectedResolutionVertical = 4000,
             expectedPixelPitch = 6;
 
         Sensor actual = new(expectedSensorHeightMM, expectedSensorWidthMM, expectedMegapixels);
@@ -27,7 +27,7 @@ public class SensorTests
         Assert.Equal(expectedDiagonal, actual.Diagonal, 13);
         Assert.Equal(expectedCropFactor, actual.CropFactor, 13);
         Assert.Equal(expectedResolutionHorizontal, actual.ResolutionHorizontal);
-        Assert.Equal(expectedResoultionVertical, actual.ResolutionVertical);
+        Assert.Equal(expectedResolutionVertical, actual.ResolutionVertical);
         Assert.Equal(expectedPixelPitch, actual.PixelPitch, 13);
     }
 
@@ -42,7 +42,7 @@ public class SensorTests
             expectedDiagonal = 43.2666153055679,
             expectedCropFactor = 1,
             expectedResolutionHorizontal = 6000,
-            expectedResoultionVertical = 4000,
+            expectedResolutionVertical = 4000,
             expectedPixelPitch = 6;
 
         Sensor actual = new(24, 30, 24);
@@ -55,7 +55,7 @@ public class SensorTests
         Assert.Equal(expectedDiagonal, actual.Diagonal, 13);
         Assert.Equal(expectedCropFactor, actual.CropFactor, 13);
         Assert.Equal(expectedResolutionHorizontal, actual.ResolutionHorizontal);
-        Assert.Equal(expectedResoultionVertical, actual.ResolutionVertical);
+        Assert.Equal(expectedResolutionVertical, actual.ResolutionVertical);
         Assert.Equal(expectedPixelPitch, actual.PixelPitch, 13);
     }
 
@@ -70,7 +70,7 @@ public class SensorTests
             expectedDiagonal = 43.2666153055679,
             expectedCropFactor = 1,
             expectedResolutionHorizontal = 6000,
-            expectedResoultionVertical = 4000,
+            expectedResolutionVertical = 4000,
             expectedPixelPitch = 6;
 
         Sensor actual = new(20, 36, 24);
@@ -83,7 +83,7 @@ public class SensorTests
         Assert.Equal(expectedDiagonal, actual.Diagonal, 13);
         Assert.Equal(expectedCropFactor, actual.CropFactor, 13);
         Assert.Equal(expectedResolutionHorizontal, actual.ResolutionHorizontal);
-        Assert.Equal(expectedResoultionVertical, actual.ResolutionVertical);
+        Assert.Equal(expectedResolutionVertical, actual.ResolutionVertical);
         Assert.Equal(expectedPixelPitch, actual.PixelPitch, 13);
     }
 
@@ -98,7 +98,7 @@ public class SensorTests
             expectedDiagonal = 43.2666153055679,
             expectedCropFactor = 1,
             expectedResolutionHorizontal = 6000,
-            expectedResoultionVertical = 4000,
+            expectedResolutionVertical = 4000,
             expectedPixelPitch = 6;
 
         Sensor actual = new(24, 36, 30);
@@ -112,7 +112,7 @@ public class SensorTests
         Assert.Equal(expectedDiagonal, actual.Diagonal, 13);
         Assert.Equal(expectedCropFactor, actual.CropFactor, 13);
         Assert.Equal(expectedResolutionHorizontal, actual.ResolutionHorizontal);
-        Assert.Equal(expectedResoultionVertical, actual.ResolutionVertical);
+        Assert.Equal(expectedResolutionVertical, actual.ResolutionVertical);
         Assert.Equal(expectedPixelPitch, actual.PixelPitch, 13);
     }
 }

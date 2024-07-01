@@ -82,7 +82,7 @@ public partial class MoonPhaseViewModel : ObservableObject
         ServiceResponse<MoonData?> offlineResult = await offlineAstroDataService.GetMoonDataAsync(date, coordinates.Latitude, coordinates.Longitude);
 
         if (offlineResult.IsSuccess && offlineResult.Data is not null)
-            DisplayResoult(offlineResult.Data, coordinates.Latitude);
+            DisplayResult(offlineResult.Data, coordinates.Latitude);
         //else display error message
 
         try
@@ -91,7 +91,7 @@ public partial class MoonPhaseViewModel : ObservableObject
 
             if (onlineResult.IsSuccess && onlineResult.Data is not null)
             {
-                DisplayResoult(onlineResult.Data, coordinates.Latitude);
+                DisplayResult(onlineResult.Data, coordinates.Latitude);
                 return;
             }
         }
@@ -104,7 +104,7 @@ public partial class MoonPhaseViewModel : ObservableObject
         }
     }
 
-    public void DisplayResoult(MoonData data, double latitude)
+    public void DisplayResult(MoonData data, double latitude)
     {
         MoonPhaseName = data.Phase;
         SetMoonImage(data.Phase, latitude);
