@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Collections.Immutable;
+using System.Text.Json;
 
 namespace Photography_Tools.Services.KeyValueStoreService;
 
@@ -51,6 +52,29 @@ public class KeyValueStore<T> : IKeyValueStore<T> where T : class
         return dictionary.TryGetValue(key, out T? value) ? value : default;
     }
 
+    public async ValueTask<ImmutableArray<string>> GetAllKeys()
+    {
+        if (dictionary.Count == 0)
+        {
+            if (await semaphore.WaitAsync(SempahoreTimeout))
+            {
+                try
+                {
+                    if (!await LoadDataAsync())
+                        return [];
+                }
+                finally
+                {
+                    semaphore.Release();
+                }
+            }
+            else
+                return [];
+        }
+
+        return [.. dictionary.Keys];
+    }
+
     public async Task<bool> AddAsync(string key, T value)
     {
         if (!await semaphore.WaitAsync(SempahoreTimeout))
@@ -101,22 +125,26 @@ public class KeyValueStore<T> : IKeyValueStore<T> where T : class
         return true;
     }
 
-    public async Task<bool> UpdateAsync(string key, T value)
+    public async Task<bool> AddOrUpdateAsync(string key, T value)
     {
         if (!await semaphore.WaitAsync(SempahoreTimeout))
             return false;
 
+        T? oldValue = null;
+        bool isUpdate = false;
         try
         {
-            if (!dictionary.ContainsKey(key))
-                return false;
-
+            isUpdate = dictionary.TryGetValue(key, out oldValue);
             dictionary[key] = value;
             await SaveToFileAsync();
         }
         catch (Exception)
         {
-            dictionary.Remove(key);
+            if (isUpdate && oldValue is not null)
+                dictionary[key] = oldValue;
+            else
+                dictionary.Remove(key);
+
             throw;
         }
         finally
