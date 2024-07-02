@@ -2,21 +2,31 @@
 
 namespace Photography_Tools.Services.KeyValueStoreService;
 
-public class CacheKeyValueStore<T> : IKeyValueStore<T> where T : class
+public class KeyValueStore<T> : IKeyValueStore<T> where T : class
 {
     private const int SempahoreTimeout = 5000;
-    private const string FileNameConst = "Cache.json", FolderName = "AppCache";
 
     private readonly SemaphoreSlim semaphore = new(1);
-    private readonly string
-        folderPath = Path.Combine(FileSystem.Current.CacheDirectory, FolderName),
-        filePath = Path.Combine(FileSystem.Current.CacheDirectory, FolderName, FileNameConst);
 
     private Dictionary<string, T> dictionary = [];
 
-    public string FileName => FileNameConst;
+    public string FileName { get; }
 
-    public string FilePath => filePath;
+    public string FolderPath { get; }
+
+    public string FilePath { get; }
+
+    public KeyValueStore(string fileName, string folderPath)
+    {
+        if (string.IsNullOrWhiteSpace(fileName))
+            throw new ArgumentNullException(nameof(fileName));
+        else if (string.IsNullOrWhiteSpace(folderPath))
+            throw new ArgumentNullException(nameof(folderPath));
+
+        FileName = fileName;
+        FolderPath = folderPath;
+        FilePath = Path.Combine(folderPath, fileName);
+    }
 
     public async ValueTask<T?> GetValueAsync(string key)
     {
@@ -129,8 +139,8 @@ public class CacheKeyValueStore<T> : IKeyValueStore<T> where T : class
 
     private async Task SaveToFileAsync()
     {
-        Directory.CreateDirectory(folderPath);
-        using FileStream fileStream = new(filePath, FileMode.Create);
+        Directory.CreateDirectory(FolderPath);
+        using FileStream fileStream = new(FilePath, FileMode.Create);
         await JsonSerializer.SerializeAsync(fileStream, dictionary);
     }
 }

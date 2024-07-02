@@ -57,10 +57,11 @@ public partial class MoonPhaseViewModel : ObservableObject
         }.ToFrozenDictionary();
     }
 
-    public MoonPhaseViewModel([FromKeyedServices("onlineAstroData")] IAstroDataService onlineAstroDataService, [FromKeyedServices("offlineAstroData")] IAstroDataService offlineAstroDataService)
+    public MoonPhaseViewModel([FromKeyedServices(KeyedServiceNames.OnlineAstroData)] IAstroDataService onlineAstroDataService, [FromKeyedServices(KeyedServiceNames.OfflineAstroData)] IAstroDataService offlineAstroDataService, IUiMessageService messageService)
     {
         this.onlineAstroDataService = onlineAstroDataService;
         this.offlineAstroDataService = offlineAstroDataService;
+        this.messageService = messageService;
     }
 
     [RelayCommand]

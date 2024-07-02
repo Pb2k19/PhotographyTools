@@ -36,9 +36,10 @@ public static class MauiProgram
         builder.Services.AddSingleton<TimeLapseCalcPage>();
 
         // Services
-        builder.Services.AddKeyedSingleton<IAstroDataService, OfflineAstroDataService>("offlineAstroData");
-        builder.Services.AddKeyedSingleton<IAstroDataService, OnlineAstroDataService>("onlineAstroData");
-        builder.Services.AddSingleton<IKeyValueStore<AstroData>, CacheKeyValueStore<AstroData>>();
+        builder.Services.AddKeyedSingleton<IAstroDataService, OfflineAstroDataService>(KeyedServiceNames.OfflineAstroData);
+        builder.Services.AddKeyedSingleton<IAstroDataService, OnlineAstroDataService>(KeyedServiceNames.OnlineAstroData);
+        builder.Services.AddSingleton(KeyValueStoreFactory.CreateCacheAstroDataKeyValueStore());
+        builder.Services.AddSingleton(KeyValueStoreFactory.CreateLocationKeyValueStore());
         builder.Services.AddSingleton<IPhotographyCalculationsService, PhotographyCalculationsService>();
         builder.Services.AddSingleton<IPreferencesService, PreferencesService>();
         builder.Services.AddSingleton<IUiMessageService, UiMessageService>();
