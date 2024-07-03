@@ -133,11 +133,30 @@ public partial class LocationPopup : Popup
         if (await locationsStore.AddOrUpdateAsync(Name, new(Name, coordinates)))
         {
             if (!Places.Contains(Name))
+            {
                 Places.Add(Name);
+                Places = new(Places.Order());
+                OnPropertyChanged(nameof(Places));
+            }
 
             return true;
         }
 
         return false;
+    }
+
+    private async void RemoveButton_Clicked(object sender, EventArgs e)
+    {
+        string name = (string)((Button)sender).CommandParameter;
+
+        Place? place = await locationsStore.GetValueAsync(name);
+
+        if (place is not null)
+        {
+            if (await locationsStore.RemoveAsync(name))
+                Places.Remove(name);
+            else
+                await messageService.ShowMessageAsync("Something went wrong", "Location has not been removed", "Ok");
+        }
     }
 }

@@ -80,11 +80,24 @@
                             Style="{StaticResource StandardBorder}"
                             Padding="{OnPlatform Default='15,10', WinUI='15,20'}">
 
-                            <Label
-                                Text="{Binding .}"
-                                Style="{StaticResource LabelMedium}"
-                                VerticalTextAlignment="Center"
-                            />
+                            <FlexLayout
+                                Direction="RowReverse">
+                                <Button
+                                    Text="Delete"
+                                    Clicked="RemoveButton_Clicked"
+                                    CommandParameter="{Binding .}"
+                                    FontSize="16"
+                                    Style="{StaticResource TransparentButton}"
+                                />
+
+                                <Label
+                                    FlexLayout.Grow="1"
+                                    Text="{Binding .}"
+                                    Style="{StaticResource LabelMedium}"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="Center"
+                                />
+                            </FlexLayout>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
