@@ -105,6 +105,7 @@ public class KeyValueStore<T> : IKeyValueStore<T> where T : class
         if (!await semaphore.WaitAsync(SempahoreTimeout))
             return false;
 
+        T? oldValue = await GetValueAsync(key);
         try
         {
             if (!dictionary.Remove(key))
@@ -114,7 +115,9 @@ public class KeyValueStore<T> : IKeyValueStore<T> where T : class
         }
         catch (Exception)
         {
-            dictionary.Remove(key);
+            if (oldValue is not null)
+                dictionary.TryAdd(key, oldValue);
+
             throw;
         }
         finally
