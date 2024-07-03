@@ -22,10 +22,10 @@
         <DataTemplate x:Key="MobileTemplate" x:DataType="models:NDFilter">
             <Border
                 Padding="15,10"
-                Style="{StaticResource StandardBorder}">
+                Style="{StaticResource StandardBorder}"
+                MinimumHeightRequest="100">
                 <SwipeView
-                    android:SwipeView.SwipeTransitionMode="Drag"
-                    MinimumHeightRequest="75">
+                    android:SwipeView.SwipeTransitionMode="Drag">
                     <SwipeView.RightItems>
                         <SwipeItemView
                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:NDFilterCalcViewModel}}, Path=RemoveFilterCommand}"
@@ -46,8 +46,7 @@
 
                     <Grid
                         ColumnDefinitions="*,*,*"
-                        RowDefinitions="auto, auto, auto"
-                        ColumnSpacing="5">
+                        RowDefinitions="35, 35, 30">
 
                         <Label
                             Margin="0,5,0,10"
