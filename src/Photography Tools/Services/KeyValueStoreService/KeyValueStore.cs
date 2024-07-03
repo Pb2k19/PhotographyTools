@@ -135,6 +135,10 @@ public class KeyValueStore<T> : IKeyValueStore<T> where T : class
         try
         {
             isUpdate = dictionary.TryGetValue(key, out oldValue);
+
+            if (oldValue is not null && oldValue.Equals(value))
+                return false;
+
             dictionary[key] = value;
             await SaveToFileAsync();
         }
