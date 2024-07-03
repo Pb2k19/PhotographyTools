@@ -493,13 +493,15 @@
         <Setter Property="Padding" Value="0"/>
     </Style>
 
+    <Style x:Key="PopupBorder" TargetType="Border" BasedOn="{StaticResource StandardBorder}">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}" />
+    </Style>
+
     <Style x:Key="EntryBorder" TargetType="Border" BasedOn="{StaticResource StandardBorder}">
         <Setter Property="Padding" Value="5"/>
     </Style>
 
     <Style x:Key="StandardEntry" TargetType="Entry">
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark = {StaticResource Gray900}, 
-                                                                   Light = {StaticResource Gray50}}"/>
         <Setter Property="MaxLength" Value="100"/>
         <Setter Property="TextColor" Value="{AppThemeBinding Dark = {StaticResource White},
                                                              Light = {StaticResource Black}}"/>

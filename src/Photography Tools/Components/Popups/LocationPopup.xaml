@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup  
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:Photography_Tools.Models"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:components="clr-namespace:Photography_Tools.Components.Popups"
+    x:Class="Photography_Tools.Components.Popups.LocationPopup"
+    x:DataType="components:LocationPopup"
+    Color="Transparent">
+
+    <Border
+        Style="{StaticResource PopupBorder}"
+        WidthRequest="{OnPlatform Default=350, WinUI=600}"
+        HeightRequest="{OnPlatform Default=630, WinUI=800}">
+
+        <VerticalStackLayout
+            Margin="10,15">
+
+            <Label
+                Margin="0,0,0,10"
+                Style="{StaticResource LabelMediumBold}"
+                Text="Name"
+            />
+
+            <Border
+                Style="{StaticResource EntryBorder}">
+                <Entry
+                    MaxLength="127"
+                    Style="{StaticResource StandardEntry}"
+                    Text="{Binding Name}"
+                />
+            </Border>
+
+            <Label
+                Margin="0,20,0,10"
+                Style="{StaticResource LabelMediumBold}"
+                Text="Coordinates"
+            />
+
+            <Border
+                Style="{StaticResource EntryBorder}">
+                <Entry
+                    MaxLength="64"
+                    Style="{StaticResource StandardEntry}"
+                    Text="{Binding Coordinates}"
+                />
+            </Border>
+
+            <Label
+                Margin="0,20,0,10"
+                Style="{StaticResource LabelMediumBold}"
+                Text="Locations"
+            />
+
+            <CollectionView
+                ItemSizingStrategy="MeasureFirstItem"
+                ItemsSource="{Binding Places, Mode=OneWay}"
+                SelectionMode="Single"
+                SelectionChanged="CollectionView_SelectionChanged"
+                MaximumHeightRequest="{OnPlatform Default=250, WinUI=410}">
+
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout Padding="0,20,0,0">
+                        <Label
+                            HorizontalOptions="Center" 
+                            Text="No locations - add some!" 
+                            Style="{StaticResource LabelMediumBold}"
+                        />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="5" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                            Style="{StaticResource StandardBorder}"
+                            Padding="{OnPlatform Default='15,10', WinUI='15,20'}">
+
+                            <Label
+                                Text="{Binding .}"
+                                Style="{StaticResource LabelMedium}"
+                                VerticalTextAlignment="Center"
+                            />
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <HorizontalStackLayout
+                Margin="10, 25"
+                HorizontalOptions="End">
+                <Button
+                    Text="Save"
+                    Margin="15,0"
+                    Clicked="SaveButton_Clicked"
+                    BackgroundColor="{StaticResource Secondary}"
+                />
+                <Button
+                    Text="Select"
+                    Clicked="SelectButton_Clicked"
+                />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </Border>
+</toolkit:Popup>

@@ -2,9 +2,15 @@
 
 public static class PreferencesKeys
 {
+    // User input prefernces
     public const string
         AstroTimeCalcUserInputPreferencesKey = "AstroTimeCalcUserInput",
         DofCalcUserInputPreferencesKey = "DofCalcUserInput",
         NDFilterCalcUserInputPreferencesKey = "NDFilterCalcUserInput",
+        MoonPhaseUserInputPreferencesKey = "MoonPhaseUserInput",
         TimeLapseCalcUserInputPreferencesKey = "TimeLapseCalcUserInput";
+
+    // App preferences
+    public const string
+        UseOnlineAstroDataPreferencesKey = "UseOnlineAstroData";
 }
