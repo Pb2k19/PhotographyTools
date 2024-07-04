@@ -40,6 +40,13 @@ public class KeyValueStore<T> : IKeyValueStore<T> where T : class
                     if (!await LoadDataAsync())
                         return default;
                 }
+                catch (Exception ex)
+                {
+                    if (ex is IOException or UnauthorizedAccessException or JsonException)
+                        return default;
+
+                    throw;
+                }
                 finally
                 {
                     semaphore.Release();
@@ -62,6 +69,13 @@ public class KeyValueStore<T> : IKeyValueStore<T> where T : class
                 {
                     if (!await LoadDataAsync())
                         return [];
+                }
+                catch (Exception ex)
+                {
+                    if (ex is IOException or UnauthorizedAccessException or JsonException)
+                        return [];
+
+                    throw;
                 }
                 finally
                 {
@@ -87,9 +101,13 @@ public class KeyValueStore<T> : IKeyValueStore<T> where T : class
 
             await SaveToFileAsync();
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             dictionary.Remove(key);
+
+            if (ex is IOException or UnauthorizedAccessException or JsonException)
+                return false;
+
             throw;
         }
         finally
@@ -105,18 +123,23 @@ public class KeyValueStore<T> : IKeyValueStore<T> where T : class
         if (!await semaphore.WaitAsync(SempahoreTimeout))
             return false;
 
-        T? oldValue = await GetValueAsync(key);
+        T? oldValue = null;
         try
         {
+            oldValue = await GetValueAsync(key);
+
             if (!dictionary.Remove(key))
                 return false;
 
             await SaveToFileAsync();
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             if (oldValue is not null)
                 dictionary.TryAdd(key, oldValue);
+
+            if (ex is IOException or UnauthorizedAccessException or JsonException)
+                return false;
 
             throw;
         }
@@ -145,12 +168,15 @@ public class KeyValueStore<T> : IKeyValueStore<T> where T : class
             dictionary[key] = value;
             await SaveToFileAsync();
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             if (isUpdate && oldValue is not null)
                 dictionary[key] = oldValue;
             else
                 dictionary.Remove(key);
+
+            if (ex is IOException or UnauthorizedAccessException or JsonException)
+                return false;
 
             throw;
         }
