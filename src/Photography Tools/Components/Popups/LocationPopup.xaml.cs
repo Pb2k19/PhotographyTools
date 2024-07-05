@@ -123,7 +123,7 @@ public partial class LocationPopup : Popup
         {
             await messageService.ShowMessageAsync("Incorrect coordinate format", """
                  Coordinates must be in one of the following formats:
-                 - Degrees Minutes Seconds - 47° 13' 11" N 14° 45' 53E
+                 - Degrees Minutes Seconds - 47° 13' 11" N 14° 45' 53" E
                  - Decimal Degrees - 47.22, 14.765
                  """, "Ok");
 
@@ -147,14 +147,34 @@ public partial class LocationPopup : Popup
 
     private async void RemoveButton_Clicked(object sender, EventArgs e)
     {
-        string name = (string)((Button)sender).CommandParameter;
+        string? name = ((Button)sender).CommandParameter as string;
 
+        if (!string.IsNullOrEmpty(name))
+            await RemoveAsync(name);
+    }
+
+    private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        string? name = e.Parameter as string;
+
+        if (!string.IsNullOrEmpty(name))
+            await RemoveAsync(name);
+    }
+
+    private async Task RemoveAsync(string name)
+    {
         Place? place = await locationsStore.GetValueAsync(name);
 
         if (place is not null)
         {
             if (await locationsStore.RemoveAsync(name))
+            {
                 Places.Remove(name);
+                Name = string.Empty;
+                Coordinates = string.Empty;
+                OnPropertyChanged(nameof(Name));
+                OnPropertyChanged(nameof(Coordinates));
+            }
             else
                 await messageService.ShowMessageAsync("Something went wrong", "Location has not been removed", "Ok");
         }

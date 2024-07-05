@@ -5,9 +5,86 @@
     xmlns:models="clr-namespace:Photography_Tools.Models"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:components="clr-namespace:Photography_Tools.Components.Popups"
+    xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
+    xmlns:datatemplate="clr-namespace:Photography_Tools.Components.DataTemplateSelectors"
     x:Class="Photography_Tools.Components.Popups.LocationPopup"
     x:DataType="components:LocationPopup"
     Color="Transparent">
+    
+    <toolkit:Popup.Resources>
+        <DataTemplate x:Key="MobileTemplate" x:DataType="models:NDFilter">
+            <Border
+                Style="{StaticResource StandardBorder}"
+                MinimumHeightRequest="70"
+                Padding="15,5">
+                
+                <SwipeView
+                    android:SwipeView.SwipeTransitionMode="Drag">
+                    <SwipeView.RightItems>
+                        <SwipeItemView>
+                            <Border
+                                Style="{StaticResource SwipeItemBorder}"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}">
+                                <Label 
+                                    Style="{StaticResource LabelSmall}" 
+                                    HorizontalTextAlignment="Center"
+                                    VerticalTextAlignment="Center"
+                                    TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
+                                    Text="Remove"
+                                />
+                            </Border>
+                            <SwipeItemView.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" CommandParameter="{Binding .}"/>
+                            </SwipeItemView.GestureRecognizers>
+                        </SwipeItemView>
+                    </SwipeView.RightItems>
+
+                    <FlexLayout
+                        Direction="Row">
+                        <Label
+                            FlexLayout.Grow="1"
+                            Text="{Binding .}"
+                            Style="{StaticResource LabelMedium}"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                        />
+                    </FlexLayout>
+                </SwipeView>
+            </Border>
+        </DataTemplate>
+        
+        <DataTemplate x:Key="DesktopTemplate" x:DataType="models:NDFilter">
+            <Border
+                Style="{StaticResource StandardBorder}"
+                Padding="15,10">
+
+                <FlexLayout
+                    Direction="RowReverse">
+                    <Button
+                        Text="Delete"
+                        Clicked="RemoveButton_Clicked"
+                        CommandParameter="{Binding .}"
+                        FontSize="16"
+                        Style="{StaticResource TransparentButton}"
+                    />
+
+                    <Label
+                        FlexLayout.Grow="1"
+                        Text="{Binding .}"
+                        Style="{StaticResource LabelMedium}"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                    />
+                </FlexLayout>
+            </Border>
+        </DataTemplate>
+        
+        <datatemplate:PlatformTemplateSelector 
+            x:Key="PlatformSelector" 
+            DesktopTemplate="{StaticResource DesktopTemplate}" 
+            MobileTemplate="{StaticResource MobileTemplate}" 
+        />
+    </toolkit:Popup.Resources>
 
     <Border
         Style="{StaticResource PopupBorder}"
@@ -55,6 +132,7 @@
 
             <CollectionView
                 ItemSizingStrategy="MeasureFirstItem"
+                ItemTemplate="{StaticResource PlatformSelector}"
                 ItemsSource="{Binding Places, Mode=OneWay}"
                 SelectionMode="Single"
                 SelectionChanged="CollectionView_SelectionChanged"
@@ -73,34 +151,6 @@
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Vertical" ItemSpacing="5" />
                 </CollectionView.ItemsLayout>
-
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Border
-                            Style="{StaticResource StandardBorder}"
-                            Padding="{OnPlatform Default='15,10', WinUI='15,20'}">
-
-                            <FlexLayout
-                                Direction="RowReverse">
-                                <Button
-                                    Text="Delete"
-                                    Clicked="RemoveButton_Clicked"
-                                    CommandParameter="{Binding .}"
-                                    FontSize="16"
-                                    Style="{StaticResource TransparentButton}"
-                                />
-
-                                <Label
-                                    FlexLayout.Grow="1"
-                                    Text="{Binding .}"
-                                    Style="{StaticResource LabelMedium}"
-                                    VerticalTextAlignment="Center"
-                                    HorizontalTextAlignment="Center"
-                                />
-                            </FlexLayout>
-                        </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
             </CollectionView>
 
             <HorizontalStackLayout
