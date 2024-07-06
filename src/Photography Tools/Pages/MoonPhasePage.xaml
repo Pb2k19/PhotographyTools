@@ -10,6 +10,10 @@
 
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding AppearingCommand}"
+        />
+        <toolkit:EventToCommandBehavior
             EventName="Disappearing"
             Command="{Binding DisappearingCommand}"
         />
@@ -21,7 +25,7 @@
 
         <Label
             Text="{Binding MoonImage}"
-            Style="{StaticResource LabelMedium}"
+            Style="{StaticResource LabelLarge}"
             HorizontalOptions="Center"
             FontSize="200"
         />
@@ -29,6 +33,12 @@
         <Label
             Text="{Binding MoonPhaseName}"
             Style="{StaticResource LabelLarge}"
+            HorizontalOptions="Center"
+        />
+
+        <Label
+            Text="{Binding DataSourceInfo}"
+            Style="{StaticResource LabelSmall}"
             HorizontalOptions="Center"
         />
 

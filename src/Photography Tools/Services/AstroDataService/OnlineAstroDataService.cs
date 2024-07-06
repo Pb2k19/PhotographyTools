@@ -8,10 +8,13 @@ public class OnlineAstroDataService : IAstroDataService
     private readonly IAstroDataAccess astroDataAccess;
     private readonly IKeyValueStore<AstroData> cacheStore;
 
+    public string DataSourceInfo { get; }
+
     public OnlineAstroDataService(IAstroDataAccess astroDataAccess, IKeyValueStore<AstroData> cacheStore)
     {
         this.astroDataAccess = astroDataAccess;
         this.cacheStore = cacheStore;
+        DataSourceInfo = astroDataAccess.DataSourceInfo;
     }
 
     public async Task<ServiceResponse<MoonData?>> GetMoonDataAsync(DateTime date, double latitude, double longitude)

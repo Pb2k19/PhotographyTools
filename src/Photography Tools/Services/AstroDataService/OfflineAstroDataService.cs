@@ -9,6 +9,8 @@ public class OfflineAstroDataService : IAstroDataService
 
     private static readonly ImmutableArray<AstroPhase> AllMoonPhases;
 
+    public string DataSourceInfo { get; } = "SunCalcNet";
+
     static OfflineAstroDataService()
     {
         AllMoonPhases = [

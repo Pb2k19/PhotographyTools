@@ -33,7 +33,8 @@ public partial class MoonPhaseViewModel : SaveableViewModel
         illuminationPerc = string.Empty,
         moonAge = string.Empty,
         moonriseDate = string.Empty,
-        moonsetDate = string.Empty;
+        moonsetDate = string.Empty,
+        dataSourceInfo = string.Empty;
 
     public bool UseOnlineAstroData { get; private set; } = true;
 
@@ -73,8 +74,13 @@ public partial class MoonPhaseViewModel : SaveableViewModel
         this.messageService = messageService;
 
         LocationName = preferencesService.GetPreference(PreferencesKeys.MoonPhaseUserInputPreferencesKey, string.Empty) ?? string.Empty;
+    }
+
+    [RelayCommand]
+    protected void OnAppearing()
+    {
 #if DEBUG
-        UseOnlineAstroData = preferencesService.GetPreference(PreferencesKeys.UseOnlineAstroDataPreferencesKey, false);
+        UseOnlineAstroData = preferencesService.GetPreference(PreferencesKeys.UseOnlineAstroDataPreferencesKey, true);
 #else
         UseOnlineAstroData = preferencesService.GetPreference(PreferencesKeys.UseOnlineAstroDataPreferencesKey, true);
 #endif
@@ -107,7 +113,7 @@ public partial class MoonPhaseViewModel : SaveableViewModel
         ServiceResponse<MoonData?> offlineResult = await offlineAstroDataService.GetMoonDataAsync(date, coordinates.Latitude, coordinates.Longitude);
 
         if (offlineResult.IsSuccess && offlineResult.Data is not null)
-            DisplayResult(offlineResult.Data, coordinates.Latitude);
+            DisplayResult(offlineResult.Data, coordinates.Latitude, offlineAstroDataService.DataSourceInfo);
 
         if (!UseOnlineAstroData)
             return;
@@ -118,11 +124,14 @@ public partial class MoonPhaseViewModel : SaveableViewModel
 
             if (onlineResult.IsSuccess && onlineResult.Data is not null)
             {
-                DisplayResult(onlineResult.Data, coordinates.Latitude);
+                DisplayResult(onlineResult.Data, coordinates.Latitude, onlineAstroDataService.DataSourceInfo);
                 return;
             }
             else
             {
+                if (onlineResult.Code == -2)
+                    return;
+
                 await messageService.ShowMessageAsync("Online data source is not avaliable", $"{onlineResult.Message}\nLower accuracy data is only avaliable" ?? "Unexpected error occured\nOnly lower accuracy data is available", "Ok");
             }
         }
@@ -150,25 +159,29 @@ public partial class MoonPhaseViewModel : SaveableViewModel
         }
     }
 
-    public void DisplayResult(MoonData data, double latitude)
+    public void DisplayResult(MoonData data, double latitude, string sourceInfo)
     {
         MoonPhaseName = data.Phase;
         SetMoonImage(data.Phase, latitude);
         SetIlluminationPerc(Math.Round(data.Illumination));
         SetMoonAge(Math.Round(data.MoonAge, 2));
+        SetDataSourceInfo(sourceInfo);
 
         MoonriseDate = data.Rise.ToLocalTime().ToString("d MMM HH:mm");
         MoonsetDate = data.Set.ToLocalTime().ToString("d MMM HH:mm");
     }
 
-    public void SetMoonImage(string phaseName, double latitude)
-    {
+    public void SetMoonImage(string phaseName, double latitude) =>
         MoonImage = latitude >= 0 ? MoonImagesNorth[phaseName] : MoonImagesSouth[phaseName];
-    }
 
-    public void SetIlluminationPerc<T>(T value) => IlluminationPerc = $"{value}%";
+    public void SetIlluminationPerc<T>(T value) =>
+        IlluminationPerc = $"{value}%";
 
-    public void SetMoonAge(double value) => MoonAge = value < 2 ? $"{value} day" : $"{value} days";
+    public void SetMoonAge(double value) =>
+        MoonAge = value < 2 ? $"{value} day" : $"{value} days";
+
+    public void SetDataSourceInfo(string info) =>
+        DataSourceInfo = $"Source: {info}";
 
     protected override void SaveUserInput()
     {

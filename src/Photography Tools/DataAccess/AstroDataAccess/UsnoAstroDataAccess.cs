@@ -14,6 +14,8 @@ public class UsnoAstroDataAccess : IAstroDataAccess
 
     private long lastApiRequest = 0, lastFailRequest = 0;
 
+    public string DataSourceInfo { get; } = "U.S. Naval Observatory";
+
     public UsnoAstroDataAccess(HttpClient httpClient)
     {
         this.httpClient = httpClient;

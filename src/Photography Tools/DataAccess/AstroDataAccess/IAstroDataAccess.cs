@@ -7,5 +7,7 @@ public interface IAstroDataAccess
         FailResultResponse = new(null, false, Message: "Something went wrong"),
         IncorrectInputResponse = new(null, false, Message: "Incorrect input");
 
+    public string DataSourceInfo { get; }
+
     Task<ServiceResponse<AstroData?>> GetAstroDataAsync(DateTime date, double latitude, double longitude);
 }
