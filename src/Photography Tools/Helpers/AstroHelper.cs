@@ -161,4 +161,11 @@ public static class AstroHelper
 
         return $"""{latitudeDeg}° {latitudeMin}' {latitudeS.ToString(CultureInfo.InvariantCulture)}" {(latitude >= 0 ? NorthUpper : SouthUpper)} {longitudeDeg}° {longitudeMin}' {longitudeS.ToString(CultureInfo.InvariantCulture)}" {(longitude >= 0 ? EastUpper : WestUpper)}""";
     }
+
+    public static bool Validate(this GeographicalCoordinates coordinates) =>
+        ValidateGeographicalCoordinates(coordinates.Latitude, coordinates.Longitude);
+
+    public static bool ValidateGeographicalCoordinates(double latitude, double longitude) =>
+        latitude >= AstroConst.LatitudeMinValue && latitude <= AstroConst.LatitudeMaxValue &&
+        longitude >= AstroConst.LongitudeMinValue && longitude <= AstroConst.LongitudeMaxValue;
 }

@@ -170,4 +170,72 @@ public class AstroHelperTests
 
         Assert.Equal(expected, actual);
     }
+
+    [Theory]
+    [InlineData(0, 0)]
+    [InlineData(20, 20)]
+    [InlineData(90, 180)]
+    [InlineData(-20, -20)]
+    [InlineData(-90, -180)]
+    public void Validate_ShouldReturnTrueIfCordsAreValid(double inputLat, double inputLong)
+    {
+        GeographicalCoordinates coordinates = new(inputLat, inputLong);
+
+        bool actual = coordinates.Validate();
+
+        Assert.True(actual);
+    }
+
+    [Theory]
+    [InlineData(90, -180.0001)]
+    [InlineData(-90.001, 0)]
+    [InlineData(90, 180.0001)]
+    [InlineData(90.001, 0)]
+    [InlineData(0, 180.0001)]
+    [InlineData(90.001, 180.0001)]
+    [InlineData(-90.001, -180.0001)]
+    [InlineData(double.NaN, 20)]
+    [InlineData(20, double.NaN)]
+    [InlineData(double.NaN, double.NaN)]
+    [InlineData(200, 200)]
+    public void Validate_ShouldReturnFalseIfCordsAreInvalid(double inputLat, double inputLong)
+    {
+        GeographicalCoordinates coordinates = new(inputLat, inputLong);
+
+        bool actual = coordinates.Validate();
+
+        Assert.False(actual);
+    }
+
+    [Theory]
+    [InlineData(0, 0)]
+    [InlineData(20, 20)]
+    [InlineData(90, 180)]
+    [InlineData(-20, -20)]
+    [InlineData(-90, -180)]
+    public void ValidateGeographicalCoordinates_ShouldReturnTrueIfCordsAreValid(double inputLat, double inputLong)
+    {
+        bool actual = AstroHelper.ValidateGeographicalCoordinates(inputLat, inputLong);
+
+        Assert.True(actual);
+    }
+
+    [Theory]
+    [InlineData(90, -180.0001)]
+    [InlineData(-90.001, 0)]
+    [InlineData(90, 180.0001)]
+    [InlineData(90.001, 0)]
+    [InlineData(0, 180.0001)]
+    [InlineData(90.001, 180.0001)]
+    [InlineData(-90.001, -180.0001)]
+    [InlineData(double.NaN, 20)]
+    [InlineData(20, double.NaN)]
+    [InlineData(double.NaN, double.NaN)]
+    [InlineData(200, 200)]
+    public void ValidateGeographicalCoordinates_ShouldReturnFalseIfCordsAreInvalid(double inputLat, double inputLong)
+    {
+        bool actual = AstroHelper.ValidateGeographicalCoordinates(inputLat, inputLong);
+
+        Assert.False(actual);
+    }
 }
