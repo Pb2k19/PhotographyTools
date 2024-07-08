@@ -26,7 +26,7 @@ public class OfflineAstroDataService : IAstroDataService
 
     public async Task<ServiceResponse<MoonData?>> GetMoonDataAsync(DateTime date, double latitude, double longitude)
     {
-        MoonPhaseResult? moonPhase = null;
+        MoonPhase? moonPhase = null;
         RiseAndSetResult? moonRiseAndSet = null;
 
         await Task.WhenAll(Task.Run(() => moonPhase = CalculateMoonPhase(date)), Task.Run(() => moonRiseAndSet = CalculateMoonRiseAndDown(date, latitude, longitude)));
@@ -54,6 +54,7 @@ public class OfflineAstroDataService : IAstroDataService
 
     #region SunCalcNet Calculations
     // Source: SunCalcNet, https://github.com/kostebudinoski/SunCalcNet, access date: 30.04.2024
+
     public static double CalculateRightAscension(double longitude, double b) =>
         Math.Atan2(Math.Sin(longitude) * Math.Cos(AstroConst.EarthObliquity) -
             Math.Tan(b) * Math.Sin(AstroConst.EarthObliquity), Math.Cos(longitude));
@@ -110,7 +111,7 @@ public class OfflineAstroDataService : IAstroDataService
         return new EquatorialCoordinates(CalculateRightAscension(eclipticLongitude, 0), CalculateDeclination(eclipticLongitude, 0));
     }
 
-    public static MoonPhaseResult CalculateMoonPhase(DateTime date)
+    public static MoonPhase CalculateMoonPhase(DateTime date)
     {
         double julianDateDiff = date.ToJulianDate() - AstroConst.JulianDay01_01_2000_Noon;
 
@@ -132,7 +133,7 @@ public class OfflineAstroDataService : IAstroDataService
         double fraction = (1 + Math.Cos(inc)) / 2;
         double phase = (0.5 + 0.5 * inc * (angle < 0 ? -1 : 1) / Math.PI) * AstroConst.SynodicMonthLength;
 
-        return new MoonPhaseResult(fraction, phase, angle);
+        return new MoonPhase(fraction, phase, angle);
     }
 
     public static MoonPosition CalculateMoonPosition(DateTime date, double latitude, double longitude)
