@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace Photography_Tools.Models;
+namespace Photography_Tools.Models.UserInput;
 
 public class NDFilterCalcUserInput : UserInput
 {

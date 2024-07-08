@@ -1,4 +1,4 @@
-﻿namespace Photography_Tools.Models;
+﻿namespace Photography_Tools.Models.UserInput;
 
 public class AstroTimeCalcUserInput : UserInput
 {
