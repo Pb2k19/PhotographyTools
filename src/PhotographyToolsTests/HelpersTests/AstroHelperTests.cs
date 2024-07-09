@@ -49,6 +49,27 @@ public class AstroHelperTests
     }
 
     [Theory]
+    [InlineData(2024, 5, 10, 12, 0, 0, 0, 2460441)]
+    [InlineData(2020, 1, 1, 0, 0, 0, 0, 2458849.5)]
+    [InlineData(1000, 10, 21, 10, 20, 0, 0, 2086601.930556)]
+    [InlineData(1582, 10, 15, 11, 40, 0, 0, 2299160.986111)]
+    [InlineData(1582, 10, 4, 11, 40, 22, 0, 2299159.986366)]
+    [InlineData(2222, 1, 1, 23, 20, 10, 0, 2532629.472338)]
+    [InlineData(1957, 10, 4, 19, 26, 24, 0, 2436116.31)]
+    [InlineData(2024, 7, 8, 18, 57, 24, 300, 2460500.289865)]
+    [InlineData(1034, 10, 1, 12, 00, 0, 900, 2099000.00001)]
+    [InlineData(2024, 2, 29, 9, 46, 56, 600, 2460369.9076)]
+    [InlineData(2024, 2, 12, 11, 46, 56, 600, 2460352.990933)]
+    public void FromJulianDate_ShouldReturnDateAsJulianDateDouble(int year, int month, int day, int hour, int minute, int seconds, int milliseconds, double input)
+    {
+        DateTime expected = new(year, month, day, hour, minute, seconds, milliseconds, DateTimeKind.Utc);
+
+        DateTime result = AstroHelper.FromJulianDate(input);
+
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
     [InlineData("0'n, 0.0002*e", 0, 0.0002)]
     [InlineData("47° 13′ 11″ N, 14° 45′ 53″ E", 47.219722, 14.764722)]
     [InlineData("  38° 58′ 4.44″ N, 106° 2′ 42.61″ W", 38.9679, -106.04517)]
