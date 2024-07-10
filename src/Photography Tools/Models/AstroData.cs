@@ -10,4 +10,8 @@ public readonly record struct MoonPosition(double Azimuth, double Altitude, doub
 
 public record SunData(DateTime Rise, DateTime CivilTwilightStart, DateTime CivilTwilightEnd, DateTime UpperTransit, DateTime Set);
 
-//public readonly record struct SunPhase();
+public readonly record struct SunPhaseStart(string Name, DateTime Date);
+
+public readonly record struct Phase(DateTime StartDate, DateTime EndDate);
+
+public record SunPhasesResult(Phase? Day, Phase? MorningGoldenHour, Phase? EveningGoldenHour, Phase? MorningBlueHour, Phase? EveningBlueHour, Phase? MorningCivilTwilight, Phase? EveningCivilTwilight, DateTime? UpperTransit);

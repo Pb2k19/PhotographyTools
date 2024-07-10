@@ -2,13 +2,13 @@
 
 public interface IAstroDataService
 {
-    public static readonly ServiceResponse<MoonData?>
-        ErrorMoonResult = new(null, false, Message: "Something went wrong"),
-        IncorrectInputMoonResult = ErrorMoonResult with { Message = "Incorrect input" };
+    public static readonly ServiceResponse<MoonData?> IncorrectInputMoonResult = new(null, false, -1, "Incorrect input");
+
+    public static readonly ServiceResponse<SunPhasesResult?> IncorrectInputSunResult = new(null, false, -1, "Incorrect input");
 
     public string DataSourceInfo { get; }
 
     Task<ServiceResponse<MoonData?>> GetMoonDataAsync(DateTime date, double latitude, double longitude);
 
-    // Get Sun Data
+    Task<ServiceResponse<SunPhasesResult?>> GetSunDataAsync(DateTime date, double latitude, double longitude, double heigth = 0);
 }
