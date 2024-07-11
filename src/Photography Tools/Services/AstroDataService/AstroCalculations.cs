@@ -238,11 +238,10 @@ public static class AstroCalculations
         return CalculateSolarTransitJ(a, m, l);
     }
 
-    public static IEnumerable<SunPhaseStart> CalculateSunPhases(DateTime date, double lat, double lng, double height = 0)
+    public static IEnumerable<SunPhaseStart> CalculateSunPhases(DateTime date, double latitude, double longitude, double height = 0)
     {
-        double lw = MathHelper.DegreesToRadians(-lng);
-        double phi = MathHelper.DegreesToRadians(lat);
-        double dh = CalculateObserverAngle(height);
+        double lw = MathHelper.DegreesToRadians(-longitude);
+        double phi = MathHelper.DegreesToRadians(latitude);
 
         double d = date.ToJulianDate() - AstroConst.JulianDay01_01_2000_Noon;
 
@@ -252,16 +251,12 @@ public static class AstroCalculations
         double m = CalculateMeanAnomaly(ds);
         double l = CalculateEclipticLongitude(m);
         double dec = CalculateDeclination(l, 0);
-
         double jnoon = CalculateSolarTransitJ(ds, m, l);
-        DateTime solarNoon = AstroHelper.FromJulianDate(jnoon);
-        DateTime nadir = AstroHelper.FromJulianDate(jnoon - 0.5);
 
+        yield return new SunPhaseStart(AstroConst.SolarNoon, AstroHelper.FromJulianDate(jnoon));
+        yield return new SunPhaseStart(AstroConst.Nadir, AstroHelper.FromJulianDate(jnoon - 0.5));
 
-        yield return new SunPhaseStart(AstroConst.SolarNoon, solarNoon);
-        yield return new SunPhaseStart(AstroConst.Nadir, nadir);
-
-
+        double dh = CalculateObserverAngle(height);
         foreach (var sunPhase in AllSunPhaseAngles)
         {
             double h0 = MathHelper.DegreesToRadians(sunPhase.Angle + dh);
@@ -274,5 +269,32 @@ public static class AstroCalculations
             yield return new SunPhaseStart(sunPhase.StartName, AstroHelper.FromJulianDate(jrise));
             yield return new SunPhaseStart(sunPhase.EndName, AstroHelper.FromJulianDate(jset));
         }
+    }
+
+    public static Models.Phase? CalculateSunPhase(DateTime date, double latitude, double longitude, double angle, double height = 0)
+    {
+        double lw = MathHelper.DegreesToRadians(-longitude);
+        double phi = MathHelper.DegreesToRadians(latitude);
+
+        double d = date.ToJulianDate() - AstroConst.JulianDay01_01_2000_Noon;
+
+        double n = CalculateJulianCycle(d, lw);
+        double ds = CalculateApproxTransit(0, lw, n);
+
+        double m = CalculateMeanAnomaly(ds);
+        double l = CalculateEclipticLongitude(m);
+        double dec = CalculateDeclination(l, 0);
+        double dh = CalculateObserverAngle(height);
+        double jnoon = CalculateSolarTransitJ(ds, m, l);
+
+        double h0 = MathHelper.DegreesToRadians(angle + dh);
+        double jset = CalculateSunSetTime(h0, lw, phi, dec, n, m, l);
+
+        if (double.IsNaN(jset) || double.IsInfinity(jset))
+            return null;
+
+        double jrise = jnoon - (jset - jnoon);
+
+        return new(AstroHelper.FromJulianDate(jrise), AstroHelper.FromJulianDate(jset));
     }
 }
