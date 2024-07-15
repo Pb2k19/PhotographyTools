@@ -38,7 +38,6 @@ public class OnlineAstroDataService : IAstroDataService
             return new(null, false, astroData.Code, astroData.Message);
 
         Models.Phase? day, morningGoldenHour, eveningGoldenHour, morningBlueHour, eveningBlueHour, morningCivilTwilight, eveningCivilTwilight;
-        day = morningGoldenHour = eveningGoldenHour = morningBlueHour = eveningBlueHour = morningCivilTwilight = eveningCivilTwilight = null;
 
         day = new(astroData.Data.SunData.Rise, astroData.Data.SunData.Set);
         morningCivilTwilight = new(astroData.Data.SunData.CivilTwilightStart, astroData.Data.SunData.Rise);
@@ -49,10 +48,14 @@ public class OnlineAstroDataService : IAstroDataService
 
         if (goldenHour6deg is not null && goldenHourMinus4deg is not null)
         {
-            morningGoldenHour = new(goldenHourMinus4deg.Value.StartDate, goldenHour6deg.Value.StartDate);
-            eveningGoldenHour = new(goldenHour6deg.Value.EndDate, goldenHourMinus4deg.Value.EndDate);
-            morningBlueHour = new(astroData.Data.SunData.Set, morningGoldenHour.Value.StartDate);
-            eveningBlueHour = new(eveningGoldenHour.Value.EndDate, astroData.Data.SunData.CivilTwilightEnd);
+            morningGoldenHour = new(goldenHourMinus4deg.StartDate, goldenHour6deg.StartDate);
+            eveningGoldenHour = new(goldenHour6deg.EndDate, goldenHourMinus4deg.EndDate);
+            morningBlueHour = new(astroData.Data.SunData.Set, morningGoldenHour.StartDate);
+            eveningBlueHour = new(eveningGoldenHour.EndDate, astroData.Data.SunData.CivilTwilightEnd);
+        }
+        else
+        {
+            morningGoldenHour = eveningGoldenHour = morningBlueHour = eveningBlueHour = null;
         }
 
         return new(new(day, morningGoldenHour, eveningGoldenHour, morningBlueHour, eveningBlueHour, morningCivilTwilight, eveningCivilTwilight, astroData.Data.SunData.UpperTransit),

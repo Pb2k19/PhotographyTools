@@ -95,8 +95,8 @@ public class UsnoAstroDataAccess : IAstroDataAccess
 
     public static AstroData ConvertUsnoResponseToAstroData(UsnoSoonMoonResponse response, double moonAge)
     {
-        DateTime rise, civilStart, civilEnd, transit, set;
-        rise = civilEnd = civilStart = transit = set = response.Properties.Data.Date;
+        DateTime? rise, civilStart, civilEnd, transit, set;
+        rise = civilEnd = civilStart = transit = set = null;
 
         foreach (ShortPhaseData item in response.Properties.Data.SunData)
         {
@@ -124,7 +124,7 @@ public class UsnoAstroDataAccess : IAstroDataAccess
 
         SunData sundData = new(rise, civilStart, civilEnd, transit, set);
 
-        rise = transit = set = response.Properties.Data.Date;
+        rise = transit = set = null;
 
         foreach (ShortPhaseData item in response.Properties.Data.MoonData)
         {
