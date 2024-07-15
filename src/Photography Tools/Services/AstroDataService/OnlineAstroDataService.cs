@@ -37,14 +37,14 @@ public class OnlineAstroDataService : IAstroDataService
         if (!astroData.IsSuccess || astroData.Data is null)
             return new(null, false, astroData.Code, astroData.Message);
 
-        Models.Phase? day, morningGoldenHour, eveningGoldenHour, morningBlueHour, eveningBlueHour, morningCivilTwilight, eveningCivilTwilight;
+        Period? day, morningGoldenHour, eveningGoldenHour, morningBlueHour, eveningBlueHour, morningCivilTwilight, eveningCivilTwilight;
 
         day = new(astroData.Data.SunData.Rise, astroData.Data.SunData.Set);
         morningCivilTwilight = new(astroData.Data.SunData.CivilTwilightStart, astroData.Data.SunData.Rise);
         eveningCivilTwilight = new(astroData.Data.SunData.Set, astroData.Data.SunData.CivilTwilightEnd);
 
-        Models.Phase? goldenHour6deg = AstroCalculations.CalculateSunPhase(date, latitude, longitude, 6);
-        Models.Phase? goldenHourMinus4deg = AstroCalculations.CalculateSunPhase(date, latitude, longitude, -4);
+        Period? goldenHour6deg = AstroCalculations.CalculateSunPhase(date, latitude, longitude, 6);
+        Period? goldenHourMinus4deg = AstroCalculations.CalculateSunPhase(date, latitude, longitude, -4);
 
         if (goldenHour6deg is not null && goldenHourMinus4deg is not null)
         {

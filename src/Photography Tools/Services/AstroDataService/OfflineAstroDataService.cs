@@ -26,7 +26,7 @@ public class OfflineAstroDataService : IAstroDataService
             result[item.Name] = item.Date;
         }
 
-        Models.Phase? day, morningGoldenHour, eveningGoldenHour, morningBlueHour, eveningBlueHour, morningCivilTwilight, eveningCivilTwilight;
+        Period? day, morningGoldenHour, eveningGoldenHour, morningBlueHour, eveningBlueHour, morningCivilTwilight, eveningCivilTwilight;
         day = morningGoldenHour = eveningGoldenHour = morningBlueHour = eveningBlueHour = morningCivilTwilight = eveningCivilTwilight = null;
 
         if (result.TryGetValue(AstroConst.Sunrise, out DateTime start) && result.TryGetValue(AstroConst.Sunrise, out DateTime end))

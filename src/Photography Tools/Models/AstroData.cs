@@ -12,6 +12,6 @@ public record SunData(DateTime? Rise, DateTime? CivilTwilightStart, DateTime? Ci
 
 public readonly record struct SunPhaseStart(string Name, DateTime Date);
 
-public record Phase(DateTime? StartDate, DateTime? EndDate);
+public record Period(DateTime? StartDate, DateTime? EndDate);
 
-public record SunPhasesResult(Phase? Day, Phase? MorningGoldenHour, Phase? EveningGoldenHour, Phase? MorningBlueHour, Phase? EveningBlueHour, Phase? MorningCivilTwilight, Phase? EveningCivilTwilight, DateTime? UpperTransit);
+public record SunPhasesResult(Period? Day, Period? MorningGoldenHour, Period? EveningGoldenHour, Period? MorningBlueHour, Period? EveningBlueHour, Period? MorningCivilTwilight, Period? EveningCivilTwilight, DateTime? UpperTransit);

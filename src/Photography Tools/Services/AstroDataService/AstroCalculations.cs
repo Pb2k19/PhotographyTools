@@ -271,7 +271,7 @@ public static class AstroCalculations
         }
     }
 
-    public static Models.Phase? CalculateSunPhase(DateTime date, double latitude, double longitude, double angle, double height = 0)
+    public static Period? CalculateSunPhase(DateTime date, double latitude, double longitude, double angle, double height = 0)
     {
         double lw = MathHelper.DegreesToRadians(-longitude);
         double phi = MathHelper.DegreesToRadians(latitude);
