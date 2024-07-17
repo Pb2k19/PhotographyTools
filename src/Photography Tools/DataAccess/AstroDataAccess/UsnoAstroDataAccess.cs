@@ -57,9 +57,9 @@ public class UsnoAstroDataAccess : IAstroDataAccess
             if (result is null)
                 return IAstroDataAccess.IncorrectInputResponse;
 
-            double moonAge = await GetMoonAgeAsync(date);
+            double moonAge = GetMoonAge(date, result.Properties.Data.ClosestPhase);
 
-            return new ServiceResponse<AstroData?>(ConvertUsnoResponseToAstroData(result, moonAge), true, 1);
+            return new ServiceResponse<AstroData?>(ConvertUsnoResponseToAstroData(result, moonAge, date), true, 1);
         }
         catch (Exception)
         {
@@ -68,32 +68,25 @@ public class UsnoAstroDataAccess : IAstroDataAccess
         }
     }
 
-    private async Task<double> GetMoonAgeAsync(DateTime universalDate)
+    public static double GetMoonAge(DateTime selectedDateUTC, PhaseData closestPhase)
     {
-#if DEBUG
-        Debug.WriteLine($"USNO API CALL: moon/phases/date?date={universalDate:yyyy-MM-dd}&nump=4");
-#endif
-        using HttpResponseMessage response = await httpClient.GetAsync($"moon/phases/date?date={universalDate:yyyy-MM-dd}&nump=4");
-
-        if (!response.IsSuccessStatusCode)
-            return double.NaN;
-
-        using Stream stream = await response.Content.ReadAsStreamAsync();
-        UsnoPhaseOfTheMoonResponse? result = await JsonSerializer.DeserializeAsync<UsnoPhaseOfTheMoonResponse>(stream);
-
-        if (result is null)
-            return double.NaN;
-
-        foreach (var item in result.PhaseData)
+        double diff = (closestPhase.DateTime - selectedDateUTC).Duration().TotalDays * (selectedDateUTC < closestPhase.DateTime ? -1 : 1);
+        double result = closestPhase.Name switch
         {
-            if (item.Name.Equals("New Moon"))
-                return AstroConst.SynodicMonthLength - (item.DateTime - universalDate).TotalDays;
-        }
+            "New Moon" => AstroConst.SynodicMonthLength + diff,
+            "Last Quarter" or AstroConst.ThirdQuarter => AstroConst.SynodicMonthLength * 0.75 + diff,
+            "Full Moon" => AstroConst.SynodicMonthLength * 0.5 + diff,
+            "First Quarter" => AstroConst.SynodicMonthLength * 0.25 + diff,
+            _ => double.NaN
+        };
 
-        return double.NaN;
+        if (result > AstroConst.SynodicMonthLength)
+            result -= AstroConst.SynodicMonthLength;
+
+        return result;
     }
 
-    public static AstroData ConvertUsnoResponseToAstroData(UsnoSoonMoonResponse response, double moonAge)
+    public static AstroData ConvertUsnoResponseToAstroData(UsnoSoonMoonResponse response, double moonAge, DateTime selectedDateTimeUTC)
     {
         DateTime? rise, civilStart, civilEnd, transit, set;
         rise = civilEnd = civilStart = transit = set = null;
@@ -144,17 +137,20 @@ public class UsnoAstroDataAccess : IAstroDataAccess
             }
         }
 
-        MoonData moonData = new(rise, transit, set, response.Properties.Data.Fracillum, moonAge, response.Properties.Data.CurrentPhase);
+        string phaseName;
+        if ((response.Properties.Data.ClosestPhase.DateTime - selectedDateTimeUTC).Duration().TotalDays < AstroConst.SynodicMonthLength / 60)
+            phaseName = response.Properties.Data.ClosestPhase.Name;
+        else
+            phaseName = response.Properties.Data.CurrentPhase;
+
+        if (phaseName.Equals("Last Quarter"))
+            phaseName = AstroConst.ThirdQuarter;
+
+        MoonData moonData = new(rise, transit, set, response.Properties.Data.Fracillum, moonAge, phaseName);
 
         return new(sundData, moonData);
     }
 
-
-    public class UsnoPhaseOfTheMoonResponse
-    {
-        [JsonPropertyName("phasedata")]
-        public required PhaseData[] PhaseData { get; set; }
-    }
 
     public class PhaseData
     {
@@ -187,6 +183,8 @@ public class UsnoAstroDataAccess : IAstroDataAccess
 
     public class Data
     {
+        [JsonPropertyName("closestphase")]
+        public required PhaseData ClosestPhase { get; set; }
         [JsonPropertyName("moondata")]
         public required ShortPhaseData[] MoonData { get; set; }
         [JsonPropertyName("sundata")]
