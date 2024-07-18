@@ -24,7 +24,7 @@ public class OnlineAstroDataService : IAstroDataService
 
         ServiceResponse<AstroData?> astroData = await GetAstroDataAsync(date, latitude, longitude);
 
-        return new ServiceResponse<MoonData?>(astroData.Data?.MoonData ?? null, astroData.IsSuccess, astroData.Code, astroData.Message);
+        return new ServiceResponse<MoonData?>(astroData.Data is not null ? astroData.Data.MoonData with { MoonAge = CalculateMoonAge(astroData.Data.MoonData, date) } : null, astroData.IsSuccess, astroData.Code, astroData.Message);
     }
 
     public async Task<ServiceResponse<SunPhasesResult?>> GetSunDataAsync(DateTime date, double latitude, double longitude, double heigth = 0)
@@ -64,17 +64,18 @@ public class OnlineAstroDataService : IAstroDataService
 
     private async Task<ServiceResponse<AstroData?>> GetAstroDataAsync(DateTime date, double latitude, double longitude)
     {
+        date = date.ToUniversalTime();
         latitude = Math.Round(latitude, 2);
         longitude = Math.Round(longitude, 2);
 
-        string cacheKey = $"{date:yyyy-MM-dd-HH}-{latitude:0.00}-{longitude:0.00}";
+        string cacheKey = $"{date:yyyy-MM-dd}-{latitude:0.00}-{longitude:0.00}";
 
         AstroData? astroData = await cacheStore.GetValueAsync(cacheKey);
 
         if (astroData is not null)
             return new(astroData, true, 1);
 
-        ServiceResponse<AstroData?> response = await astroDataAccess.GetAstroDataAsync(date, latitude, longitude);
+        ServiceResponse<AstroData?> response = await astroDataAccess.GetAstroDataAsync(date.Date, latitude, longitude);
 
         if (!response.IsSuccess || response.Data is null)
             return new(null, false, response.Code, response.Message);
@@ -82,5 +83,11 @@ public class OnlineAstroDataService : IAstroDataService
         await cacheStore.AddAsync(cacheKey, response.Data);
 
         return response;
+    }
+
+    private static double CalculateMoonAge(MoonData data, DateTime currentUtcTime)
+    {
+        double result = data.MoonAge + (currentUtcTime.Date - currentUtcTime).Duration().TotalDays;
+        return result > AstroConst.SynodicMonthLength ? result - AstroConst.SynodicMonthLength : result;
     }
 }

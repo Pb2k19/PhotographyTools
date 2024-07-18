@@ -9,5 +9,5 @@ public interface IAstroDataAccess
 
     public string DataSourceInfo { get; }
 
-    Task<ServiceResponse<AstroData?>> GetAstroDataAsync(DateTime date, double latitude, double longitude);
+    Task<ServiceResponse<AstroData?>> GetAstroDataAsync(DateTime dateTimeUtc, double latitude, double longitude);
 }

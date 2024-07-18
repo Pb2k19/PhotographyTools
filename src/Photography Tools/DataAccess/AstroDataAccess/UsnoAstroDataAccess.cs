@@ -21,7 +21,7 @@ public class UsnoAstroDataAccess : IAstroDataAccess
         this.httpClient = httpClient;
     }
 
-    public async Task<ServiceResponse<AstroData?>> GetAstroDataAsync(DateTime date, double latitude, double longitude)
+    public async Task<ServiceResponse<AstroData?>> GetAstroDataAsync(DateTime dateTimeUtc, double latitude, double longitude)
     {
         if (!(Connectivity.Current.NetworkAccess == NetworkAccess.Internet))
             return IAstroDataAccess.FailResultResponse with { Message = "No Internet access", Code = -2 };
@@ -32,18 +32,17 @@ public class UsnoAstroDataAccess : IAstroDataAccess
         if (Stopwatch.GetElapsedTime(lastFailRequest) < MinFailRequestDiffTime)
             return IAstroDataAccess.FailResultResponse with { Message = "Source unavailable", Code = -4 };
 
-        if (date < MinDateTime || date > MaxDateTime)
+        if (dateTimeUtc < MinDateTime || dateTimeUtc > MaxDateTime)
             return IAstroDataAccess.IncorrectInputResponse with { Code = -5 };
 
-        DateTime universalDate = date.ToUniversalTime();
         lastApiRequest = Stopwatch.GetTimestamp();
 
         try
         {
 #if DEBUG
-            Debug.WriteLine($"USNO API CALL: rstt/oneday?date={universalDate:yyyy-MM-dd}&time={universalDate:HH:mm}&coords={latitude.ToString("0.000", CultureInfo.InvariantCulture)},{longitude.ToString("0.00", CultureInfo.InvariantCulture)}");
+            Debug.WriteLine($"USNO API CALL: rstt/oneday?date={dateTimeUtc:yyyy-MM-dd}&coords={latitude.ToString("0.000", CultureInfo.InvariantCulture)},{longitude.ToString("0.00", CultureInfo.InvariantCulture)}");
 #endif
-            using HttpResponseMessage response = await httpClient.GetAsync($"rstt/oneday?date={universalDate:yyyy-MM-dd}&time={universalDate:HH:mm}&coords={latitude.ToString("0.000", CultureInfo.InvariantCulture)},{longitude.ToString("0.00", CultureInfo.InvariantCulture)}");
+            using HttpResponseMessage response = await httpClient.GetAsync($"rstt/oneday?date={dateTimeUtc:yyyy-MM-dd}&coords={latitude.ToString("0.000", CultureInfo.InvariantCulture)},{longitude.ToString("0.00", CultureInfo.InvariantCulture)}");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -57,9 +56,9 @@ public class UsnoAstroDataAccess : IAstroDataAccess
             if (result is null)
                 return IAstroDataAccess.IncorrectInputResponse;
 
-            double moonAge = GetMoonAge(date, result.Properties.Data.ClosestPhase);
+            double moonAge = GetMoonAge(dateTimeUtc, result.Properties.Data.ClosestPhase);
 
-            return new ServiceResponse<AstroData?>(ConvertUsnoResponseToAstroData(result, moonAge, date), true, 1);
+            return new ServiceResponse<AstroData?>(ConvertUsnoResponseToAstroData(result, moonAge, dateTimeUtc), true, 1);
         }
         catch (Exception)
         {
