@@ -167,8 +167,8 @@ public partial class MoonPhaseViewModel : SaveableViewModel
         SetMoonAge(Math.Round(data.MoonAge, 2));
         SetDataSourceInfo(sourceInfo);
 
-        MoonriseDate = data?.Rise?.ToLocalTime().ToString("d MMM HH:mm") ?? " --- ";
-        MoonsetDate = data?.Set?.ToLocalTime().ToString("d MMM HH:mm") ?? " --- ";
+        MoonriseDate = data.Rise.ToStringLocalTime();
+        MoonsetDate = data.Set.ToStringLocalTime();
     }
 
     public void SetMoonImage(string phaseName, double latitude) =>
