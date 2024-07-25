@@ -14,4 +14,4 @@ public readonly record struct SunPhaseStart(string Name, DateTime Date);
 
 public record Period(DateTime? StartDate, DateTime? EndDate);
 
-public record SunPhasesResult(Period? Day, Period? MorningGoldenHour, Period? EveningGoldenHour, Period? MorningBlueHour, Period? EveningBlueHour, Period? MorningCivilTwilight, Period? EveningCivilTwilight, DateTime? UpperTransit);
+public record SunPhasesResult(Period Day, Period MorningGoldenHour, Period EveningGoldenHour, Period MorningBlueHour, Period EveningBlueHour, Period MorningCivilTwilight, Period EveningCivilTwilight, DateTime? UpperTransit);

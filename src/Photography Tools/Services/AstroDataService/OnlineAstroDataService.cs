@@ -55,7 +55,7 @@ public class OnlineAstroDataService : IAstroDataService
         }
         else
         {
-            morningGoldenHour = eveningGoldenHour = morningBlueHour = eveningBlueHour = null;
+            morningGoldenHour = eveningGoldenHour = morningBlueHour = eveningBlueHour = new(null, null);
         }
 
         return new(new(day, morningGoldenHour, eveningGoldenHour, morningBlueHour, eveningBlueHour, morningCivilTwilight, eveningCivilTwilight, astroData.Data.SunData.UpperTransit),

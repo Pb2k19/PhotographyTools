@@ -26,29 +26,13 @@ public class OfflineAstroDataService : IAstroDataService
             result[item.Name] = item.Date;
         }
 
-        Period? day, morningGoldenHour, eveningGoldenHour, morningBlueHour, eveningBlueHour, morningCivilTwilight, eveningCivilTwilight;
-        day = morningGoldenHour = eveningGoldenHour = morningBlueHour = eveningBlueHour = morningCivilTwilight = eveningCivilTwilight = null;
-
-        if (result.TryGetValue(AstroConst.Sunrise, out DateTime start) && result.TryGetValue(AstroConst.Sunrise, out DateTime end))
-            day = new(start, end);
-
-        if (result.TryGetValue(AstroConst.MorningGoldenHourStart, out start) && result.TryGetValue(AstroConst.MorningGoldenHourEnd, out end))
-            morningGoldenHour = new(start, end);
-
-        if (result.TryGetValue(AstroConst.EveningGoldenHourStart, out start) && result.TryGetValue(AstroConst.EveningGoldenHourEnd, out end))
-            eveningGoldenHour = new(start, end);
-
-        if (result.TryGetValue(AstroConst.Dawn, out start) && result.TryGetValue(AstroConst.MorningGoldenHourStart, out end))
-            morningBlueHour = new(start, end);
-
-        if (result.TryGetValue(AstroConst.EveningGoldenHourEnd, out start) && result.TryGetValue(AstroConst.Dusk, out end))
-            eveningBlueHour = new(start, end);
-
-        if (result.TryGetValue(AstroConst.Dawn, out start) && result.TryGetValue(AstroConst.Sunrise, out end))
-            morningCivilTwilight = new(start, end);
-
-        if (result.TryGetValue(AstroConst.Sunset, out start) && result.TryGetValue(AstroConst.Dusk, out end))
-            eveningCivilTwilight = new(start, end);
+        Period day = new(result.GetValueOrNull(AstroConst.Sunrise), result.GetValueOrNull(AstroConst.Sunset));
+        Period morningGoldenHour = new(result.GetValueOrNull(AstroConst.MorningGoldenHourStart), result.GetValueOrNull(AstroConst.MorningGoldenHourEnd));
+        Period eveningGoldenHour = new(result.GetValueOrNull(AstroConst.EveningGoldenHourStart), result.GetValueOrNull(AstroConst.EveningGoldenHourEnd));
+        Period morningBlueHour = new(result.GetValueOrNull(AstroConst.Dawn), result.GetValueOrNull(AstroConst.MorningGoldenHourStart));
+        Period eveningBlueHour = new(result.GetValueOrNull(AstroConst.EveningGoldenHourEnd), result.GetValueOrNull(AstroConst.Dusk));
+        Period morningCivilTwilight = new(result.GetValueOrNull(AstroConst.Dawn), result.GetValueOrNull(AstroConst.Sunrise));
+        Period eveningCivilTwilight = new(result.GetValueOrNull(AstroConst.Sunset), result.GetValueOrNull(AstroConst.Dusk));
 
         return Task.FromResult(new ServiceResponse<SunPhasesResult?>(
             new(day, morningGoldenHour, eveningGoldenHour, morningBlueHour, eveningBlueHour, morningCivilTwilight, eveningCivilTwilight, result[AstroConst.SolarNoon]),
