@@ -43,6 +43,12 @@
     />
 
     <ShellContent
+        Title="Sun Phase"
+        ContentTemplate="{DataTemplate pages:SunPage}"
+        Route="SunPage"
+    />
+
+    <ShellContent
         Title="Moon Phase"
         ContentTemplate="{DataTemplate pages:MoonPhasePage}"
         Route="MoonPhasePage"

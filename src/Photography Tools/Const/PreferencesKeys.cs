@@ -8,6 +8,7 @@ public static class PreferencesKeys
         DofCalcUserInputPreferencesKey = "DofCalcUserInput",
         NDFilterCalcUserInputPreferencesKey = "NDFilterCalcUserInput",
         MoonPhaseUserInputPreferencesKey = "MoonPhaseUserInput",
+        SunUserInputPreferencesKey = "SunUserInput",
         TimeLapseCalcUserInputPreferencesKey = "TimeLapseCalcUserInput";
 
     // App preferences

@@ -82,6 +82,9 @@
 	  <MauiXaml Update="Pages\DofCalcPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\SunPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\MoonPhasePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
