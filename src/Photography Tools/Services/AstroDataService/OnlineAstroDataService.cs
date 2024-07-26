@@ -46,17 +46,10 @@ public class OnlineAstroDataService : IAstroDataService
         Period? goldenHour6deg = AstroCalculations.CalculateSunPhase(date, latitude, longitude, 6);
         Period? goldenHourMinus4deg = AstroCalculations.CalculateSunPhase(date, latitude, longitude, -4);
 
-        if (goldenHour6deg is not null && goldenHourMinus4deg is not null)
-        {
-            morningGoldenHour = new(goldenHourMinus4deg.StartDate, goldenHour6deg.StartDate);
-            eveningGoldenHour = new(goldenHour6deg.EndDate, goldenHourMinus4deg.EndDate);
-            morningBlueHour = new(astroData.Data.SunData.Set, morningGoldenHour.StartDate);
-            eveningBlueHour = new(eveningGoldenHour.EndDate, astroData.Data.SunData.CivilTwilightEnd);
-        }
-        else
-        {
-            morningGoldenHour = eveningGoldenHour = morningBlueHour = eveningBlueHour = new(null, null);
-        }
+        morningGoldenHour = new(goldenHourMinus4deg?.StartDate, goldenHour6deg?.StartDate);
+        eveningGoldenHour = new(goldenHour6deg?.EndDate, goldenHourMinus4deg?.EndDate);
+        morningBlueHour = new(morningCivilTwilight.StartDate, morningGoldenHour.StartDate);
+        eveningBlueHour = new(eveningGoldenHour.EndDate, eveningCivilTwilight.EndDate);
 
         return new(new(day, morningGoldenHour, eveningGoldenHour, morningBlueHour, eveningBlueHour, morningCivilTwilight, eveningCivilTwilight, astroData.Data.SunData.UpperTransit),
             true, 1);
