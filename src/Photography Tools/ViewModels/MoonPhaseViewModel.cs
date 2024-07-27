@@ -1,27 +1,14 @@
-﻿using CommunityToolkit.Maui.Views;
-using Photography_Tools.Components.Popups;
-using Photography_Tools.Services.KeyValueStoreService;
+﻿using Photography_Tools.Services.KeyValueStoreService;
 using System.Collections.Frozen;
 using System.Text.Json;
 
 namespace Photography_Tools.ViewModels;
 
-public partial class MoonPhaseViewModel : SaveableViewModel
+public partial class MoonPhaseViewModel : AstroLocationViewModel
 {
     private static readonly FrozenDictionary<string, string> MoonImagesNorth, MoonImagesSouth;
 
-    private readonly IAstroDataService onlineAstroDataService;
-    private readonly IAstroDataService offlineAstroDataService;
-    private readonly IKeyValueStore<Place> locationsKeyValueStore;
-    private readonly IUiMessageService messageService;
-
     private TimeSpan lastSelectedTime = TimeSpan.Zero;
-
-    [ObservableProperty]
-    private string locationName = string.Empty;
-
-    [ObservableProperty]
-    private DateTime selectedDate = DateTime.Today;
 
     [ObservableProperty]
     private TimeSpan selectedTime = new(DateTime.Now.TimeOfDay.Hours, DateTime.Now.TimeOfDay.Minutes, 0);
@@ -33,10 +20,7 @@ public partial class MoonPhaseViewModel : SaveableViewModel
         illuminationPerc = string.Empty,
         moonAge = string.Empty,
         moonriseDate = string.Empty,
-        moonsetDate = string.Empty,
-        dataSourceInfo = string.Empty;
-
-    public bool UseOnlineAstroData { get; private set; } = true;
+        moonsetDate = string.Empty;
 
     static MoonPhaseViewModel()
     {
@@ -66,13 +50,10 @@ public partial class MoonPhaseViewModel : SaveableViewModel
     }
 
     public MoonPhaseViewModel([FromKeyedServices(KeyedServiceNames.OnlineAstroData)] IAstroDataService onlineAstroDataService, [FromKeyedServices(KeyedServiceNames.OfflineAstroData)] IAstroDataService offlineAstroDataService,
-        IKeyValueStore<Place> locationsKeyValueStore, IPreferencesService preferencesService, IUiMessageService messageService) : base(preferencesService)
+        IKeyValueStore<Place> locationsKeyValueStore, IPreferencesService preferencesService, IUiMessageService messageService) : base(onlineAstroDataService, offlineAstroDataService, locationsKeyValueStore,
+            preferencesService, messageService)
     {
-        this.onlineAstroDataService = onlineAstroDataService;
-        this.offlineAstroDataService = offlineAstroDataService;
-        this.locationsKeyValueStore = locationsKeyValueStore;
-        this.messageService = messageService;
-
+        SelectedDate = DateTime.Today;
         LocationName = preferencesService.GetPreference(PreferencesKeys.MoonPhaseUserInputPreferencesKey, string.Empty) ?? string.Empty;
     }
 
@@ -80,24 +61,24 @@ public partial class MoonPhaseViewModel : SaveableViewModel
     protected void OnAppearing()
     {
 #if DEBUG
-        UseOnlineAstroData = preferencesService.GetPreference(PreferencesKeys.UseOnlineAstroDataPreferencesKey, true);
+        UseOnlineService = preferencesService.GetPreference(PreferencesKeys.UseOnlineAstroDataPreferencesKey, false);
 #else
-        UseOnlineAstroData = preferencesService.GetPreference(PreferencesKeys.UseOnlineAstroDataPreferencesKey, true);
+        UseOnlineService = preferencesService.GetPreference(PreferencesKeys.UseOnlineAstroDataPreferencesKey, true);
 #endif
     }
 
     [RelayCommand]
     private async Task OnSelectedTimeChangedAsync()
     {
-        if (lastSelectedTime != SelectedTime)
-        {
-            lastSelectedTime = SelectedTime;
-            await CalculateAsync();
-        }
+        if (lastSelectedTime == SelectedTime)
+            return;
+
+        lastSelectedTime = SelectedTime;
+        await CalculateAsync();
     }
 
     [RelayCommand]
-    private async Task CalculateAsync()
+    protected override async Task CalculateAsync()
     {
         Place? location = await locationsKeyValueStore.GetValueAsync(LocationName);
 
@@ -115,7 +96,7 @@ public partial class MoonPhaseViewModel : SaveableViewModel
         if (offlineResult.IsSuccess && offlineResult.Data is not null)
             DisplayResult(offlineResult.Data, coordinates.Latitude, offlineAstroDataService.DataSourceInfo);
 
-        if (!UseOnlineAstroData)
+        if (!UseOnlineService)
             return;
 
         try
@@ -144,21 +125,6 @@ public partial class MoonPhaseViewModel : SaveableViewModel
         }
     }
 
-    [RelayCommand]
-    private async Task ChangeLocationAsync()
-    {
-        if (Application.Current is null || Application.Current.MainPage is null)
-            return;
-
-        Place? selectedPlace = await Application.Current.MainPage.ShowPopupAsync(new LocationPopup(locationsKeyValueStore, messageService, LocationName)) as Place;
-
-        if (selectedPlace is not null)
-        {
-            LocationName = selectedPlace.Name;
-            await CalculateAsync();
-        }
-    }
-
     public void DisplayResult(MoonData data, double latitude, string sourceInfo)
     {
         MoonPhaseName = data.Phase;
@@ -179,9 +145,6 @@ public partial class MoonPhaseViewModel : SaveableViewModel
 
     public void SetMoonAge(double value) =>
         MoonAge = value < 2 ? $"{value} day" : $"{value} days";
-
-    public void SetDataSourceInfo(string info) =>
-        DataSourceInfo = $"Source: {info}";
 
     protected override void SaveUserInput()
     {
