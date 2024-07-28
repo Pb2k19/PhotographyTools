@@ -216,9 +216,8 @@
             </Border>
 
             <Label
-                Margin="0,20,0,10"
                 Text="Exposure With Filters"
-                Style="{StaticResource LabelMediumBold}"
+                Style="{StaticResource LabelMediumBoldMargin}"
             />
 
             <Border
@@ -248,9 +247,8 @@
             </Border>
 
             <Label
-                Margin="0,20,0,10"
                 Text="Filters"
-                Style="{StaticResource LabelMediumBold}"
+                Style="{StaticResource LabelMediumBoldMargin}"
             />
 
             <FlexLayout

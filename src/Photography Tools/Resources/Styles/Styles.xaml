@@ -474,6 +474,11 @@
         <Setter Property="FontSize" Value="Medium"/>
     </Style>
 
+    <Style x:Key="LabelMediumBoldMargin" TargetType="Label" 
+                BasedOn="{StaticResource LabelMediumBold}">
+        <Setter Property="Margin" Value="0,20,0,10"/>
+    </Style>
+
     <Style x:Key="LabelLarge" TargetType="Label" 
                 BasedOn="{StaticResource BaseLabelBold}">
         <Setter Property="FontSize" Value="Large"/>

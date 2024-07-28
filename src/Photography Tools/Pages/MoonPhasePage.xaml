@@ -49,16 +49,14 @@
             RowDefinitions="auto, auto, auto, auto, auto, auto">
 
             <Label
-                Margin="0,20,0,10"
                 Text="Date"
-                Style="{StaticResource LabelMediumBold}" 
+                Style="{StaticResource LabelMediumBoldMargin}" 
             />
 
             <Label
                 Grid.Column="1"
-                Margin="0,20,0,10"
                 Text="Location"
-                Style="{StaticResource LabelMediumBold}" 
+                Style="{StaticResource LabelMediumBoldMargin}" 
             />
 
             <Border
@@ -108,17 +106,15 @@
 
             <Label
                 Grid.Row="2"
-                Margin="0,20,0,10"
                 Text="Illumination"
-                Style="{StaticResource LabelMediumBold}" 
+                Style="{StaticResource LabelMediumBoldMargin}" 
             />
 
             <Label
                 Grid.Row="2"
                 Grid.Column="1"
-                Margin="0,20,0,10"
                 Text="Moon Age"
-                Style="{StaticResource LabelMediumBold}" 
+                Style="{StaticResource LabelMediumBoldMargin}" 
             />
 
             <Border
@@ -144,17 +140,15 @@
 
             <Label
                 Grid.Row="4"
-                Margin="0,20,0,10"
                 Text="Moonrise"
-                Style="{StaticResource LabelMediumBold}"
+                Style="{StaticResource LabelMediumBoldMargin}"
             />
 
             <Label
                 Grid.Row="4"
                 Grid.Column="1"
-                Margin="0,20,0,10"
                 Text="Moonset"
-                Style="{StaticResource LabelMediumBold}"
+                Style="{StaticResource LabelMediumBoldMargin}"
             />
 
             <Border

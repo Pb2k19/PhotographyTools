@@ -44,16 +44,14 @@
                 RowDefinitions="auto, auto">
 
                 <Label
-                    Margin="0,20,0,10"
                     Text="Date"
-                    Style="{StaticResource LabelMediumBold}" 
+                    Style="{StaticResource LabelMediumBoldMargin}" 
                 />
 
                 <Label
                     Grid.Column="1"
-                    Margin="0,20,0,10"
                     Text="Location"
-                    Style="{StaticResource LabelMediumBold}" 
+                    Style="{StaticResource LabelMediumBoldMargin}" 
                 />
 
                 <Border
@@ -96,23 +94,20 @@
                 RowDefinitions="auto, auto">
 
                 <Label
-                    Margin="0,20,0,10"
                     Text="Sunrise"
-                    Style="{StaticResource LabelMediumBold}" 
+                    Style="{StaticResource LabelMediumBoldMargin}" 
                 />
 
                 <Label
                     Grid.Column="1"
-                    Margin="0,20,0,10"
                     Text="Upper Transit"
-                    Style="{StaticResource LabelMediumBold}" 
+                    Style="{StaticResource LabelMediumBoldMargin}" 
                 />
 
                 <Label
                     Grid.Column="2"
-                    Margin="0,20,0,10"
                     Text="Sunset"
-                    Style="{StaticResource LabelMediumBold}" 
+                    Style="{StaticResource LabelMediumBoldMargin}" 
                 />
 
                 <Border
@@ -155,9 +150,8 @@
 
                 <Label
                     Grid.ColumnSpan="2"
-                    Margin="0,20,0,10"
                     Text="Morning Civil Twilight"
-                    Style="{StaticResource LabelMediumBold}"
+                    Style="{StaticResource LabelMediumBoldMargin}"
                 />
 
                 <Border
@@ -184,9 +178,8 @@
                 <Label
                     Grid.ColumnSpan="2"
                     Grid.Row="2"
-                    Margin="0,20,0,10"
                     Text="Morning Blue Hour"
-                    Style="{StaticResource LabelMediumBold}"
+                    Style="{StaticResource LabelMediumBoldMargin}"
                 />
 
                 <Border
@@ -213,9 +206,8 @@
                 <Label
                     Grid.ColumnSpan="2"
                     Grid.Row="4"
-                    Margin="0,20,0,10"
                     Text="Morning Golden Hour"
-                    Style="{StaticResource LabelMediumBold}"
+                    Style="{StaticResource LabelMediumBoldMargin}"
                 />
 
                 <Border
@@ -241,9 +233,8 @@
 
                 <Label
                     Grid.Row="6"
-                    Margin="0,20,0,10"
                     Text="Evening Golden Hour"
-                    Style="{StaticResource LabelMediumBold}"
+                    Style="{StaticResource LabelMediumBoldMargin}"
                 />
 
                 <Border
@@ -270,9 +261,8 @@
                 <Label
                     Grid.ColumnSpan="2"
                     Grid.Row="8"
-                    Margin="0,20,0,10"
                     Text="Evening Blue Hour"
-                    Style="{StaticResource LabelMediumBold}"
+                    Style="{StaticResource LabelMediumBoldMargin}"
                 />
 
                 <Border
@@ -299,9 +289,8 @@
                 <Label
                     Grid.ColumnSpan="2"
                     Grid.Row="10"
-                    Margin="0,20,0,10"
                     Text="Evening Civil Twilight"
-                    Style="{StaticResource LabelMediumBold}"
+                    Style="{StaticResource LabelMediumBoldMargin}"
                 />
 
                 <Border

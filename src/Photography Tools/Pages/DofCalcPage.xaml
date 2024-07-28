@@ -47,27 +47,24 @@
             <Label
                 Grid.Row="2"
                 Grid.ColumnSpan="2"
-                Margin="0,20,0,10"
                 Text="Focal Length"
-                Style="{StaticResource LabelMediumBold}"
+                Style="{StaticResource LabelMediumBoldMargin}"
             />
 
             <Label
                 Grid.Row="2"
                 Grid.Column="2"
                 Grid.ColumnSpan="2"
-                Margin="0,20,0,10"
                 Text="Distance"
-                Style="{StaticResource LabelMediumBold}"
+                Style="{StaticResource LabelMediumBoldMargin}"
             />
 
             <Label
                 Grid.Row="2"
                 Grid.Column="4"
                 Grid.ColumnSpan="2"
-                Margin="0,20,0,10"
                 Text="Aperture"
-                Style="{StaticResource LabelMediumBold}"
+                Style="{StaticResource LabelMediumBoldMargin}"
             />
 
             <Border
@@ -127,30 +124,27 @@
             <Label
                 Grid.Row="4"
                 Grid.ColumnSpan="2"
-                Margin="0,20,0,10"
                 Text="Print Heigth"
                 IsVisible="{Binding UserInput.IsAdvancedModeEnabled}"
-                Style="{StaticResource LabelMediumBold}"
+                Style="{StaticResource LabelMediumBoldMargin}"
             />
 
             <Label
                 Grid.Row="4"
                 Grid.Column="2"
                 Grid.ColumnSpan="2"
-                Margin="0,20,0,10"
                 Text="Print Width"
                 IsVisible="{Binding UserInput.IsAdvancedModeEnabled}"
-                Style="{StaticResource LabelMediumBold}"
+                Style="{StaticResource LabelMediumBoldMargin}"
             />
 
             <Label
                 Grid.Row="4"
                 Grid.Column="4"
                 Grid.ColumnSpan="2"
-                Margin="0,20,0,10"
                 Text="Visual Acuity"
                 IsVisible="{Binding UserInput.IsAdvancedModeEnabled}"
-                Style="{StaticResource LabelMediumBold}"
+                Style="{StaticResource LabelMediumBoldMargin}"
             />
 
             <Border
@@ -210,20 +204,18 @@
             <Label
                 Grid.Row="6"
                 Grid.ColumnSpan="3"
-                Margin="0,20,0,10"
                 Text="Standard Viewing Distance"
                 IsVisible="{Binding UserInput.IsAdvancedModeEnabled}"
-                Style="{StaticResource LabelMediumBold}"
+                Style="{StaticResource LabelMediumBoldMargin}"
             />
 
             <Label
                 Grid.Row="6"
                 Grid.Column="3"
                 Grid.ColumnSpan="3"
-                Margin="0,20,0,10"
                 Text="Actual Viewing Distance"
                 IsVisible="{Binding UserInput.IsAdvancedModeEnabled}"
-                Style="{StaticResource LabelMediumBold}"
+                Style="{StaticResource LabelMediumBoldMargin}"
             />
 
             <Border
@@ -256,18 +248,16 @@
             <Label
                 Grid.Row="8"
                 Grid.ColumnSpan="3"
-                Margin="0,20,0,10"
                 Text="Depth of Field"
-                Style="{StaticResource LabelMediumBold}"
+                Style="{StaticResource LabelMediumBoldMargin}"
             />
 
             <Label
                 Grid.Row="8"
                 Grid.Column="3"
                 Grid.ColumnSpan="3"
-                Margin="0,20,0,10"
                 Text="Hyperfocal"
-                Style="{StaticResource LabelMediumBold}"
+                Style="{StaticResource LabelMediumBoldMargin}"
             />
 
             <Border
@@ -298,18 +288,16 @@
             <Label
                 Grid.Row="10"
                 Grid.ColumnSpan="3"
-                Margin="0,20,0,10"
                 Text="Near limit"
-                Style="{StaticResource LabelMediumBold}"
+                Style="{StaticResource LabelMediumBoldMargin}"
             />
 
             <Label
                 Grid.Row="10"
                 Grid.Column="3"
                 Grid.ColumnSpan="2"
-                Margin="0,20,0,10"
                 Text="Far Limit"
-                Style="{StaticResource LabelMediumBold}"
+                Style="{StaticResource LabelMediumBoldMargin}"
             />
 
             <Border
@@ -340,18 +328,16 @@
             <Label
                 Grid.Row="12"
                 Grid.ColumnSpan="3"
-                Margin="0,20,0,10"
                 Text="In Front of Subject"
-                Style="{StaticResource LabelMediumBold}"
+                Style="{StaticResource LabelMediumBoldMargin}"
             />
 
             <Label
                 Grid.Row="12"
                 Grid.Column="3"
                 Grid.ColumnSpan="3"
-                Margin="0,20,0,10"
                 Text="Behind Subject"
-                Style="{StaticResource LabelMediumBold}"
+                Style="{StaticResource LabelMediumBoldMargin}"
             />
 
             <Border
