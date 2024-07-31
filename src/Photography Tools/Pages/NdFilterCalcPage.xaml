@@ -194,7 +194,8 @@
 
     <ScrollView>
         <VerticalStackLayout
-            Padding="15,15,15,0">
+            Padding="15,15,15,0"
+            Style="{StaticResource PageVerticalStackLayout}">
 
             <Label
                 Margin="0,0,0,10"

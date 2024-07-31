@@ -18,10 +18,9 @@
 
     <ScrollView>
         <Grid
-            Padding="15"
-            ColumnSpacing="10"
             ColumnDefinitions="*,*,*,*,*,*"
-            RowDefinitions="auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto">
+            RowDefinitions="auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto"
+            Style="{StaticResource PageGrid}">
 
             <Label
                 Margin="0,0,0,10"

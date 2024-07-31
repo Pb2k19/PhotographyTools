@@ -19,158 +19,159 @@
         />
     </ContentPage.Behaviors>
 
-    <VerticalStackLayout
-        Padding="15"
-        MaximumWidthRequest="1500">
-
-        <Label
-            Text="{Binding MoonImage}"
-            Style="{StaticResource LabelLarge}"
-            HorizontalOptions="Center"
-            FontSize="200"
-        />
-
-        <Label
-            Text="{Binding MoonPhaseName}"
-            Style="{StaticResource LabelLarge}"
-            HorizontalOptions="Center"
-        />
-
-        <Label
-            Text="{Binding DataSourceInfo}"
-            Style="{StaticResource LabelSmall}"
-            HorizontalOptions="Center"
-        />
-
-        <Grid
-            Margin="0,25,0,0"
-            ColumnSpacing="10"
-            ColumnDefinitions="*,*"
-            RowDefinitions="auto, auto, auto, auto, auto, auto">
+    <ScrollView>
+        <VerticalStackLayout
+            Style="{StaticResource PageVerticalStackLayout}">
 
             <Label
-                Text="Date"
-                Style="{StaticResource LabelMediumBoldMargin}" 
+                Text="{Binding MoonImage}"
+                Style="{StaticResource LabelLarge}"
+                HorizontalOptions="Center"
+                FontSize="200"
             />
 
             <Label
-                Grid.Column="1"
-                Text="Location"
-                Style="{StaticResource LabelMediumBoldMargin}" 
+                Text="{Binding MoonPhaseName}"
+                Style="{StaticResource LabelLarge}"
+                HorizontalOptions="Center"
             />
 
-            <Border
-                Grid.Row="1"
-                Style="{StaticResource EntryBorder}">
-                <HorizontalStackLayout
-                    HorizontalOptions="Center">
-                    <DatePicker
-                        Date="{Binding SelectedDate}"
-                        FontSize="Medium">
-                        <DatePicker.Behaviors>
-                            <toolkit:EventToCommandBehavior 
-                                EventName="DateSelected" 
-                                Command="{Binding CalculateCommand}" 
-                            />
-                        </DatePicker.Behaviors>
-                    </DatePicker>
-                    <TimePicker
-                        Format="HH:mm"
-                        Time="{Binding SelectedTime}"
-                        FontSize="Medium">
-                        <TimePicker.Behaviors>
-                            <toolkit:EventToCommandBehavior 
-                                EventName="PropertyChanged" 
-                                Command="{Binding SelectedTimeChangedCommand}" 
-                            />
-                        </TimePicker.Behaviors>
-                    </TimePicker>
-                </HorizontalStackLayout>
-            </Border>
+            <Label
+                Text="{Binding DataSourceInfo}"
+                Style="{StaticResource LabelSmall}"
+                HorizontalOptions="Center"
+            />
 
-            <Border
-                Grid.Row="1"
-                Grid.Column="1"
-                Style="{StaticResource EntryBorder}">
+            <Grid
+                Margin="0,25,0,0"
+                ColumnSpacing="10"
+                ColumnDefinitions="*,*"
+                RowDefinitions="auto, auto, auto, auto, auto, auto">
 
-                <Entry
-                    InputTransparent="True"
-                    Text="{Binding LocationName}"
-                    Style="{StaticResource StandardReadonlyEntry}">
-                </Entry>
+                <Label
+                    Text="Date"
+                    Style="{StaticResource LabelMediumBoldMargin}" 
+                />
+
+                <Label
+                    Grid.Column="1"
+                    Text="Location"
+                    Style="{StaticResource LabelMediumBoldMargin}" 
+                />
+
+                <Border
+                    Grid.Row="1"
+                    Style="{StaticResource EntryBorder}">
+                    <HorizontalStackLayout
+                        HorizontalOptions="Center">
+                        <DatePicker
+                            Date="{Binding SelectedDate}"
+                            FontSize="Medium">
+                            <DatePicker.Behaviors>
+                                <toolkit:EventToCommandBehavior 
+                                    EventName="DateSelected" 
+                                    Command="{Binding CalculateCommand}" 
+                                />
+                            </DatePicker.Behaviors>
+                        </DatePicker>
+                        <TimePicker
+                            Format="HH:mm"
+                            Time="{Binding SelectedTime}"
+                            FontSize="Medium">
+                            <TimePicker.Behaviors>
+                                <toolkit:EventToCommandBehavior 
+                                    EventName="PropertyChanged" 
+                                    Command="{Binding SelectedTimeChangedCommand}" 
+                                />
+                            </TimePicker.Behaviors>
+                        </TimePicker>
+                    </HorizontalStackLayout>
+                </Border>
+
+                <Border
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Style="{StaticResource EntryBorder}">
+
+                    <Entry
+                        InputTransparent="True"
+                        Text="{Binding LocationName}"
+                        Style="{StaticResource StandardReadonlyEntry}">
+                    </Entry>
                 
-                <Border.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding ChangeLocationCommand}" />
-                </Border.GestureRecognizers>
-            </Border>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ChangeLocationCommand}" />
+                    </Border.GestureRecognizers>
+                </Border>
 
-            <Label
-                Grid.Row="2"
-                Text="Illumination"
-                Style="{StaticResource LabelMediumBoldMargin}" 
-            />
+                <Label
+                    Grid.Row="2"
+                    Text="Illumination"
+                    Style="{StaticResource LabelMediumBoldMargin}" 
+                />
 
-            <Label
-                Grid.Row="2"
-                Grid.Column="1"
-                Text="Moon Age"
-                Style="{StaticResource LabelMediumBoldMargin}" 
-            />
+                <Label
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Text="Moon Age"
+                    Style="{StaticResource LabelMediumBoldMargin}" 
+                />
 
-            <Border
-                Grid.Row="3"
-                Style="{StaticResource EntryBorder}">
-                <Entry
-                    Margin="0,5"
-                    Text="{Binding IlluminationPerc}"
-                    Style="{StaticResource StandardReadonlyEntry}">
-                </Entry>
-            </Border>
+                <Border
+                    Grid.Row="3"
+                    Style="{StaticResource EntryBorder}">
+                    <Entry
+                        Margin="0,5"
+                        Text="{Binding IlluminationPerc}"
+                        Style="{StaticResource StandardReadonlyEntry}">
+                    </Entry>
+                </Border>
 
-            <Border
-                Grid.Row="3"
-                Grid.Column="1"
-                Style="{StaticResource EntryBorder}">
-                <Entry
-                    Margin="0,5"
-                    Text="{Binding MoonAge}"
-                    Style="{StaticResource StandardReadonlyEntry}">
-                </Entry>
-            </Border>
+                <Border
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Style="{StaticResource EntryBorder}">
+                    <Entry
+                        Margin="0,5"
+                        Text="{Binding MoonAge}"
+                        Style="{StaticResource StandardReadonlyEntry}">
+                    </Entry>
+                </Border>
 
-            <Label
-                Grid.Row="4"
-                Text="Moonrise"
-                Style="{StaticResource LabelMediumBoldMargin}"
-            />
+                <Label
+                    Grid.Row="4"
+                    Text="Moonrise"
+                    Style="{StaticResource LabelMediumBoldMargin}"
+                />
 
-            <Label
-                Grid.Row="4"
-                Grid.Column="1"
-                Text="Moonset"
-                Style="{StaticResource LabelMediumBoldMargin}"
-            />
+                <Label
+                    Grid.Row="4"
+                    Grid.Column="1"
+                    Text="Moonset"
+                    Style="{StaticResource LabelMediumBoldMargin}"
+                />
 
-            <Border
-                Grid.Row="5"
-                Style="{StaticResource EntryBorder}">
-                <Entry
-                   Margin="0,5"
-                   Text="{Binding MoonriseDate}"
-                   Style="{StaticResource StandardReadonlyEntry}">
-                </Entry>
-            </Border>
+                <Border
+                    Grid.Row="5"
+                    Style="{StaticResource EntryBorder}">
+                    <Entry
+                       Margin="0,5"
+                       Text="{Binding MoonriseDate}"
+                       Style="{StaticResource StandardReadonlyEntry}">
+                    </Entry>
+                </Border>
 
-            <Border
-                Grid.Row="5"
-                Grid.Column="1"
-                Style="{StaticResource EntryBorder}">
-                <Entry
-                   Margin="0,5"
-                   Text="{Binding MoonsetDate}"
-                   Style="{StaticResource StandardReadonlyEntry}">
-                </Entry>
-            </Border>
-        </Grid>
-    </VerticalStackLayout>
+                <Border
+                    Grid.Row="5"
+                    Grid.Column="1"
+                    Style="{StaticResource EntryBorder}">
+                    <Entry
+                       Margin="0,5"
+                       Text="{Binding MoonsetDate}"
+                       Style="{StaticResource StandardReadonlyEntry}">
+                    </Entry>
+                </Border>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

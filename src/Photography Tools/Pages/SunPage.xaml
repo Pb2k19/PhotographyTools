@@ -21,8 +21,7 @@
 
     <ScrollView>
         <VerticalStackLayout
-            Padding="15"
-            MaximumWidthRequest="1500">
+            Style="{StaticResource PageVerticalStackLayout}">
 
             <Label
                 Style="{StaticResource LabelLarge}"

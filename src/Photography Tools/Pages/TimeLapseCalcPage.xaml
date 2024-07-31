@@ -18,29 +18,28 @@
 
     <ScrollView>
         <Grid
-            Padding="15"
-            ColumnSpacing="10"
             ColumnDefinitions="*,*,*,*,*,*"
-            RowDefinitions="auto, auto, auto, auto, auto, auto">
+            RowDefinitions="auto, auto, auto, auto, auto, auto"
+            Style="{StaticResource PageGrid}">
 
             <Label
                 Grid.ColumnSpan="2"
                 Text="Interval"
-                Style="{StaticResource LabelMediumBoldMargin}"
+                Style="{StaticResource LabelMediumBold}"
             />
 
             <Label
                 Grid.Column="2"
                 Grid.ColumnSpan="2"
                 Text="Length"
-                Style="{StaticResource LabelMediumBoldMargin}"
+                Style="{StaticResource LabelMediumBold}"
             />
 
             <Label
                 Grid.Column="4"
                 Grid.ColumnSpan="2"
                 Text="Shots Count"
-                Style="{StaticResource LabelMediumBoldMargin}"
+                Style="{StaticResource LabelMediumBold}"
             />
 
             <Border
