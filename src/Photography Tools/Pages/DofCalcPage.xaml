@@ -327,7 +327,7 @@
             <Label
                 Grid.Row="12"
                 Grid.ColumnSpan="3"
-                Text="In Front of Subject"
+                Text="Behind Subject"
                 Style="{StaticResource LabelMediumBoldMargin}"
             />
 
@@ -335,25 +335,12 @@
                 Grid.Row="12"
                 Grid.Column="3"
                 Grid.ColumnSpan="3"
-                Text="Behind Subject"
+                Text="In Front of Subject"
                 Style="{StaticResource LabelMediumBoldMargin}"
             />
 
             <Border
                 Grid.Row="13"
-                Grid.ColumnSpan="3"
-                Style="{StaticResource EntryBorder}">
-                <controls:UnitEntryControl
-                    IsReadOnly="True"
-                    MaxValueBaseUnit="1000000"
-                    BaseUnitValue="{Binding DofCalcResult.DofInFrontOfSubject}"
-                    SelectedUnitIndex="{Binding UserInput.DofInFrontOfSubjectUnitIndex}"
-                />
-            </Border>
-
-            <Border
-                Grid.Row="13"
-                Grid.Column="3"
                 Grid.ColumnSpan="3"
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
@@ -364,12 +351,27 @@
                 />
             </Border>
 
+            <Border
+                Grid.Row="13"
+                Grid.Column="3"
+                Grid.ColumnSpan="3"
+                Style="{StaticResource EntryBorder}">
+                <controls:UnitEntryControl
+                    IsReadOnly="True"
+                    MaxValueBaseUnit="1000000"
+                    BaseUnitValue="{Binding DofCalcResult.DofInFrontOfSubject}"
+                    SelectedUnitIndex="{Binding UserInput.DofInFrontOfSubjectUnitIndex}"
+                />
+            </Border>
+
             <Button
-                Margin="0,20,0,10"
+                Margin="0,25,0,10"
                 Grid.Row="14"
                 Grid.Column="3"
                 Grid.ColumnSpan="3"
-                Text="{Binding ToggleText}"
+                MaximumWidthRequest="500"
+                HorizontalOptions="End"
+                Text="{Binding ToggleText}"                
                 Command="{Binding ChangeModeCommand}"
             />
         </Grid>

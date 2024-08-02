@@ -24,21 +24,24 @@
 
             <Label
                 Grid.ColumnSpan="2"
-                Text="Interval"
+                Margin="0,0,0,10"
+                Text="Shot Interval"
                 Style="{StaticResource LabelMediumBold}"
             />
 
             <Label
                 Grid.Column="2"
                 Grid.ColumnSpan="2"
-                Text="Length"
+                Margin="0,0,0,10"
+                Text="Duration"
                 Style="{StaticResource LabelMediumBold}"
             />
 
             <Label
                 Grid.Column="4"
                 Grid.ColumnSpan="2"
-                Text="Shots Count"
+                Margin="0,0,0,10"
+                Text="Shot Count"
                 Style="{StaticResource LabelMediumBold}"
             />
 

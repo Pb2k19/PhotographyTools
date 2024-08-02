@@ -99,7 +99,7 @@
 
                 <Label
                     Grid.Column="1"
-                    Text="Upper Transit"
+                    Text="Solar Noon"
                     Style="{StaticResource LabelMediumBoldMargin}" 
                 />
 
@@ -231,6 +231,7 @@
                 </Border>
 
                 <Label
+                    Grid.ColumnSpan="2"
                     Grid.Row="6"
                     Text="Evening Golden Hour"
                     Style="{StaticResource LabelMediumBoldMargin}"
