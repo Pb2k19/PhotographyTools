@@ -6,6 +6,55 @@ namespace PhotographyToolsTests.HelpersTests;
 public class DateTimeHelperTests
 {
     [Fact]
+    public void ToStringLocalTime_ShouldReturnStringWithShortTimeWhenDateIsEqualToReferenceDate()
+    {
+        const int referanceDateDay = 10;
+        int timeDiff = (int)Math.Round((DateTime.Now - DateTime.UtcNow).TotalHours, 0);
+        DateTime? date = new DateTime(2134, 9, 10, 12, 00, 0, DateTimeKind.Utc);
+        string expected = $"{12 + timeDiff}:00";
+
+        string acutal = date.ToStringLocalTime(referanceDateDay, formatProvider: CultureInfo.InvariantCulture);
+
+        Assert.Equal(expected, acutal);
+    }
+
+    [Fact]
+    public void ToStringLocalTime_ShouldReturnStringWithDateAndTimeWhenDateIsNotEqualToReferenceDate()
+    {
+        const int referanceDateDay = 9;
+        int timeDiff = (int)Math.Round((DateTime.Now - DateTime.UtcNow).TotalHours, 0);
+        DateTime? date = new DateTime(2134, 9, 10, 12, 00, 0, DateTimeKind.Utc);
+        string expected = $"10 Sep {12 + timeDiff}:00";
+
+        string acutal = date.ToStringLocalTime(referanceDateDay, formatProvider: CultureInfo.InvariantCulture);
+
+        Assert.Equal(expected, acutal);
+    }
+
+    [Fact]
+    public void ToStringLocalTime_WithReferenceDate_ShouldReturnStringWithTime_HU()
+    {
+        const int referanceDateDay = 9;
+        const string expected = "10 szept. 16:49";
+        DateTime? date = new DateTime(2134, 9, 10, 16, 49, 0, DateTimeKind.Local);
+
+        string acutal = date.ToStringLocalTime(referanceDateDay, formatProvider: CultureInfo.GetCultureInfo("hu-hu"));
+
+        Assert.Equal(expected, acutal);
+    }
+
+    [Fact]
+    public void ToStringLocalTime_WithReferenceDate_ShouldReturnCustomDefaultValue()
+    {
+        const string expected = "DateTimeHelper.DefaultValue";
+        DateTime? date = null;
+
+        string acutal = date.ToStringLocalTime(0, expected);
+
+        Assert.Equal(expected, acutal);
+    }
+
+    [Fact]
     public void ToStringLocalTime_ShouldReturnStringWithTime()
     {
         int timeDiff = (int)Math.Round((DateTime.Now - DateTime.UtcNow).TotalHours, 0);

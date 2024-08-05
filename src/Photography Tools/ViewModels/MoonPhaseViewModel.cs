@@ -94,7 +94,7 @@ public partial class MoonPhaseViewModel : AstroLocationViewModel
         ServiceResponse<MoonData?> offlineResult = await offlineAstroDataService.GetMoonDataAsync(date, coordinates.Latitude, coordinates.Longitude);
 
         if (offlineResult.IsSuccess && offlineResult.Data is not null)
-            DisplayResult(offlineResult.Data, coordinates.Latitude, offlineAstroDataService.DataSourceInfo);
+            DisplayResult(offlineResult.Data, date, coordinates.Latitude, offlineAstroDataService.DataSourceInfo);
 
         if (!UseOnlineService)
             return;
@@ -105,7 +105,7 @@ public partial class MoonPhaseViewModel : AstroLocationViewModel
 
             if (onlineResult.IsSuccess && onlineResult.Data is not null)
             {
-                DisplayResult(onlineResult.Data, coordinates.Latitude, onlineAstroDataService.DataSourceInfo);
+                DisplayResult(onlineResult.Data, date, coordinates.Latitude, onlineAstroDataService.DataSourceInfo);
                 return;
             }
             else
@@ -125,7 +125,7 @@ public partial class MoonPhaseViewModel : AstroLocationViewModel
         }
     }
 
-    public void DisplayResult(MoonData data, double latitude, string sourceInfo)
+    public void DisplayResult(MoonData data, DateTime selectedDate, double latitude, string sourceInfo)
     {
         MoonPhaseName = data.Phase;
         SetMoonImage(data.Phase, latitude);
@@ -133,8 +133,8 @@ public partial class MoonPhaseViewModel : AstroLocationViewModel
         SetMoonAge(Math.Round(data.MoonAge, 2));
         SetDataSourceInfo(sourceInfo);
 
-        MoonriseDate = data.Rise.ToStringLocalTime();
-        MoonsetDate = data.Set.ToStringLocalTime();
+        MoonriseDate = data.Rise.ToStringLocalTime(selectedDate.Day);
+        MoonsetDate = data.Set.ToStringLocalTime(selectedDate.Day);
     }
 
     public void SetMoonImage(string phaseName, double latitude) =>
