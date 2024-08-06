@@ -36,7 +36,7 @@ public class StaticSensorsDataAccess : ISensorsDataAccess
             { "Nikon DX", new Sensor(15.7, 23.5, 24) },
         }.ToFrozenDictionary();
 
-        keys = [.. sensors.Keys];
+        keys = [.. sensors.Keys.Order()];
     }
 
     public ImmutableArray<string> GetSensorNames() => keys;
