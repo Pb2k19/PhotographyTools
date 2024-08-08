@@ -13,6 +13,9 @@ public class StaticSensorsDataAccess : ISensorsDataAccess
         sensors = new Dictionary<string, Sensor>()
         {
             { "Full Frame 24 Mpix", new Sensor(24, 36, 24.0) },
+            { "Nikon 1 AW1, J3, S2, V2", new Sensor(8.8, 13.2, 14.2) },
+            { "Nikon 1 J1, J2, S1, V1", new Sensor(8.8, 13.2, 10.1) },
+            { "Nikon 1 J4, V3", new Sensor(8.8, 13.2, 18.4) },
             { "Nikon D1, D1H", new Sensor(15.5, 23.7, 2.6) },
             { "Nikon D100", new Sensor(15.5, 23.7, 6.0) },
             { "Nikon D1x", new Sensor(15.5, 23.7, 5.3) },
@@ -45,7 +48,7 @@ public class StaticSensorsDataAccess : ISensorsDataAccess
             { "Nikon D7000", new Sensor(15.6, 23.6, 16.2) },
             { "Nikon D7100", new Sensor(15.6, 23.5, 24.1) },
             { "Nikon D7200", new Sensor(15.6, 23.5, 24.2) },
-            { "Nikon D750", new Sensor(24, 35.9, 24.5) },
+            { "Nikon D750", new Sensor(24, 35.9, 24.3) },
             { "Nikon D7500", new Sensor(15.7, 23.5, 20.9) },
             { "Nikon D780", new Sensor(23.9, 35.9, 24.5) },
             { "Nikon D80", new Sensor(15.8, 23.6, 10.2) },
@@ -56,8 +59,7 @@ public class StaticSensorsDataAccess : ISensorsDataAccess
             { "Nikon Z5", new Sensor(23.9, 35.9, 24.3) },
             { "Nikon Z6, Z6 II, Z6 III, Z f", new Sensor(23.9, 35.9, 24.5) },
             { "Nikon Z7, Z7 II, Z8, Z9", new Sensor(23.9, 35.9, 45.7 ) },
-            { "Nikon CX", new Sensor(8.8, 13.2, 20) },
-            { "Nikon DX", new Sensor(15.7, 23.5, 24) },
+
         }.ToFrozenDictionary();
 
         keys = [.. sensors.Keys.Order()];
