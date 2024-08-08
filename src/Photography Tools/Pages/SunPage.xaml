@@ -27,7 +27,7 @@
                 Style="{StaticResource LabelLarge}"
                 Text="☀️"
                 HorizontalOptions="Center"
-                FontSize="150"
+                FontSize="{OnPlatform Default=125, WinUI=150, MacCatalyst=150}"
             />
 
             <Label

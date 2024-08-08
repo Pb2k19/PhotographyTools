@@ -27,7 +27,7 @@
                 Text="{Binding MoonImage}"
                 Style="{StaticResource LabelLarge}"
                 HorizontalOptions="Center"
-                FontSize="200"
+                FontSize="{OnPlatform Default=150, WinUI=200, MacCatalyst=200}"
             />
 
             <Label
