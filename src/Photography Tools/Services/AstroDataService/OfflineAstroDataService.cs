@@ -17,11 +17,11 @@ public class OfflineAstroDataService : IAstroDataService
         return new(new MoonData(moonRiseAndSet?.Rise ?? date, date, moonRiseAndSet?.Set ?? date, moonPhase.Value.Fraction * 100, moonPhase.Value.Phase, AstroCalculations.GetPhaseName(moonPhase.Value.Phase)), true, 1);
     }
 
-    public Task<ServiceResponse<SunPhasesResult?>> GetSunDataAsync(DateTime date, double latitude, double longitude, double heigth = 0)
+    public Task<ServiceResponse<SunPhasesResult?>> GetSunDataAsync(DateTime date, double latitude, double longitude, double height = 0)
     {
         Dictionary<string, DateTime> result = [];
 
-        foreach (var item in AstroCalculations.CalculateSunPhases(date, latitude, longitude, heigth))
+        foreach (var item in AstroCalculations.CalculateSunPhases(date, latitude, longitude, height))
         {
             result[item.Name] = item.Date;
         }

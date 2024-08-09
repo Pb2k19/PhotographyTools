@@ -10,5 +10,5 @@ public interface IAstroDataService
 
     Task<ServiceResponse<MoonData?>> GetMoonDataAsync(DateTime date, double latitude, double longitude);
 
-    Task<ServiceResponse<SunPhasesResult?>> GetSunDataAsync(DateTime date, double latitude, double longitude, double heigth = 0);
+    Task<ServiceResponse<SunPhasesResult?>> GetSunDataAsync(DateTime date, double latitude, double longitude, double height = 0);
 }

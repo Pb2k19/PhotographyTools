@@ -27,7 +27,7 @@ public class OnlineAstroDataService : IAstroDataService
         return new ServiceResponse<MoonData?>(astroData.Data is not null ? astroData.Data.MoonData with { MoonAge = CalculateMoonAge(astroData.Data.MoonData, date) } : null, astroData.IsSuccess, astroData.Code, astroData.Message);
     }
 
-    public async Task<ServiceResponse<SunPhasesResult?>> GetSunDataAsync(DateTime date, double latitude, double longitude, double heigth = 0)
+    public async Task<ServiceResponse<SunPhasesResult?>> GetSunDataAsync(DateTime date, double latitude, double longitude, double height = 0)
     {
         if (!AstroHelper.ValidateGeographicalCoordinates(latitude, longitude))
             return IAstroDataService.IncorrectInputSunResult;

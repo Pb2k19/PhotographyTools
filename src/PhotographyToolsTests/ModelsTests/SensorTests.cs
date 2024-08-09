@@ -21,7 +21,7 @@ public class SensorTests
         Sensor actual = new(expectedSensorHeightMM, expectedSensorWidthMM, expectedMegapixels);
 
         Assert.Equal(expectedSensorWidthMM, actual.SensorWidthMM);
-        Assert.Equal(expectedSensorHeightMM, actual.SensorHeigthMM);
+        Assert.Equal(expectedSensorHeightMM, actual.SensorHeightMM);
         Assert.Equal(expectedMegapixels, actual.Megapixels);
         Assert.Equal(expectedRatio, actual.Ratio);
         Assert.Equal(expectedDiagonal, actual.Diagonal, 13);
@@ -49,7 +49,7 @@ public class SensorTests
         actual.SetSensorWidthMM(expectedSensorWidthMM);
 
         Assert.Equal(expectedSensorWidthMM, actual.SensorWidthMM);
-        Assert.Equal(expectedSensorHeightMM, actual.SensorHeigthMM);
+        Assert.Equal(expectedSensorHeightMM, actual.SensorHeightMM);
         Assert.Equal(expectedMegapixels, actual.Megapixels);
         Assert.Equal(expectedRatio, actual.Ratio);
         Assert.Equal(expectedDiagonal, actual.Diagonal, 13);
@@ -60,7 +60,7 @@ public class SensorTests
     }
 
     [Fact]
-    public void SetSensorHeigthMM_ShouldSetSensorHeigthAndOtherCorrelatedData()
+    public void SetSensorHeightMM_ShouldSetSensorHeigthAndOtherCorrelatedData()
     {
         const double
             expectedSensorWidthMM = 36,
@@ -74,10 +74,10 @@ public class SensorTests
             expectedPixelPitch = 6;
 
         Sensor actual = new(20, 36, 24);
-        actual.SetSensorHeigthMM(expectedSensorHeightMM);
+        actual.SetSensorHeightMM(expectedSensorHeightMM);
 
         Assert.Equal(expectedSensorWidthMM, actual.SensorWidthMM);
-        Assert.Equal(expectedSensorHeightMM, actual.SensorHeigthMM);
+        Assert.Equal(expectedSensorHeightMM, actual.SensorHeightMM);
         Assert.Equal(expectedMegapixels, actual.Megapixels);
         Assert.Equal(expectedRatio, actual.Ratio);
         Assert.Equal(expectedDiagonal, actual.Diagonal, 13);
@@ -106,7 +106,7 @@ public class SensorTests
 
 
         Assert.Equal(expectedSensorWidthMM, actual.SensorWidthMM);
-        Assert.Equal(expectedSensorHeightMM, actual.SensorHeigthMM);
+        Assert.Equal(expectedSensorHeightMM, actual.SensorHeightMM);
         Assert.Equal(expectedMegapixels, actual.Megapixels);
         Assert.Equal(expectedRatio, actual.Ratio);
         Assert.Equal(expectedDiagonal, actual.Diagonal, 13);

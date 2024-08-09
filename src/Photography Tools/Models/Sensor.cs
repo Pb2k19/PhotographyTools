@@ -3,7 +3,7 @@
 public class Sensor
 {
     public double SensorWidthMM { get; private set; }
-    public double SensorHeigthMM { get; private set; }
+    public double SensorHeightMM { get; private set; }
     public double Megapixels { get; private set; }
     public double Ratio { get; private set; }
     public int ResolutionHorizontal { get; private set; }
@@ -12,10 +12,10 @@ public class Sensor
     public double CropFactor { get; private set; }
     public double PixelPitch { get; private set; }
 
-    public Sensor(double sensorHeigthMM, double sensorWidthMM, double megapixels)
+    public Sensor(double sensorHeightMM, double sensorWidthMM, double megapixels)
     {
         SensorWidthMM = sensorWidthMM;
-        SensorHeigthMM = sensorHeigthMM;
+        SensorHeightMM = sensorHeightMM;
         Megapixels = megapixels;
 
         UpdateAll();
@@ -30,11 +30,11 @@ public class Sensor
         }
     }
 
-    public void SetSensorHeigthMM(double value)
+    public void SetSensorHeightMM(double value)
     {
-        if (SensorHeigthMM != value)
+        if (SensorHeightMM != value)
         {
-            SensorHeigthMM = value;
+            SensorHeightMM = value;
             UpdateAll();
         }
     }
@@ -58,9 +58,9 @@ public class Sensor
         UpdatePixelPitch();
     }
 
-    private void UpdateRatio() => Ratio = SensorCalculations.CalculateRatio(SensorWidthMM, SensorHeigthMM);
+    private void UpdateRatio() => Ratio = SensorCalculations.CalculateRatio(SensorWidthMM, SensorHeightMM);
 
-    private void UpdateDiagonal() => Diagonal = SensorCalculations.CalculateDiagonal(SensorWidthMM, SensorHeigthMM);
+    private void UpdateDiagonal() => Diagonal = SensorCalculations.CalculateDiagonal(SensorWidthMM, SensorHeightMM);
 
     private void UpdateCropFactor() => CropFactor = SensorCalculations.CalculateCropFactor(Diagonal);
 
@@ -82,7 +82,7 @@ public static class SensorCalculations
 
     public static double CalculateRatio(double sensorWidthMM, double sensorHeightMM) => sensorWidthMM / sensorHeightMM;
 
-    public static double CalculateDiagonal(double sensorWidth, double sensorHeigth) => Math.Sqrt(sensorWidth * sensorWidth + sensorHeigth * sensorHeigth);
+    public static double CalculateDiagonal(double sensorWidth, double sensorHeight) => Math.Sqrt(sensorWidth * sensorWidth + sensorHeight * sensorHeight);
 
     /// <summary>
     /// Calculates sensor resolution
