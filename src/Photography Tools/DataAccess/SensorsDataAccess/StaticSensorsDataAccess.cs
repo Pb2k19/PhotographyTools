@@ -10,7 +10,7 @@ public class StaticSensorsDataAccess : ISensorsDataAccess
 
     static StaticSensorsDataAccess()
     {
-        // Source: https://github.com/openMVG/CameraSensorSizeDatabase, access date: 08.08.2024
+        // Source: CameraSensorSizeDatabase, https://github.com/openMVG/CameraSensorSizeDatabase, access date: 08.08.2024
         sensors = new Dictionary<string, Sensor>()
         {
             { "Full Frame 24 Mpix", new Sensor(24, 36, 24.0) },
