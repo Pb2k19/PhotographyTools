@@ -9,9 +9,20 @@ public class DateTimeHelperTests
     public void ToStringLocalTime_ShouldReturnStringWithShortTimeWhenDateIsEqualToReferenceDate()
     {
         const int referanceDateDay = 10;
-        int timeDiff = (int)Math.Round((DateTime.Now - DateTime.UtcNow).TotalHours, 0);
         DateTime? date = new DateTime(2134, 9, 10, 12, 00, 0, DateTimeKind.Utc);
-        string expected = $"{12 + timeDiff}:00";
+        string expected = $"{date.Value.ToLocalTime().Hour}:00";
+
+        string acutal = date.ToStringLocalTime(referanceDateDay, formatProvider: CultureInfo.InvariantCulture);
+
+        Assert.Equal(expected, acutal);
+    }
+
+    [Fact]
+    public void ToStringLocalTime_ShouldReturnStringWithShortTimeWhenDateIsEqualToReferenceDate_January()
+    {
+        const int referanceDateDay = 10;
+        DateTime? date = new DateTime(2134, 1, 10, 12, 00, 0, DateTimeKind.Utc);
+        string expected = $"{date.Value.ToLocalTime().Hour}:00";
 
         string acutal = date.ToStringLocalTime(referanceDateDay, formatProvider: CultureInfo.InvariantCulture);
 
@@ -22,9 +33,20 @@ public class DateTimeHelperTests
     public void ToStringLocalTime_ShouldReturnStringWithDateAndTimeWhenDateIsNotEqualToReferenceDate()
     {
         const int referanceDateDay = 9;
-        int timeDiff = (int)Math.Round((DateTime.Now - DateTime.UtcNow).TotalHours, 0);
         DateTime? date = new DateTime(2134, 9, 10, 12, 00, 0, DateTimeKind.Utc);
-        string expected = $"10 Sep {12 + timeDiff}:00";
+        string expected = $"10 Sep {date.Value.ToLocalTime().Hour}:00";
+
+        string acutal = date.ToStringLocalTime(referanceDateDay, formatProvider: CultureInfo.InvariantCulture);
+
+        Assert.Equal(expected, acutal);
+    }
+
+    [Fact]
+    public void ToStringLocalTime_ShouldReturnStringWithDateAndTimeWhenDateIsNotEqualToReferenceDate_January()
+    {
+        const int referanceDateDay = 9;
+        DateTime? date = new DateTime(2134, 1, 10, 12, 00, 0, DateTimeKind.Utc);
+        string expected = $"10 Jan {date.Value.ToLocalTime().Hour}:00";
 
         string acutal = date.ToStringLocalTime(referanceDateDay, formatProvider: CultureInfo.InvariantCulture);
 
@@ -57,9 +79,19 @@ public class DateTimeHelperTests
     [Fact]
     public void ToStringLocalTime_ShouldReturnStringWithTime()
     {
-        int timeDiff = (int)Math.Round((DateTime.Now - DateTime.UtcNow).TotalHours, 0);
         DateTime? date = new DateTime(2134, 9, 10, 12, 00, 0, DateTimeKind.Utc);
-        string expected = $"10 Sep {12 + timeDiff}:00";
+        string expected = $"10 Sep {date.Value.ToLocalTime().Hour}:00";
+
+        string acutal = date.ToStringLocalTime(formatProvider: CultureInfo.InvariantCulture);
+
+        Assert.Equal(expected, acutal);
+    }
+
+    [Fact]
+    public void ToStringLocalTime_ShouldReturnStringWithTime_January()
+    {
+        DateTime? date = new DateTime(2134, 1, 10, 12, 00, 0, DateTimeKind.Utc);
+        string expected = $"10 Jan {date.Value.ToLocalTime().Hour}:00";
 
         string acutal = date.ToStringLocalTime(formatProvider: CultureInfo.InvariantCulture);
 
@@ -146,9 +178,19 @@ public class DateTimeHelperTests
     [Fact]
     public void ToStringUtcTime_ShouldReturnStringWithTime()
     {
-        int timeDiff = (int)Math.Round((DateTime.Now - DateTime.UtcNow).TotalHours, 0);
         DateTime? date = new DateTime(2134, 9, 10, 12, 00, 0, DateTimeKind.Local);
-        string expected = $"10 Sep {12 - timeDiff}:00";
+        string expected = $"10 Sep {date.Value.ToUniversalTime().Hour}:00";
+
+        string acutal = date.ToStringUtcTime(formatProvider: CultureInfo.InvariantCulture);
+
+        Assert.Equal(expected, acutal);
+    }
+
+    [Fact]
+    public void ToStringUtcTime_ShouldReturnStringWithTime_January()
+    {
+        DateTime? date = new DateTime(2134, 1, 10, 12, 00, 0, DateTimeKind.Local);
+        string expected = $"10 Jan {date.Value.ToUniversalTime().Hour}:00";
 
         string acutal = date.ToStringUtcTime(formatProvider: CultureInfo.InvariantCulture);
 
