@@ -12,7 +12,7 @@
     Color="Transparent">
     
     <toolkit:Popup.Resources>
-        <DataTemplate x:Key="MobileTemplate" x:DataType="models:NDFilter">
+        <DataTemplate x:Key="MobileTemplate" x:DataType="x:String">
             <Border
                 Style="{StaticResource StandardBorder}"
                 MinimumHeightRequest="70"
@@ -53,7 +53,7 @@
             </Border>
         </DataTemplate>
         
-        <DataTemplate x:Key="DesktopTemplate" x:DataType="models:NDFilter">
+        <DataTemplate x:Key="DesktopTemplate" x:DataType="x:String">
             <Border
                 Style="{StaticResource StandardBorder}"
                 Padding="15,10">

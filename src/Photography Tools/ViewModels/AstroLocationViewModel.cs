@@ -36,10 +36,11 @@ public abstract partial class AstroLocationViewModel : SaveableViewModel
     [RelayCommand]
     private async Task ChangeLocationAsync()
     {
-        if (Application.Current is null || Application.Current.MainPage is null)
+        Page? mainPage = UiHelper.GetMainPage();
+        if (mainPage is null)
             return;
 
-        Place? selectedPlace = await Application.Current.MainPage.ShowPopupAsync(new LocationPopup(locationsKeyValueStore, messageService, LocationName)) as Place;
+        Place? selectedPlace = await mainPage.ShowPopupAsync(new LocationPopup(locationsKeyValueStore, messageService, LocationName)) as Place;
 
         if (selectedPlace is not null)
         {

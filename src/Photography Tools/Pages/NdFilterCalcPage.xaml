@@ -28,7 +28,7 @@
                     android:SwipeView.SwipeTransitionMode="Drag">
                     <SwipeView.RightItems>
                         <SwipeItemView
-                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:NDFilterCalcViewModel}}, Path=RemoveFilterCommand}"
+                            Command="{Binding Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={x:Type viewmodels:NDFilterCalcViewModel}}, Path=RemoveFilterCommand, x:DataType=viewmodels:NDFilterCalcViewModel}"
                             CommandParameter="{Binding .}">
                             <Border
                                 Style="{StaticResource SwipeItemBorder}"
@@ -127,7 +127,7 @@
                             Text="✕">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:NDFilterCalcViewModel}}, Path=RemoveFilterCommand}"
+                                    Command="{Binding Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={x:Type viewmodels:NDFilterCalcViewModel}}, Path=RemoveFilterCommand, x:DataType=viewmodels:NDFilterCalcViewModel}"
                                     CommandParameter="{Binding .}"
                                 />
                             </Label.GestureRecognizers>
