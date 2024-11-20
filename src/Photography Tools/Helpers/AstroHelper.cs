@@ -21,7 +21,8 @@ public static class AstroHelper
         separatorsSearchValues = SearchValues.Create([',', ';']),
         degreeSearchValues = SearchValues.Create(['°', '*']),
         primeSearchValues = SearchValues.Create(['′', '\'', '‘', '´', '`']),
-        quotationSearchValues = SearchValues.Create(['″', '"', '〃']);
+        quotationSearchValues = SearchValues.Create(['″', '"', '〃']),
+        dmsCharactersSearchValues = SearchValues.Create(['°', '*', '′', '\'', '‘', '´', '`', '″', '"', '〃']);
 
     public static bool IsJulianDate(this DateTime date)
     {
@@ -114,12 +115,10 @@ public static class AstroHelper
             indexOfSecondPart = input.IndexOfAny(latitudeDirectionsSearchValues);
             if (indexOfSecondPart == -1)
                 return new(double.NaN, double.NaN);
-
-            indexOfSecondPart++;
         }
 
-        ReadOnlySpan<char> latitudePart = input[..indexOfSecondPart].Trim();
         indexOfSecondPart++;
+        ReadOnlySpan<char> latitudePart = input[..indexOfSecondPart].Trim();
         ReadOnlySpan<char> longitudePart = input[indexOfSecondPart..].Trim();
 
         return new(ConvertDmsPartToDd(latitudePart), ConvertDmsPartToDd(longitudePart));
@@ -131,8 +130,9 @@ public static class AstroHelper
         int primeIndex = chars.IndexOfAny(primeSearchValues);
         int quotationIndex = chars.IndexOfAny(quotationSearchValues);
         int direction = chars.IndexOfAny(directionsSearchValues);
+        bool containsDmsCharacters = chars.ContainsAny(dmsCharactersSearchValues);
 
-        if (direction == -1)
+        if (direction == -1 || !containsDmsCharacters)
             return double.NaN;
 
         double degrees = 0, minutes = 0, seconds = 0;

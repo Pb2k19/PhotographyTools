@@ -84,6 +84,13 @@ public class AstroHelperTests
     [InlineData(""" 37* 50' 59" S, 144° 58′ 6″ E  test""", -37.849722, 144.968333)]
     [InlineData("""37° 51' 1.134" S 144° 58' 11.5356" E""", -37.850315, 144.969871)]
     [InlineData("""37° 51' 1.134" N 144° 58' 11.5356" E""", 37.850315, 144.969871)]
+    [InlineData("""37°51'1.134"N 144°58'11.5356"E""", 37.850315, 144.969871)]
+    [InlineData("""37°51'1.134"N144°58'11.5356"E""", 37.850315, 144.969871)]
+    [InlineData("""37°51'1.134"N,144°58'11.5356"E""", 37.850315, 144.969871)]
+    [InlineData("""37°51'1.134" N144°58'11.5356"E""", 37.850315, 144.969871)]
+    [InlineData("""37°51'1.134" N,144°58'11.5356"E""", 37.850315, 144.969871)]
+    [InlineData("""37°51'1.134" N 144°58'11.5356"E""", 37.850315, 144.969871)]
+    [InlineData("""37°51'1.134" N, 144°58'11.5356"E""", 37.850315, 144.969871)]
     public void ConvertDmsStringToDd_ShouldReturnCorrectLatitudeAndLongitude(string input, double expectedLat, double expectedLong)
     {
         (double latitude, double longitude) = AstroHelper.ConvertDmsStringToDd(input);
@@ -92,10 +99,13 @@ public class AstroHelperTests
         Assert.Equal(expectedLong, longitude, 5);
     }
 
-    [Fact]
-    public void ConvertDmsStringToDd_ShouldReturnNaNWhenInputIsIncorrect()
+    [Theory]
+    [InlineData("38.9679-106.04517")]
+    [InlineData("21, 42")]
+    [InlineData("21 42")]
+    public void ConvertDmsStringToDd_ShouldReturnNaNWhenInputIsIncorrect(string input)
     {
-        (double latitude, double longitude) = AstroHelper.ConvertDmsStringToDd("38.9679-106.04517");
+        (double latitude, double longitude) = AstroHelper.ConvertDmsStringToDd(input);
 
         Assert.Equal(double.NaN, latitude);
         Assert.Equal(double.NaN, longitude);

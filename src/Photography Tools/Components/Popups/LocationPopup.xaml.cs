@@ -139,6 +139,9 @@ public partial class LocationPopup : Popup
                 OnPropertyChanged(nameof(Places));
             }
 
+            Coordinates = AstroHelper.ConvertDdToDmsString(coordinates, 3);
+            OnPropertyChanged(nameof(Coordinates));
+
             return true;
         }
 
