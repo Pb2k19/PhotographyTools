@@ -7,7 +7,7 @@ namespace Photography_Tools.DataAccess.AstroDataAccess;
 
 public class UsnoAstroDataAccess : IAstroDataAccess
 {
-    private static readonly TimeSpan MinRequestDiffTime = TimeSpan.FromSeconds(0.5), MinFailRequestDiffTime = TimeSpan.FromSeconds(20);
+    private static readonly TimeSpan MinRequestDiffTime = TimeSpan.FromMilliseconds(500), MinFailRequestDiffTime = TimeSpan.FromSeconds(20);
     private static readonly DateTime MinDateTime = new(1700, 1, 1), MaxDateTime = new(2099, 12, 31);
 
     private readonly HttpClient httpClient;
