@@ -5,6 +5,7 @@
     xmlns:viewmodels="clr-namespace:Photography_Tools.ViewModels"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:controls="clr-namespace:Photography_Tools.Components.Controls.UnitEntry"
+    x:Name="AstroTimeCalcPage0"
     x:Class="Photography_Tools.Pages.AstroTimeCalcPage"
     x:DataType="viewmodels:AstroTimeCalcViewModel"
     Title="Astro Exposure Time Calculator">
@@ -12,6 +13,7 @@
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior
             EventName="Disappearing"
+            BindingContext="{Binding Path=BindingContext, Source={x:Reference AstroTimeCalcPage0}, x:DataType=ContentPage}"
             Command="{Binding DisappearingCommand}"
         />
     </ContentPage.Behaviors>
@@ -33,12 +35,17 @@
                 Grid.Row="1"
                 Grid.ColumnSpan="6"
                 Style="{StaticResource EntryBorder}">
-                <Picker 
+                <Picker
+                    x:Name="SelectedSensorPicker"
                     ItemsSource="{Binding SensorNames}"
                     SelectedItem="{Binding UserInput.SelectedSensorName}"
                     FontSize="Medium">
                     <Picker.Behaviors>
-                        <toolkit:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding CalculateAllValuesCommand}"/>
+                        <toolkit:EventToCommandBehavior
+                            EventName="SelectedIndexChanged"
+                            BindingContext="{Binding Path=BindingContext, Source={x:Reference SelectedSensorPicker}, x:DataType=Picker}"
+                            Command="{Binding CalculateAllValuesCommand}"
+                        />
                     </Picker.Behaviors>
                 </Picker>
             </Border>
@@ -94,13 +101,18 @@
                         Margin="0,0,10,0"
                     />
                     <Picker
+                        x:Name="AperturePicker"
                         FlexLayout.Grow="1"
                         ItemsSource="{Binding Apertures}"
                         SelectedItem="{Binding UserInput.Lens.Aperture}"
                         HorizontalTextAlignment="Center"
                         FontSize="Medium">
                         <Picker.Behaviors>
-                            <toolkit:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding CalculateTimeForAstroWithNpfRuleCommand}"/>
+                            <toolkit:EventToCommandBehavior
+                                EventName="SelectedIndexChanged"
+                                BindingContext="{Binding Path=BindingContext, Source={x:Reference AperturePicker}, x:DataType=Picker}"
+                                Command="{Binding CalculateTimeForAstroWithNpfRuleCommand}"
+                            />
                         </Picker.Behaviors>
                     </Picker>
                 </FlexLayout>
@@ -115,14 +127,23 @@
                 <FlexLayout
                     Direction="Row">
                     <Entry
+                        x:Name="DeclinationEntry"
                         FlexLayout.Grow="1"
                         Margin="0,5"
                         Keyboard="Numeric"                        
                         Text="{Binding UserInput.Decilination}"
                         Style="{StaticResource StandardEntry}">
                         <Entry.Behaviors>
-                            <toolkit:EventToCommandBehavior EventName="TextChanged" Command="{Binding DecilinationTextChangedCommand}"/>
-                            <toolkit:NumericValidationBehavior MinimumValue="-90" MaximumValue="90" />
+                            <toolkit:EventToCommandBehavior 
+                                EventName="TextChanged"
+                                BindingContext="{Binding Path=BindingContext, Source={x:Reference DeclinationEntry}, x:DataType=Entry}"
+                                Command="{Binding DecilinationTextChangedCommand}"
+                            />
+                            <toolkit:NumericValidationBehavior
+                                MinimumValue="-90"
+                                MaximumValue="90"
+                                BindingContext="{Binding Path=BindingContext, Source={x:Reference DeclinationEntry}, x:DataType=Entry}"
+                            />
                         </Entry.Behaviors>
                     </Entry>
                     <Label 

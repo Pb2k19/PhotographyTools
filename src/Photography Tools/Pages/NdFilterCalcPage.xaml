@@ -7,6 +7,7 @@
     xmlns:models="clr-namespace:Photography_Tools.Models"
     xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
     xmlns:datatemplate="clr-namespace:Photography_Tools.Components.DataTemplateSelectors"
+    x:Name="NdFilterCalcPage0"
     x:Class="Photography_Tools.Pages.NdFilterCalcPage"
     x:DataType="viewmodels:NDFilterCalcViewModel"
     Title="ND Filter Time Calculator">
@@ -14,6 +15,7 @@
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior
             EventName="Disappearing"
+            BindingContext="{Binding Path=BindingContext, Source={x:Reference NdFilterCalcPage0}, x:DataType=ContentPage}"
             Command="{Binding DisappearingCommand}"
         />
     </ContentPage.Behaviors>
@@ -206,12 +208,17 @@
             <Border
                 Style="{StaticResource StandardBorder}">
                 <Picker
+                    x:Name="ShutterSpeedPicker"
                     ItemsSource="{Binding AllShutterSpeedsNames}"
                     SelectedItem="{Binding UserInput.TimeText}"
                     HorizontalTextAlignment="Center"
                     FontSize="Medium">
                     <Picker.Behaviors>
-                        <toolkit:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding CalculateTimeCommand}"/>
+                        <toolkit:EventToCommandBehavior
+                            EventName="SelectedIndexChanged"
+                            BindingContext="{Binding Path=BindingContext, Source={x:Reference ShutterSpeedPicker}, x:DataType=Picker}"
+                            Command="{Binding CalculateTimeCommand}"
+                        />
                     </Picker.Behaviors>
                 </Picker>
             </Border>

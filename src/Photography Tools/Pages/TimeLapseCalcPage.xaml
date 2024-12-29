@@ -5,6 +5,7 @@
     xmlns:viewmodels="clr-namespace:Photography_Tools.ViewModels"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:controls="clr-namespace:Photography_Tools.Components.Controls.UnitEntry"
+    x:Name="TimeLapseCalcPage0"
     x:Class="Photography_Tools.Pages.TimeLapseCalcPage"
     x:DataType="viewmodels:TimeLapseCalculatorViewModel"
     Title="Time-lapse Calculator">
@@ -12,6 +13,7 @@
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior
             EventName="Disappearing"
+            BindingContext="{Binding Path=BindingContext, Source={x:Reference TimeLapseCalcPage0}, x:DataType=ContentPage}"
             Command="{Binding DisappearingCommand}"
         />
     </ContentPage.Behaviors>
@@ -80,12 +82,17 @@
                 Grid.ColumnSpan="2"
                 Style="{StaticResource EntryBorder}">
                 <Entry
+                    x:Name="EnteredShotsCountEntry"
                     Margin="0,5"
                     Keyboard="Numeric"                    
                     Text="{Binding UserInput.EnteredShootsCount}"
                     Style="{StaticResource StandardEntry}">
                     <Entry.Behaviors>
-                        <toolkit:EventToCommandBehavior EventName="TextChanged" Command="{Binding ShootsCountChangedCommand}"/>
+                        <toolkit:EventToCommandBehavior
+                            EventName="TextChanged"
+                            BindingContext="{Binding Path=BindingContext, Source={x:Reference EnteredShotsCountEntry}, x:DataType=Entry}"
+                            Command="{Binding ShootsCountChangedCommand}"
+                        />
                     </Entry.Behaviors>
                 </Entry>
             </Border>
@@ -112,12 +119,17 @@
                 <FlexLayout
                     Direction="Row">
                     <Entry
+                        x:Name="EnteredClipFrameRateFPSEntry"
                         FlexLayout.Grow="1"
                         Margin="0,5"
                         Text="{Binding UserInput.EnteredClipFrameRateFPS}"
                         Style="{StaticResource StandardEntry}">
                         <Entry.Behaviors>
-                            <toolkit:EventToCommandBehavior EventName="TextChanged" Command="{Binding ClipFrameRateFPSChangedCommand}"/>
+                            <toolkit:EventToCommandBehavior 
+                                EventName="TextChanged"
+                                BindingContext="{Binding Path=BindingContext, Source={x:Reference EnteredClipFrameRateFPSEntry}, x:DataType=Entry}"
+                                Command="{Binding ClipFrameRateFPSChangedCommand}"
+                            />
                         </Entry.Behaviors>
                     </Entry>
                     <Label 

@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:viewmodels="clr-namespace:Photography_Tools.ViewModels"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    x:Name="MoonPhasePage0"
     x:Class="Photography_Tools.Pages.MoonPhasePage"
     x:DataType="viewmodels:MoonPhaseViewModel"
     Title="Moon Phase">
@@ -11,10 +12,12 @@
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior
             EventName="Appearing"
+            BindingContext="{Binding Path=BindingContext, Source={x:Reference MoonPhasePage0}, x:DataType=ContentPage}"
             Command="{Binding AppearingCommand}"
         />
         <toolkit:EventToCommandBehavior
             EventName="Disappearing"
+            BindingContext="{Binding Path=BindingContext, Source={x:Reference MoonPhasePage0}, x:DataType=ContentPage}"
             Command="{Binding DisappearingCommand}"
         />
     </ContentPage.Behaviors>
@@ -65,22 +68,26 @@
                     <HorizontalStackLayout
                         HorizontalOptions="Center">
                         <DatePicker
+                            x:Name="SelectedDatePicker"
                             Date="{Binding SelectedDate}"
                             FontSize="Medium">
                             <DatePicker.Behaviors>
                                 <toolkit:EventToCommandBehavior 
-                                    EventName="DateSelected" 
+                                    EventName="DateSelected"
+                                    BindingContext="{Binding Path=BindingContext, Source={x:Reference SelectedDatePicker}, x:DataType=DatePicker}"
                                     Command="{Binding CalculateCommand}" 
                                 />
                             </DatePicker.Behaviors>
                         </DatePicker>
                         <TimePicker
+                            x:Name="SelectedTimePicker"
                             Format="HH:mm"
                             Time="{Binding SelectedTime}"
                             FontSize="Medium">
                             <TimePicker.Behaviors>
                                 <toolkit:EventToCommandBehavior 
-                                    EventName="PropertyChanged" 
+                                    EventName="PropertyChanged"
+                                    BindingContext="{Binding Path=BindingContext, Source={x:Reference SelectedTimePicker}, x:DataType=TimePicker}"
                                     Command="{Binding SelectedTimeChangedCommand}" 
                                 />
                             </TimePicker.Behaviors>
