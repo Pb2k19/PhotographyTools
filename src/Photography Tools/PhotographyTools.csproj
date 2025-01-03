@@ -20,6 +20,9 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<MauiEnableXamlCBindingWithSourceCompilation>true</MauiEnableXamlCBindingWithSourceCompilation>
+		
+		<!--//tmp remove after .net version update-->
+		<NoWarn>MVVMTK0045</NoWarn>
 
 		<!-- Display name -->
 		<ApplicationTitle>Photography Tools</ApplicationTitle>
