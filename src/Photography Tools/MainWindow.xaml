@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Window 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Photography_Tools.MainWindow"
+    Title="MainWindow"
+    MinimumHeight="600"
+    MinimumWidth="800">
+
+    <Window.TitleBar>
+        <TitleBar
+            x:Name="AppTitleBar"
+            Title="Photography Tools"
+            BackgroundColor="{AppThemeBinding Default='#202020', Light='#f2f2f2'}"
+            ForegroundColor="{AppThemeBinding Default={StaticResource White}, Light={StaticResource Black}}"
+            Icon="{AppThemeBinding Default='logo_light.png', Light='logo_dark.png'}">
+        </TitleBar>
+    </Window.TitleBar>
+</Window>
