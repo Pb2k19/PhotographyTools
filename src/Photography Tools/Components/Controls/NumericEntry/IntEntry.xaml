@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Photography_Tools.Components.Controls.NumericEntry.IntEntry">
+
+    <Entry
+        x:Name="NumEntry"
+        Keyboard="Numeric"
+        Text="0"
+        TextChanged="NumEntry_TextChanged"
+        Completed="NumEntry_Completed"
+        Unfocused="NumEntry_Unfocused"
+        Style="{StaticResource StandardEntry}"
+    />
+</ContentView>

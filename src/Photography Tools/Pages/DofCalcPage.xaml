@@ -5,6 +5,7 @@
     xmlns:viewmodels="clr-namespace:Photography_Tools.ViewModels"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:controls="clr-namespace:Photography_Tools.Components.Controls.UnitEntry"
+    xmlns:numcontrols="clr-namespace:Photography_Tools.Components.Controls.NumericEntry"
     x:Name="DofCalcPage0"
     x:Class="Photography_Tools.Pages.DofCalcPage"
     x:DataType="viewmodels:DofCalcViewModel"
@@ -78,7 +79,7 @@
                 Grid.ColumnSpan="2"
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
-                    MinValueBaseUnit="4"
+                    MinValueBaseUnit="0.1"
                     MaxValueBaseUnit="9999"
                     BaseUnitValue="{Binding UserInput.DofCalcInput.LensInfo.FocalLengthMM}"
                     ValueChangedCommand="{Binding CalculateValuesCommand}"
@@ -92,7 +93,7 @@
                 Grid.ColumnSpan="2"
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
-                    MinValueBaseUnit="50"
+                    MinValueBaseUnit="1"
                     MaxValueBaseUnit="9999999"
                     BaseUnitValue="{Binding UserInput.DofCalcInput.FocusingDistanceMM}"
                     ValueChangedCommand="{Binding CalculateValuesCommand}"
@@ -164,6 +165,7 @@
                 IsVisible="{Binding UserInput.IsAdvancedModeEnabled}"
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
+                    MinValueBaseUnit="1"
                     MaxValueBaseUnit="10000"
                     BaseUnitValue="{Binding UserInput.DofCalcInput.PrintHeighthMM}"
                     ValueChangedCommand="{Binding CalculateValuesCommand}"
@@ -178,6 +180,7 @@
                 IsVisible="{Binding UserInput.IsAdvancedModeEnabled}"
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
+                    MinValueBaseUnit="1"
                     MaxValueBaseUnit="10000"
                     BaseUnitValue="{Binding UserInput.DofCalcInput.PrintWidthMM}"
                     ValueChangedCommand="{Binding CalculateValuesCommand}"
@@ -193,21 +196,15 @@
                 Style="{StaticResource EntryBorder}">
                 <FlexLayout
                     Direction="Row">
-                    <Entry
+                    <numcontrols:IntEntry
                         x:Name="VisualAcuityEntry"
                         FlexLayout.Grow="1"
-                        Keyboard="Numeric"
                         Margin="0,5"
-                        Text="{Binding UserInput.VisualAcuityLpPerMM}"
-                        Style="{StaticResource StandardEntry}">
-                        <Entry.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                EventName="TextChanged"
-                                BindingContext="{Binding Path=BindingContext, Source={x:Reference VisualAcuityEntry}, x:DataType=Entry}"
-                                Command="{Binding VisualAcuityLpPerMMChangedCommand}"
-                            />
-                        </Entry.Behaviors>
-                    </Entry>
+                        EntryValue="{Binding UserInput.VisualAcuityLpPerMM}"
+                        MinValue="1"
+                        MaxValue="100"
+                        ValueChangedCommand="{Binding VisualAcuityLpPerMMChangedCommand}">
+                    </numcontrols:IntEntry>
                     <Label 
                         Text="lp/mm"
                         Style="{StaticResource LabelSmall}"
@@ -240,6 +237,7 @@
                 IsVisible="{Binding UserInput.IsAdvancedModeEnabled}"
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
+                    MinValueBaseUnit="1"
                     MaxValueBaseUnit="10000"
                     BaseUnitValue="{Binding UserInput.DofCalcInput.StandardViewingDistanceMM}"
                     ValueChangedCommand="{Binding CalculateValuesCommand}"
@@ -254,6 +252,7 @@
                 IsVisible="{Binding UserInput.IsAdvancedModeEnabled}"
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
+                    MinValueBaseUnit="1"
                     MaxValueBaseUnit="10000"
                     BaseUnitValue="{Binding UserInput.DofCalcInput.ActualViewingDistanceMM}"
                     ValueChangedCommand="{Binding CalculateValuesCommand}"

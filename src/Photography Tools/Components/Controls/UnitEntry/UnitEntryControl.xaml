@@ -16,6 +16,7 @@
             Style="{StaticResource StandardEntry}"
             Completed="UnitEntry_Completed"
             Unfocused="UnitEntry_Unfocused"
+            TextChanged="UnitEntry_TextChanged"
         />
 
         <Picker

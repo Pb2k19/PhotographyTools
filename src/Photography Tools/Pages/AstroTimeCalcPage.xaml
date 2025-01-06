@@ -5,6 +5,7 @@
     xmlns:viewmodels="clr-namespace:Photography_Tools.ViewModels"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:controls="clr-namespace:Photography_Tools.Components.Controls.UnitEntry"
+    xmlns:numcontrols="clr-namespace:Photography_Tools.Components.Controls.NumericEntry"
     x:Name="AstroTimeCalcPage0"
     x:Class="Photography_Tools.Pages.AstroTimeCalcPage"
     x:DataType="viewmodels:AstroTimeCalcViewModel"
@@ -78,7 +79,7 @@
                 Grid.ColumnSpan="2"
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
-                    MinValueBaseUnit="4"
+                    MinValueBaseUnit="0.1"
                     MaxValueBaseUnit="9999"
                     BaseUnitValue="{Binding UserInput.Lens.FocalLengthMM}"
                     ValueChangedCommand="{Binding CalculateAllValuesCommand}"
@@ -126,26 +127,15 @@
 
                 <FlexLayout
                     Direction="Row">
-                    <Entry
+                    <numcontrols:DoubleEntry
                         x:Name="DeclinationEntry"
                         FlexLayout.Grow="1"
                         Margin="0,5"
-                        Keyboard="Numeric"                        
-                        Text="{Binding UserInput.Decilination}"
-                        Style="{StaticResource StandardEntry}">
-                        <Entry.Behaviors>
-                            <toolkit:EventToCommandBehavior 
-                                EventName="TextChanged"
-                                BindingContext="{Binding Path=BindingContext, Source={x:Reference DeclinationEntry}, x:DataType=Entry}"
-                                Command="{Binding DecilinationTextChangedCommand}"
-                            />
-                            <toolkit:NumericValidationBehavior
-                                MinimumValue="-90"
-                                MaximumValue="90"
-                                BindingContext="{Binding Path=BindingContext, Source={x:Reference DeclinationEntry}, x:DataType=Entry}"
-                            />
-                        </Entry.Behaviors>
-                    </Entry>
+                        MaxValue="90"
+                        MinValue="-90"
+                        EntryValue="{Binding UserInput.Decilination}"
+                        ValueChangedCommand="{Binding DecilinationTextChangedCommand}">
+                    </numcontrols:DoubleEntry>
                     <Label 
                         Text="°"
                         Style="{StaticResource LabelMediumBold}"

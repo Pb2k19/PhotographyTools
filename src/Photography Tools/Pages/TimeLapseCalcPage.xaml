@@ -5,6 +5,7 @@
     xmlns:viewmodels="clr-namespace:Photography_Tools.ViewModels"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:controls="clr-namespace:Photography_Tools.Components.Controls.UnitEntry"
+    xmlns:numcontrols="clr-namespace:Photography_Tools.Components.Controls.NumericEntry"
     x:Name="TimeLapseCalcPage0"
     x:Class="Photography_Tools.Pages.TimeLapseCalcPage"
     x:DataType="viewmodels:TimeLapseCalculatorViewModel"
@@ -52,7 +53,7 @@
                 Grid.ColumnSpan="2"
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
-                    MinValueBaseUnit="0"
+                    MinValueBaseUnit="0.001"
                     MaxValueBaseUnit="999999"
                     BaseUnitValue="{Binding UserInput.TimeLapseCalcValues.ShootingIntervalSeconds}"
                     UnitConverter="{Static controls:StaticConverters.TimeUnitConverter}"
@@ -67,7 +68,7 @@
                 Grid.ColumnSpan="2"
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
-                    MinValueBaseUnit="0"
+                    MinValueBaseUnit="0.001"
                     MaxValueBaseUnit="2000000000"
                     BaseUnitValue="{Binding UserInput.TimeLapseCalcValues.ShootingLengthSeconds}"
                     UnitConverter="{Static controls:StaticConverters.TimeUnitConverter}"
@@ -81,20 +82,13 @@
                 Grid.Column="4"
                 Grid.ColumnSpan="2"
                 Style="{StaticResource EntryBorder}">
-                <Entry
+                <numcontrols:IntEntry
                     x:Name="EnteredShotsCountEntry"
                     Margin="0,5"
-                    Keyboard="Numeric"                    
-                    Text="{Binding UserInput.EnteredShootsCount}"
-                    Style="{StaticResource StandardEntry}">
-                    <Entry.Behaviors>
-                        <toolkit:EventToCommandBehavior
-                            EventName="TextChanged"
-                            BindingContext="{Binding Path=BindingContext, Source={x:Reference EnteredShotsCountEntry}, x:DataType=Entry}"
-                            Command="{Binding ShootsCountChangedCommand}"
-                        />
-                    </Entry.Behaviors>
-                </Entry>
+                    MinValue="1"
+                    EntryValue="{Binding UserInput.EnteredShootsCount}"
+                    ValueChangedCommand="{Binding ShootsCountChangedCommand}">
+                </numcontrols:IntEntry>
             </Border>
 
             <Label
@@ -118,20 +112,15 @@
                 Style="{StaticResource EntryBorder}">
                 <FlexLayout
                     Direction="Row">
-                    <Entry
+                    <numcontrols:IntEntry
                         x:Name="EnteredClipFrameRateFPSEntry"
                         FlexLayout.Grow="1"
                         Margin="0,5"
-                        Text="{Binding UserInput.EnteredClipFrameRateFPS}"
-                        Style="{StaticResource StandardEntry}">
-                        <Entry.Behaviors>
-                            <toolkit:EventToCommandBehavior 
-                                EventName="TextChanged"
-                                BindingContext="{Binding Path=BindingContext, Source={x:Reference EnteredClipFrameRateFPSEntry}, x:DataType=Entry}"
-                                Command="{Binding ClipFrameRateFPSChangedCommand}"
-                            />
-                        </Entry.Behaviors>
-                    </Entry>
+                        MinValue="1"
+                        MaxValue="1000"
+                        EntryValue="{Binding UserInput.EnteredClipFrameRateFPS}"
+                        ValueChangedCommand="{Binding ClipFrameRateFPSChangedCommand}">
+                    </numcontrols:IntEntry>
                     <Label 
                         Text="FPS"
                         Style="{StaticResource LabelSmall}"
@@ -148,7 +137,7 @@
                 Grid.ColumnSpan="3"
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
-                    MinValueBaseUnit="0"
+                    MinValueBaseUnit="0.001"
                     MaxValueBaseUnit="999999"
                     BaseUnitValue="{Binding UserInput.TimeLapseCalcValues.ClipLengthSeconds}"
                     UnitConverter="{Static controls:StaticConverters.TimeUnitConverter}"
@@ -177,7 +166,7 @@
                 Grid.ColumnSpan="3"
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
-                    MinValueBaseUnit="0"
+                    MinValueBaseUnit="0.00001"
                     MaxValueBaseUnit="9999999"
                     BaseUnitValue="{Binding UserInput.TimeLapseCalcValues.PhotoSizeMB}"
                     UnitConverter="{Static controls:StaticConverters.InformationUnitConverter}"
@@ -192,7 +181,7 @@
                 Grid.ColumnSpan="3"
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
-                    MinValueBaseUnit="0"
+                    MinValueBaseUnit="0.00001"
                     MaxValueBaseUnit="2000000000"
                     BaseUnitValue="{Binding UserInput.TimeLapseCalcValues.TotalStorageSizeMB}"
                     UnitConverter="{Static controls:StaticConverters.InformationUnitConverter}"

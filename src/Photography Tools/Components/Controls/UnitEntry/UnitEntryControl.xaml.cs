@@ -128,6 +128,21 @@ public partial class UnitEntryControl : ContentView
         SetValueFromText();
     }
 
+    private void UnitEntry_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (string.IsNullOrWhiteSpace(e.NewTextValue))
+            return;
+
+        if (MinValueBaseUnit < 0 && e.NewTextValue.AsSpan().Trim().Equals("-", StringComparison.Ordinal))
+            return;
+
+        if (!ParseHelper.TryParseDoubleDifferentCulture(e.NewTextValue, out _))
+        {
+            UnitEntry.Text = e.OldTextValue;
+            return;
+        }
+    }
+
     private void PickerIndexChanged(object sender, EventArgs e)
     {
         int index = UnitPicker.SelectedIndex;
