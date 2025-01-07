@@ -11,7 +11,7 @@
         <TitleBar
             x:Name="AppTitleBar"
             Title="Photography Tools"
-            BackgroundColor="{AppThemeBinding Default='#202020', Light='#f2f2f2'}"
+            BackgroundColor="{AppThemeBinding Default='#202020', Light='#cdcdcd'}"
             ForegroundColor="{AppThemeBinding Default={StaticResource White}, Light={StaticResource Black}}"
             Icon="{AppThemeBinding Default='logo_light.png', Light='logo_dark.png'}">
         </TitleBar>

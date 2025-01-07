@@ -9,7 +9,7 @@
     <Shell.FlyoutHeader>
         <VerticalStackLayout
             Margin="0,30">
-            <Image Source="{AppThemeBinding Dark='logo_light.png', Light='applogo_dark.svg' }" HeightRequest="64" />
+            <Image Source="{AppThemeBinding Dark='logo_light.png', Light='logo_dark.png' }" HeightRequest="64" />
             <Label
                 Style="{StaticResource LabelMediumBold}"
                 Text="Photography Tools"
