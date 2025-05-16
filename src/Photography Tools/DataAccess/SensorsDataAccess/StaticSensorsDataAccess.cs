@@ -39,6 +39,7 @@ public class StaticSensorsDataAccess : ISensorsDataAccess
             { "Canon EOS-1Ds", new Sensor(23.8, 35.8, 11) },
             { "Canon EOS-1Ds Mark II", new Sensor(24, 36, 16.7) },
             { "Canon EOS-1Ds Mark III", new Sensor(24, 36, 21.1) },
+            { "Canon EOS R1", new Sensor(24, 36, 24.2) },
 
             { "Fujifilm FinePix IS Pro, S2 Pro, S5 Pro", new Sensor(15.5, 23, 6.1) },
             { "Fujifilm FinePix S1 Pro", new Sensor(15.5, 23, 3.1) },
@@ -101,7 +102,7 @@ public class StaticSensorsDataAccess : ISensorsDataAccess
             { "Nikon D90", new Sensor(15.8, 23.6, 12.3) },
             { "Nikon Z30, Z50, Z fc", new Sensor(15.7, 23.5, 20.90) },
             { "Nikon Z5", new Sensor(23.9, 35.9, 24.3) },
-            { "Nikon Z6, Z6 II, Z6 III, Z f", new Sensor(23.9, 35.9, 24.5) },
+            { "Nikon Z5 II, Z6, Z6 II, Z6 III, Z f", new Sensor(23.9, 35.9, 24.5) },
             { "Nikon Z7, Z7 II, Z8, Z9", new Sensor(23.9, 35.9, 45.7 ) },
 
             { "Olympus E-1", new Sensor(13, 17.3, 4.9) },
@@ -136,9 +137,13 @@ public class StaticSensorsDataAccess : ISensorsDataAccess
             { "Pentax K110D", new Sensor(15.5, 23.7, 6.1) },
             { "Pentax Optio LS465", new Sensor(15.7, 23.7, 16) },
 
+            { "Sony A7 IV", new Sensor(23.9, 35.9, 33.0) },
+            { "Sony a7R IV, a7R V", new Sensor(23.8, 35.7, 61.0) },
+            { "Sony a9 III", new Sensor(23.8, 35.6, 24.60) },
             { "Sony Alpha 7", new Sensor(23.9, 35.8, 24.3) },
             { "Sony Alpha 7R", new Sensor(24, 35.9, 36.4) },
             { "Sony Alpha 7S", new Sensor(23.8, 35.6, 12.2) },
+            { "Sony Alpha A7 III", new Sensor(23.8, 35.6, 24.2) },
             { "Sony Alpha a3000, a5000, QX1", new Sensor(15.6, 23.5, 20.1) },
             { "Sony Alpha a5100, a6000, NEX-7, SLT-A65, SLT-A77, SLT-A77 II", new Sensor(15.6, 23.5, 24.3) },
             { "Sony Alpha DSLR-A100", new Sensor(15.8, 23.6, 10) },
