@@ -11,7 +11,14 @@
             Margin="0,30">
             <Image Source="{AppThemeBinding Dark='logo_light.png', Light='logo_dark.png' }" HeightRequest="64" />
             <Label
-                Style="{StaticResource LabelMediumBold}"
+                Style="{StaticResource LabelLarge}"
+                Text="Photography Tools"
+                HorizontalOptions="Center"
+            />
+            <Label
+                x:Name="AppVersionLabel"
+                Margin="0,5,0,0"
+                Style="{StaticResource LabelMedium}"
                 Text="Photography Tools"
                 HorizontalOptions="Center"
             />
