@@ -2,9 +2,23 @@
 .NET Maui multi-platform application containing the most important tools useful for every photographer, especially for landscape photography.
 
 ## Features
-* Depth of field calculator
-* Maximum exposure time calculator for astrophotography
-* And many more (work in progress...)
+* Depth of Field Calculator - 
+Calculate the depth of field based on your lens, aperture, and distance.
+
+* Maximum Exposure Time Calculator (Astrophotography) - 
+Determine the longest shutter speed to avoid star trails.
+
+* Neutral Density (ND) Filter Calculator - 
+Adjust exposure settings when using ND filters.
+
+* Time-Lapse Calculator - 
+Plan frame rates, interval timing, and final video duration.
+
+* Golden Hour & Sun Data - 
+Get detailed information including sunrise, solar noon, sunset, civil twilight, blue and golden hour.
+
+* Moon Phases - 
+Access detailed lunar information including the current moon phase name, illumination percentage, moonrise and moonset times, and moon age (days since the new moon) for selected date.
 
 ## Supported Platforms
 * Android (7 or newer)
