@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+using Photography_Tools.Components.Popups;
 using Photography_Tools.DataAccess.AstroDataAccess;
 using Photography_Tools.Services.KeyValueStoreService;
 
@@ -52,6 +53,9 @@ public static class MauiProgram
         builder.Services.AddSingleton<MoonPhaseViewModel>();
         builder.Services.AddSingleton<SunViewModel>();
         builder.Services.AddSingleton<TimeLapseCalculatorViewModel>();
+
+        // Popups
+        builder.Services.AddSingleton<LocationPopup>();
 
         // HttpClient
         builder.Services.AddHttpClient<IAstroDataAccess, UsnoAstroDataAccess>(client =>

@@ -1,4 +1,5 @@
-﻿using Photography_Tools.Services.KeyValueStoreService;
+﻿using CommunityToolkit.Maui;
+using Photography_Tools.Services.KeyValueStoreService;
 using System.Collections.Frozen;
 using System.Text.Json;
 
@@ -50,8 +51,8 @@ public partial class MoonPhaseViewModel : AstroLocationViewModel
     }
 
     public MoonPhaseViewModel([FromKeyedServices(KeyedServiceNames.OnlineAstroData)] IAstroDataService onlineAstroDataService, [FromKeyedServices(KeyedServiceNames.OfflineAstroData)] IAstroDataService offlineAstroDataService,
-        IKeyValueStore<Place> locationsKeyValueStore, IPreferencesService preferencesService, IUiMessageService messageService) : base(onlineAstroDataService, offlineAstroDataService, locationsKeyValueStore,
-            preferencesService, messageService)
+        IKeyValueStore<Place> locationsKeyValueStore, IPreferencesService preferencesService, IUiMessageService messageService, IPopupService popupService) : base(onlineAstroDataService, offlineAstroDataService, locationsKeyValueStore,
+            preferencesService, messageService, popupService)
     {
         SelectedDate = DateTime.Today;
         LocationName = preferencesService.GetPreference(PreferencesKeys.MoonPhaseUserInputPreferencesKey, string.Empty) ?? string.Empty;
@@ -60,6 +61,9 @@ public partial class MoonPhaseViewModel : AstroLocationViewModel
     [RelayCommand]
     protected void OnAppearing()
     {
+        if (IsPopupPresented)
+            return;
+
 #if DEBUG
         UseOnlineService = preferencesService.GetPreference(PreferencesKeys.UseOnlineAstroDataPreferencesKey, false);
 #else

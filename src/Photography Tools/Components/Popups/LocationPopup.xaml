@@ -9,7 +9,8 @@
     xmlns:datatemplate="clr-namespace:Photography_Tools.Components.DataTemplateSelectors"
     x:Class="Photography_Tools.Components.Popups.LocationPopup"
     x:DataType="components:LocationPopup"
-    Color="Transparent">
+    x:TypeArguments="models:Place"
+    BackgroundColor="Transparent">
     
     <toolkit:Popup.Resources>
         <DataTemplate x:Key="MobileTemplate" x:DataType="x:String">
