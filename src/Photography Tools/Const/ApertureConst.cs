@@ -35,12 +35,12 @@ public static class ApertureConst
         OtherStops = new double[]
         { 0.95, 1.05 }.ToFrozenSet();
 
-        int arraySize = FullStops.Count + SecondStops.Count + ThirdStops.Count;
-        Span<double> allStops = arraySize * sizeof(double) <= 512 ? stackalloc double[arraySize] : new double[arraySize];
+        int arraySize = FullStops.Count + SecondStops.Count + ThirdStops.Count + OtherStops.Count;
+        Span<double> allStops = arraySize * sizeof(double) <= 1024 ? stackalloc double[arraySize] : new double[arraySize];
         allStops.Clear();
 
-        int insertedValues = ThirdStops.Count;
         ThirdStops.CopyTo(allStops);
+        int insertedValues = ThirdStops.Count;
 
         AddStops(allStops, SecondStops, ref insertedValues);
         AddStops(allStops, FullStops, ref insertedValues);
