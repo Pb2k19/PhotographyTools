@@ -54,7 +54,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<TimeLapseCalculatorViewModel>();
 
         // HttpClient
-        builder.Services.AddHttpClient<IAstroDataAccess, UsnoAstroDataAccess>(client =>
+        builder.Services.AddHttpClient(HttpClientConst.UsnoHttpClientName, client =>
         {
             client.BaseAddress = new Uri("https://aa.usno.navy.mil/api/");
         });

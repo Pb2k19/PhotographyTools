@@ -10,15 +10,15 @@ public class UsnoAstroDataAccess : IAstroDataAccess
     private static readonly TimeSpan MinRequestDiffTime = TimeSpan.FromMilliseconds(500), MinFailRequestDiffTime = TimeSpan.FromSeconds(20);
     private static readonly DateTime MinDateTime = new(1700, 1, 1), MaxDateTime = new(2099, 12, 31);
 
-    private readonly HttpClient httpClient;
+    private readonly IHttpClientFactory httpClientFactory;
 
     private long lastApiRequest = 0, lastFailRequest = 0;
 
     public string DataSourceInfo { get; } = "U.S. Naval Observatory";
 
-    public UsnoAstroDataAccess(HttpClient httpClient)
+    public UsnoAstroDataAccess(IHttpClientFactory httpClientFactory)
     {
-        this.httpClient = httpClient;
+        this.httpClientFactory = httpClientFactory;
     }
 
     public async Task<ServiceResponse<AstroData?>> GetAstroDataAsync(DateTime dateTimeUtc, double latitude, double longitude)
@@ -42,6 +42,7 @@ public class UsnoAstroDataAccess : IAstroDataAccess
 #if DEBUG
             Debug.WriteLine($"USNO API CALL: rstt/oneday?date={dateTimeUtc:yyyy-MM-dd}&coords={latitude.ToString("0.000", CultureInfo.InvariantCulture)},{longitude.ToString("0.00", CultureInfo.InvariantCulture)}");
 #endif
+            HttpClient httpClient = httpClientFactory.CreateClient(HttpClientConst.UsnoHttpClientName);
             using HttpResponseMessage response = await httpClient.GetAsync($"rstt/oneday?date={dateTimeUtc:yyyy-MM-dd}&coords={latitude.ToString("0.000", CultureInfo.InvariantCulture)},{longitude.ToString("0.00", CultureInfo.InvariantCulture)}");
 
             if (!response.IsSuccessStatusCode)
