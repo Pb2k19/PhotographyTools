@@ -110,6 +110,6 @@ public partial class TimeLapseCalculatorViewModel : SaveableViewModel
     protected override void SaveUserInput()
     {
         if (UserInput.Validate())
-            preferencesService?.SerializedAndSetPreference(PreferencesKeys.TimeLapseCalcUserInputPreferencesKey, UserInput);
+            preferencesService?.SerializeAndSetPreference(PreferencesKeys.TimeLapseCalcUserInputPreferencesKey, UserInput);
     }
 }

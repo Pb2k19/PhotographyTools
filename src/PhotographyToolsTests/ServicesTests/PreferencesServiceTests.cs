@@ -114,7 +114,7 @@ public class PreferencesServiceTests
         TestObject obj = new() { Name = "TestObject0", Aperture = 2.2, FocalLengthMM = 55 };
         preferences.Get<string?>(key, null).ReturnsNull();
 
-        bool actual = preferencesService.SerializedAndSetPreference(key, obj);
+        bool actual = preferencesService.SerializeAndSetPreference(key, obj);
 
         preferences.Received(1).Get<string?>(key, null);
         preferences.Received(1).Set(key, expectedSerialized);

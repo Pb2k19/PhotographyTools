@@ -11,6 +11,11 @@ public class PreferencesService : IPreferencesService
         this.preferences = preferences;
     }
 
+    public void ClearAll()
+    {
+        preferences.Clear();
+    }
+
     public T? GetPreference<T>(string key, T? defaultValue = default)
     {
         return preferences.Get(key, defaultValue);
@@ -28,7 +33,7 @@ public class PreferencesService : IPreferencesService
         return true;
     }
 
-    public bool SerializedAndSetPreference<T>(string preferenceKey, T obj) where T : class
+    public bool SerializeAndSetPreference<T>(string preferenceKey, T obj) where T : class
     {
         string serialized = JsonSerializer.Serialize(obj);
         SetPreference(preferenceKey, serialized);
