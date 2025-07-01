@@ -3,6 +3,8 @@ namespace Photography_Tools.Services.ConfigService;
 
 public class SettingsService : ISettingsService
 {
+    private static readonly Lock PreferencesLock = new();
+
     private readonly IPreferencesService preferencesService;
 
     Settings currentSettings;
@@ -20,12 +22,15 @@ public class SettingsService : ISettingsService
         if (currentSettings.Equals(newSettings))
             return 0;
 
-        bool result = preferencesService.SerializeAndSetPreference(PreferencesKeys.SettingsKey, newSettings);
+        lock (PreferencesLock)
+        {
+            bool result = preferencesService.SerializeAndSetPreference(PreferencesKeys.SettingsKey, newSettings);
 
-        if (!result)
-            return -1;
+            if (!result)
+                return -1;
 
-        currentSettings = newSettings;
-        return 1;
+            currentSettings = newSettings;
+            return 1;
+        }
     }
 }
