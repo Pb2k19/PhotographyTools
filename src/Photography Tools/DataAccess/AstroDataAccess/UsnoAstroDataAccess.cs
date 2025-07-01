@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Photography_Tools.Services.ConfigService;
+using System.Diagnostics;
 using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -11,19 +12,21 @@ public class UsnoAstroDataAccess : IAstroDataAccess
     private static readonly DateTime MinDateTime = new(1700, 1, 1), MaxDateTime = new(2099, 12, 31);
 
     private readonly IHttpClientFactory httpClientFactory;
+    private readonly ISettingsService settingsService;
 
     private long lastApiRequest = 0, lastFailRequest = 0;
 
     public string DataSourceInfo { get; } = "U.S. Naval Observatory";
 
-    public UsnoAstroDataAccess(IHttpClientFactory httpClientFactory)
+    public UsnoAstroDataAccess(IHttpClientFactory httpClientFactory, ISettingsService settingsService)
     {
         this.httpClientFactory = httpClientFactory;
+        this.settingsService = settingsService;
     }
 
     public async Task<ServiceResponse<AstroData?>> GetAstroDataAsync(DateTime dateTimeUtc, double latitude, double longitude)
     {
-        if (!(Connectivity.Current.NetworkAccess == NetworkAccess.Internet))
+        if (!(Connectivity.Current.NetworkAccess == NetworkAccess.Internet) || settingsService.GetSettings().IsUseOnlyOfflineDataSourceModeEnabled)
             return IAstroDataAccess.FailResultResponse with { Message = "No Internet access", Code = -2 };
 
         if (Stopwatch.GetElapsedTime(lastApiRequest) < MinRequestDiffTime)

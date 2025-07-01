@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:Photography_Tools.ViewModels"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    x:Name="SettingsPage0"
+    x:Class="Photography_Tools.Pages.SettingsPage"
+    x:DataType="viewmodels:SettingsViewModel"
+    Title="SettingsPage">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior
+            EventName="Appearing"
+            BindingContext="{Binding Path=BindingContext, Source={x:Reference SettingsPage0}, x:DataType=ContentPage}"
+            Command="{Binding AppearingCommand}"
+        />
+        <toolkit:EventToCommandBehavior
+            EventName="Disappearing"
+            BindingContext="{Binding Path=BindingContext, Source={x:Reference SettingsPage0}, x:DataType=ContentPage}"
+            Command="{Binding DisappearingCommand}"
+        />
+    </ContentPage.Behaviors>
+
+    <ScrollView>
+        <VerticalStackLayout
+            Style="{StaticResource PageVerticalStackLayout}">
+            
+            <Border
+                Style="{StaticResource StandardBorder}">
+                <VerticalStackLayout>
+                    <Label
+                        Text="Data source"
+                        Style="{StaticResource LabelMediumBold}" 
+                    />
+
+                    <HorizontalStackLayout
+                        Margin="0,10,0,0">
+                        
+                        <CheckBox 
+                            IsChecked="{Binding IsUseOfflineDataSourceModeEnabled}" 
+                        />
+
+                        <Label
+                            Text="Use only offline data (lower accuracy)"
+                            Style="{StaticResource LabelMedium}"
+                            VerticalOptions="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ToggleOfflineDataOnlyCommand}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+            
+            <Border
+                Style="{StaticResource StandardBorder}"
+                Margin="0,15,0,0">
+                <VerticalStackLayout>
+                    <Label
+                        Text="Preferences"
+                        Style="{StaticResource LabelMediumBold}" 
+                    />
+
+                    <Button
+                        Text="Clear all"
+                        Margin="0,15,0,0"
+                        HorizontalOptions="Start"
+                        Command="{Binding ResetAllPreferencesCommand}"
+                    />
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

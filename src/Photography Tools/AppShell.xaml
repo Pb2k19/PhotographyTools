@@ -60,4 +60,10 @@
         ContentTemplate="{DataTemplate pages:MoonPhasePage}"
         Route="MoonPhasePage"
     />
+
+    <ShellContent
+        Title="Settings"
+        ContentTemplate="{DataTemplate pages:SettingsPage}"
+        Route="SettingsPage"
+    />
 </Shell>

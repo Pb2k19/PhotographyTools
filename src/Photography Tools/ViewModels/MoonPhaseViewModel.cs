@@ -7,7 +7,6 @@ namespace Photography_Tools.ViewModels;
 public partial class MoonPhaseViewModel : AstroLocationViewModel
 {
     private static readonly FrozenDictionary<string, string> MoonImagesNorth, MoonImagesSouth;
-
     private TimeSpan lastSelectedTime = TimeSpan.Zero;
 
     [ObservableProperty]
@@ -58,13 +57,9 @@ public partial class MoonPhaseViewModel : AstroLocationViewModel
     }
 
     [RelayCommand]
-    protected void OnAppearing()
+    protected async Task OnAppearing()
     {
-#if DEBUG
-        UseOnlineService = preferencesService.GetPreference(PreferencesKeys.UseOnlineAstroDataPreferencesKey, false);
-#else
-        UseOnlineService = preferencesService.GetPreference(PreferencesKeys.UseOnlineAstroDataPreferencesKey, true);
-#endif
+        await CalculateAsync();
     }
 
     [RelayCommand]
@@ -95,9 +90,6 @@ public partial class MoonPhaseViewModel : AstroLocationViewModel
 
         if (offlineResult.IsSuccess && offlineResult.Data is not null)
             DisplayResult(offlineResult.Data, date, coordinates.Latitude, offlineAstroDataService.DataSourceInfo);
-
-        if (!UseOnlineService)
-            return;
 
         try
         {

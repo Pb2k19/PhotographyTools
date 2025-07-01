@@ -20,8 +20,6 @@ public abstract partial class AstroLocationViewModel : SaveableViewModel
     [ObservableProperty]
     private string dataSourceInfo = string.Empty;
 
-    public bool UseOnlineService { get; protected set; } = true;
-
     protected AstroLocationViewModel([FromKeyedServices(KeyedServiceNames.OnlineAstroData)] IAstroDataService onlineAstroDataService, [FromKeyedServices(KeyedServiceNames.OfflineAstroData)] IAstroDataService offlineAstroDataService,
         IKeyValueStore<Place> locationsKeyValueStore, IPreferencesService preferencesService, IUiMessageService messageService) : base(preferencesService)
     {

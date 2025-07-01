@@ -1,5 +1,6 @@
 ﻿using Photography_Tools.DataAccess.AstroDataAccess;
 using Photography_Tools.Services.KeyValueStoreService;
+using System.Diagnostics;
 
 namespace Photography_Tools.Services.AstroDataService;
 
@@ -66,7 +67,12 @@ public class OnlineAstroDataService : IAstroDataService
         AstroData? astroData = await cacheStore.GetValueAsync(cacheKey);
 
         if (astroData is not null)
+        {
+#if DEBUG
+            Debug.WriteLine("Astro data loaded from cache");
+#endif
             return new(astroData, true, 1);
+        }
 
         ServiceResponse<AstroData?> response = await astroDataAccess.GetAstroDataAsync(date.Date, latitude, longitude);
 
