@@ -9,7 +9,6 @@
         Keyboard="Numeric"
         Text="0"
         TextChanged="NumEntry_TextChanged"
-        Completed="NumEntry_Completed"
         Unfocused="NumEntry_Unfocused"
         Style="{StaticResource StandardEntry}"
     />

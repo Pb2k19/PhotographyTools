@@ -23,6 +23,8 @@ public partial class IntEntry : ContentView
 
     private int entryValue;
 
+    private bool isInputFromUser = true;
+
     public ICommand? ValueChangedCommand
     {
         get => (ICommand)GetValue(ValueChangedCommandProperty);
@@ -44,7 +46,7 @@ public partial class IntEntry : ContentView
             entryValue = value;
             SetValue(EntryValueProperty, value);
             OnPropertyChanged(nameof(EntryValue));
-            SetValueText(value);
+            SetValueText(value, false);
 
             if (ValueChangedCommand?.CanExecute(null) ?? false)
                 ValueChangedCommand.Execute(null);
@@ -56,18 +58,20 @@ public partial class IntEntry : ContentView
         InitializeComponent();
     }
 
-    private void NumEntry_Completed(object sender, EventArgs e)
-    {
-        SetValueFromText();
-    }
-
     private void NumEntry_Unfocused(object sender, FocusEventArgs e)
     {
-        SetValueFromText();
+        if (string.IsNullOrEmpty(NumEntry.Text) || !int.TryParse(NumEntry.Text, out int newValue) || newValue != EntryValue)
+        {
+            SetValueText(EntryValue, false);
+            return;
+        }
     }
 
     private void NumEntry_TextChanged(object sender, TextChangedEventArgs e)
     {
+        if (!isInputFromUser)
+            return;
+
         if (string.IsNullOrWhiteSpace(e.NewTextValue))
             return;
 
@@ -79,20 +83,22 @@ public partial class IntEntry : ContentView
             NumEntry.Text = e.OldTextValue;
             return;
         }
+
+        SetValueFromText(true);
     }
 
-    private void SetValueFromText()
+    private void SetValueFromText(bool isInputFromUser)
     {
         if (int.TryParse(NumEntry.Text, out int newValue))
         {
-            if (SetValueAndNotify(newValue))
+            if (SetValueAndNotify(newValue, isInputFromUser))
                 return;
         }
 
-        SetValueText(entryValue);
+        SetValueText(entryValue, isInputFromUser);
     }
 
-    private bool SetValueAndNotify(int value)
+    private bool SetValueAndNotify(int value, bool isInputFromUser)
     {
         if (value == entryValue || value < MinValue || value > MaxValue)
             return false;
@@ -100,7 +106,7 @@ public partial class IntEntry : ContentView
         entryValue = value;
         SetValue(EntryValueProperty, entryValue);
         OnPropertyChanged(nameof(EntryValue));
-        SetValueText(value);
+        SetValueText(value, isInputFromUser);
 
         if (ValueChangedCommand?.CanExecute(null) ?? false)
             ValueChangedCommand.Execute(null);
@@ -108,8 +114,10 @@ public partial class IntEntry : ContentView
         return true;
     }
 
-    private void SetValueText(int value)
+    private void SetValueText(int value, bool isInputFromUser)
     {
+        this.isInputFromUser = isInputFromUser;
         NumEntry.Text = value.ToString();
+        this.isInputFromUser = true;
     }
 }

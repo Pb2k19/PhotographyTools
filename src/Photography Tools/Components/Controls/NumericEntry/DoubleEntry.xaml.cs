@@ -23,6 +23,8 @@ public partial class DoubleEntry : ContentView
 
     private double entryValue;
 
+    private bool isInputFromUser = true;
+
     public ICommand? ValueChangedCommand
     {
         get => (ICommand)GetValue(ValueChangedCommandProperty);
@@ -46,7 +48,7 @@ public partial class DoubleEntry : ContentView
             entryValue = value;
             SetValue(EntryValueProperty, value);
             OnPropertyChanged(nameof(EntryValue));
-            SetValueText(value);
+            SetValueText(value, false);
 
             if (ValueChangedCommand?.CanExecute(null) ?? false)
                 ValueChangedCommand.Execute(null);
@@ -58,43 +60,51 @@ public partial class DoubleEntry : ContentView
         InitializeComponent();
     }
 
-    private void NumEntry_Completed(object sender, EventArgs e)
-    {
-        SetValueFromText();
-    }
-
     private void NumEntry_Unfocused(object sender, FocusEventArgs e)
     {
-        SetValueFromText();
+        if (string.IsNullOrEmpty(NumEntry.Text) || !ParseHelper.TryParseDoubleDifferentCulture(NumEntry.Text, out double newValue) || newValue != EntryValue)
+        {
+            SetValueText(EntryValue, false);
+            return;
+        }
     }
 
     private void NumEntry_TextChanged(object sender, TextChangedEventArgs e)
     {
+        if (!isInputFromUser)
+            return;
+
         if (string.IsNullOrWhiteSpace(e.NewTextValue))
             return;
 
-        if (MinValue < 0 && e.NewTextValue.AsSpan().Trim().Equals("-", StringComparison.Ordinal))
+        ReadOnlySpan<char> newTextSpan = e.NewTextValue.AsSpan().Trim();
+        if (MinValue < 0 && newTextSpan.Equals("-", StringComparison.Ordinal))
             return;
 
-        if (!ParseHelper.TryParseDoubleDifferentCulture(e.NewTextValue, out _))
+        if (newTextSpan.IsEmpty || newTextSpan[^1].Equals(ParseHelper.Dot) || newTextSpan[^1].Equals(ParseHelper.Comma))
+            return;
+
+        if (!ParseHelper.TryParseDoubleDifferentCulture(newTextSpan, out _))
         {
             NumEntry.Text = e.OldTextValue;
             return;
         }
+
+        SetValueFromText(true);
     }
 
-    private void SetValueFromText()
+    private void SetValueFromText(bool isInputFromUser)
     {
         if (ParseHelper.TryParseDoubleDifferentCulture(NumEntry.Text, out double newValue))
         {
-            if (SetValueAndNotify(Math.Round(newValue, Precision)))
+            if (SetValueAndNotify(Math.Round(newValue, Precision), isInputFromUser))
                 return;
         }
 
-        SetValueText(entryValue);
+        SetValueText(entryValue, isInputFromUser);
     }
 
-    private bool SetValueAndNotify(double value)
+    private bool SetValueAndNotify(double value, bool isInputFromUser)
     {
         if (value == entryValue || value < MinValue || value > MaxValue)
             return false;
@@ -102,7 +112,7 @@ public partial class DoubleEntry : ContentView
         entryValue = value;
         SetValue(EntryValueProperty, entryValue);
         OnPropertyChanged(nameof(EntryValue));
-        SetValueText(value);
+        SetValueText(value, isInputFromUser);
 
         if (ValueChangedCommand?.CanExecute(null) ?? false)
             ValueChangedCommand.Execute(null);
@@ -110,8 +120,10 @@ public partial class DoubleEntry : ContentView
         return true;
     }
 
-    private void SetValueText(double value)
+    private void SetValueText(double value, bool isInputFromUser)
     {
+        this.isInputFromUser = isInputFromUser;
         NumEntry.Text = value.ToString();
+        this.isInputFromUser = true;
     }
 }

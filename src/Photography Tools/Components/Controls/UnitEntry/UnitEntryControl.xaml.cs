@@ -6,7 +6,8 @@ public partial class UnitEntryControl : ContentView
 {
     private IUnitConverter unitConverter;
     private int selectedUnitIndex;
-    private double baseUnitValue;
+    private double baseUnitValue, selectedUnitValue;
+    private bool isInputFromUser = true;
 
     #region BindableProperties
     public static readonly BindableProperty ValueChangedCommandProperty = BindableProperty.Create(
@@ -72,7 +73,7 @@ public partial class UnitEntryControl : ContentView
                 baseUnitValue = value;
                 SetValue(BaseUnitValueProperty, value);
                 OnPropertyChanged(nameof(BaseUnitValue));
-                SetValueText(value);
+                SetValueText(value, false);
 
                 if (ValueChangedCommand?.CanExecute(null) ?? false)
                     ValueChangedCommand.Execute(null);
@@ -115,25 +116,31 @@ public partial class UnitEntryControl : ContentView
         unitConverter = StaticConverters.LengthUnitConverter;
         UnitPicker.ItemsSource = unitConverter.Units;
         UnitPicker.SelectedItem = unitConverter.Units[SelectedUnitIndex];
-        SetValueText(baseUnitValue);
-    }
-
-    private void UnitEntry_Completed(object sender, EventArgs e)
-    {
-        SetValueFromText();
+        SetValueText(baseUnitValue, false);
     }
 
     private void UnitEntry_Unfocused(object sender, FocusEventArgs e)
     {
-        SetValueFromText();
+        if (string.IsNullOrEmpty(UnitEntry.Text) || !ParseHelper.TryParseDoubleDifferentCulture(UnitEntry.Text, out double newValue) || newValue != selectedUnitValue)
+        {
+            SetValueText(baseUnitValue, false);
+            return;
+        }
     }
 
     private void UnitEntry_TextChanged(object sender, TextChangedEventArgs e)
     {
+        if (!isInputFromUser)
+            return;
+
         if (string.IsNullOrWhiteSpace(e.NewTextValue))
             return;
 
-        if (MinValueBaseUnit < 0 && e.NewTextValue.AsSpan().Trim().Equals("-", StringComparison.Ordinal))
+        ReadOnlySpan<char> newTextSpan = e.NewTextValue.AsSpan().Trim();
+        if (MinValueBaseUnit < 0 && newTextSpan.Equals("-", StringComparison.Ordinal))
+            return;
+
+        if (!AcceptIntOnly && (newTextSpan.IsEmpty || newTextSpan[^1].Equals(ParseHelper.Dot) || newTextSpan[^1].Equals(ParseHelper.Comma)))
             return;
 
         if (!ParseHelper.TryParseDoubleDifferentCulture(e.NewTextValue, out _))
@@ -141,6 +148,8 @@ public partial class UnitEntryControl : ContentView
             UnitEntry.Text = e.OldTextValue;
             return;
         }
+
+        SetValueFromText(true);
     }
 
     private void PickerIndexChanged(object sender, EventArgs e)
@@ -150,29 +159,29 @@ public partial class UnitEntryControl : ContentView
         if (index >= 0 && index < UnitConverter.Units.Length)
         {
             SelectedUnitIndex = index;
-            SetValueText(baseUnitValue);
+            SetValueText(baseUnitValue, isInputFromUser);
         }
     }
 
-    private void SetValueFromText()
+    private void SetValueFromText(bool isInputFromUser)
     {
         if (ParseHelper.TryParseDoubleDifferentCulture(UnitEntry.Text, out double newValue))
         {
-            if (SetBaseUnitValueAndNotify(UnitConverter.ConvertToBaseUnit(newValue, UnitConverter.Units[SelectedUnitIndex])))
+            if (SetBaseUnitValueAndNotify(UnitConverter.ConvertToBaseUnit(newValue, UnitConverter.Units[SelectedUnitIndex]), isInputFromUser))
                 return;
         }
 
-        SetValueText(baseUnitValue);
+        SetValueText(baseUnitValue, isInputFromUser);
     }
 
-    private bool SetBaseUnitValueAndNotify(double value)
+    private bool SetBaseUnitValueAndNotify(double value, bool isInputFromUser)
     {
         if (value != baseUnitValue && value >= MinValueBaseUnit && value <= MaxValueBaseUnit)
         {
             baseUnitValue = value;
             SetValue(BaseUnitValueProperty, baseUnitValue);
             OnPropertyChanged(nameof(BaseUnitValue));
-            SetValueText(value);
+            SetValueText(value, isInputFromUser);
 
             if (ValueChangedCommand?.CanExecute(null) ?? false)
                 ValueChangedCommand.Execute(null);
@@ -183,11 +192,16 @@ public partial class UnitEntryControl : ContentView
         return false;
     }
 
-    private void SetValueText(double value)
+    private void SetValueText(double value, bool isInputFromUser)
     {
+        this.isInputFromUser = isInputFromUser;
+
         value = UnitConverter.ConvertBaseToSelectedUnit(value, UnitConverter.Units[SelectedUnitIndex]);
         value = AcceptIntOnly ? Math.Round(value, 0) : Math.Round(value, DisplayPrecision);
 
+        selectedUnitValue = value;
         UnitEntry.Text = value.ToString();
+
+        this.isInputFromUser = true;
     }
 }
