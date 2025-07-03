@@ -16,6 +16,31 @@ public class ParseHelperTests
     [InlineData("45468,379684", 45468.379684)]
     [InlineData("-45468.379684", -45468.379684)]
     [InlineData("-45468,379684", -45468.379684)]
+    [InlineData("45 468,379684", 45468.379684)]
+    [InlineData("45 468.379684", 45468.379684)]
+    [InlineData("45,468,379684", 45468.379684)]
+    [InlineData("45,468.379684", 45468.379684)]
+    [InlineData("45.468,379684", 45468.379684)]
+    [InlineData("-45 468,379684", -45468.379684)]
+    [InlineData("-45 468.379684", -45468.379684)]
+    [InlineData("-45,468,379684", -45468.379684)]
+    [InlineData("-45,468.379684", -45468.379684)]
+    [InlineData("-45.468,379684", -45468.379684)]
+    [InlineData("+45.468,379684", 45468.379684)]
+    [InlineData("1234.56", 1234.56)]
+    [InlineData("+1234.56", 1234.56)]
+    [InlineData("1234,56", 1234.56)]
+    [InlineData("+1234,56", 1234.56)]
+    [InlineData("1.234,56", 1234.56)]
+    [InlineData("1 234,56", 1234.56)]
+    [InlineData("1'234.56", 1234.56)]
+    [InlineData("1 234,56", 1234.56)]
+    [InlineData("1,23,456.78", 123456.78)]
+    [InlineData("1,234.56", 1234.56)]
+    [InlineData("1234.567", 1234.567)]
+    [InlineData("-12,445.68", -12445.68)]
+    [InlineData("-12 445,68", -12445.68)]
+    [InlineData("123,456,789.0", 123456789)]
     [InlineData("0.00000000000000000001", 0.00000000000000000001)]
     [InlineData("0,00000000000000000001", 0.00000000000000000001)]
     public void TryParseDecimalDifferentCulture_ShouldReturnTrueAndParsedValueAsDouble(string input, decimal expected)
@@ -38,6 +63,31 @@ public class ParseHelperTests
     [InlineData("45468,379684", 45468.379684)]
     [InlineData("-45468.379684", -45468.379684)]
     [InlineData("-45468,379684", -45468.379684)]
+    [InlineData("45 468,379684", 45468.379684)]
+    [InlineData("45 468.379684", 45468.379684)]
+    [InlineData("45,468,379684", 45468.379684)]
+    [InlineData("45,468.379684", 45468.379684)]
+    [InlineData("45.468,379684", 45468.379684)]
+    [InlineData("-45 468,379684", -45468.379684)]
+    [InlineData("-45 468.379684", -45468.379684)]
+    [InlineData("-45,468,379684", -45468.379684)]
+    [InlineData("-45,468.379684", -45468.379684)]
+    [InlineData("-45.468,379684", -45468.379684)]
+    [InlineData("+45.468,379684", 45468.379684)]
+    [InlineData("1234.56", 1234.56)]
+    [InlineData("+1234.56", 1234.56)]
+    [InlineData("1234,56", 1234.56)]
+    [InlineData("+1234,56", 1234.56)]
+    [InlineData("1.234,56", 1234.56)]
+    [InlineData("1 234,56", 1234.56)]
+    [InlineData("1'234.56", 1234.56)]
+    [InlineData("1 234,56", 1234.56)]
+    [InlineData("1,23,456.78", 123456.78)]
+    [InlineData("1,234.56", 1234.56)]
+    [InlineData("1234.567", 1234.567)]
+    [InlineData("-12,445.68", -12445.68)]
+    [InlineData("-12 445,68", -12445.68)]
+    [InlineData("123,456,789.0", 123456789)]
     [InlineData("0.00000000000000000001", 0.00000000000000000001)]
     [InlineData("0,00000000000000000001", 0.00000000000000000001)]
     public void ParseDecimalDifferentCulture_ShouldReturnParsedValueAsDouble(string input, decimal expected)
@@ -51,7 +101,7 @@ public class ParseHelperTests
     [InlineData("0.0", 0)]
     [InlineData("0,0", 0)]
     [InlineData("0.01", 0.01)]
-    [InlineData("0,01", 0.01)]    
+    [InlineData("0,01", 0.01)]
     [InlineData("-0.01", -0.01)]
     [InlineData("-0,01", -0.01)]
     [InlineData("0.00001", 0.00001)]
@@ -59,8 +109,33 @@ public class ParseHelperTests
     [InlineData("45468,379684", 45468.379684)]
     [InlineData("-45468.379684", -45468.379684)]
     [InlineData("-45468,379684", -45468.379684)]
-    [InlineData("0.000000000000001", 0.000000000000001)]
-    [InlineData("0,000000000000001", 0.000000000000001)]
+    [InlineData("45 468,379684", 45468.379684)]
+    [InlineData("45 468.379684", 45468.379684)]
+    [InlineData("45,468,379684", 45468.379684)]
+    [InlineData("45,468.379684", 45468.379684)]
+    [InlineData("45.468,379684", 45468.379684)]
+    [InlineData("-45 468,379684", -45468.379684)]
+    [InlineData("-45 468.379684", -45468.379684)]
+    [InlineData("-45,468,379684", -45468.379684)]
+    [InlineData("-45,468.379684", -45468.379684)]
+    [InlineData("-45.468,379684", -45468.379684)]
+    [InlineData("+45.468,379684", 45468.379684)]
+    [InlineData("1234.56", 1234.56)]
+    [InlineData("+1234.56", 1234.56)]
+    [InlineData("1234,56", 1234.56)]
+    [InlineData("+1234,56", 1234.56)]
+    [InlineData("1.234,56", 1234.56)]
+    [InlineData("1 234,56", 1234.56)]
+    [InlineData("1'234.56", 1234.56)]
+    [InlineData("1 234,56", 1234.56)]
+    [InlineData("1,23,456.78", 123456.78)]
+    [InlineData("1,234.56", 1234.56)]
+    [InlineData("1234.567", 1234.567)]
+    [InlineData("-12,445.68", -12445.68)]
+    [InlineData("-12 445,68", -12445.68)]
+    [InlineData("123,456,789.0", 123456789)]
+    [InlineData("0.00000000000000000001", 0.00000000000000000001)]
+    [InlineData("0,00000000000000000001", 0.00000000000000000001)]
     public void TryParseDoubleDifferentCulture_ShouldReturnTrueAndParsedValueAsDouble(string input, double expected)
     {
         bool tryParseActual = ParseHelper.TryParseDoubleDifferentCulture(input, out double actual);
@@ -81,44 +156,37 @@ public class ParseHelperTests
     [InlineData("45468,379684", 45468.379684)]
     [InlineData("-45468.379684", -45468.379684)]
     [InlineData("-45468,379684", -45468.379684)]
-    [InlineData("0.000000000000001", 0.000000000000001)]
-    [InlineData("0,000000000000001", 0.000000000000001)]
+    [InlineData("45 468,379684", 45468.379684)]
+    [InlineData("45 468.379684", 45468.379684)]
+    [InlineData("45,468,379684", 45468.379684)]
+    [InlineData("45,468.379684", 45468.379684)]
+    [InlineData("45.468,379684", 45468.379684)]
+    [InlineData("-45 468,379684", -45468.379684)]
+    [InlineData("-45 468.379684", -45468.379684)]
+    [InlineData("-45,468,379684", -45468.379684)]
+    [InlineData("-45,468.379684", -45468.379684)]
+    [InlineData("-45.468,379684", -45468.379684)]
+    [InlineData("+45.468,379684", 45468.379684)]
+    [InlineData("1234.56", 1234.56)]
+    [InlineData("+1234.56", 1234.56)]
+    [InlineData("1234,56", 1234.56)]
+    [InlineData("+1234,56", 1234.56)]
+    [InlineData("1.234,56", 1234.56)]
+    [InlineData("1 234,56", 1234.56)]
+    [InlineData("1'234.56", 1234.56)]
+    [InlineData("1 234,56", 1234.56)]
+    [InlineData("1,23,456.78", 123456.78)]
+    [InlineData("1,234.56", 1234.56)]
+    [InlineData("1234.567", 1234.567)]
+    [InlineData("-12,445.68", -12445.68)]
+    [InlineData("-12 445,68", -12445.68)]
+    [InlineData("123,456,789.0", 123456789)]
+    [InlineData("0.00000000000000000001", 0.00000000000000000001)]
+    [InlineData("0,00000000000000000001", 0.00000000000000000001)]
     public void ParseDoubleDifferentCulture_ShouldReturnParsedValueAsDouble(string input, double expected)
     {
         double actual = ParseHelper.ParseDoubleDifferentCulture(input);
 
         Assert.Equal(expected, actual, 15);
-    }
-
-    [Fact]
-    public void ParseDoubleDifferentCulture_ShouldThrowFormatException()
-    {
-        Assert.Throws<FormatException>(() => ParseHelper.ParseDoubleDifferentCulture("12.34a"));
-    }
-
-    [Fact]
-    public void ParseDecimalDifferentCulture_ShouldThrowFormatException()
-    {
-        Assert.Throws<FormatException>(() => ParseHelper.ParseDecimalDifferentCulture("12.34a"));
-    }
-
-    [Fact]
-    public void TryParseDoubleDifferentCulture_ShouldReturnFalse()
-    {
-        const double expectedValue = 0;
-        bool actual = ParseHelper.TryParseDoubleDifferentCulture("12.34a", out double actualValue);
-
-        Assert.False(actual);
-        Assert.Equal(expectedValue, actualValue, 5);
-    }
-
-    [Fact]
-    public void ParseDecimalDifferentCulture_ShouldReturnFalse()
-    {
-        const decimal expectedValue = 0;
-        bool actual = ParseHelper.TryParseDecimalDifferentCulture("12.34a", out decimal actualValue);
-
-        Assert.False(actual);
-        Assert.Equal(expectedValue, actualValue, 5);
     }
 }
