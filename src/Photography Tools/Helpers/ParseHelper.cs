@@ -1,5 +1,6 @@
 ﻿using System.Buffers;
 using System.Globalization;
+using System.Numerics;
 
 namespace Photography_Tools.Helpers;
 
@@ -7,8 +8,9 @@ public static class ParseHelper
 {
     public const char Comma = ',', Dot = '.', Space = ' ', ThinSpace = ' ';
 
-    private static readonly SearchValues<char>
-        StandardCharacterSearchValues,
+    public static readonly SearchValues<char>
+        StandardFloatCharacterSearchValues,
+        StandardIntCharacterSearchValues,
         DecimalSeparatorSearchValues,
         NegativeSignSearchValues,
         AllArabicNumeralsSearchValues;
@@ -35,88 +37,57 @@ public static class ParseHelper
         NegativeSignSearchValues = SearchValues.Create(negativeSigns.ToArray());
         DecimalSeparatorSearchValues = SearchValues.Create(decimalSeparators.ToArray());
         AllArabicNumeralsSearchValues = SearchValues.Create('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
-        StandardCharacterSearchValues = SearchValues.Create('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '-', '+');
+        StandardFloatCharacterSearchValues = SearchValues.Create('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '-', '+');
+        StandardIntCharacterSearchValues = SearchValues.Create('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '+');
     }
 
-    public static bool TryParseDecimalDifferentCulture(ReadOnlySpan<char> readonlySpan, out decimal value)
+    public static bool TryParseDifferentCulture<T>(ReadOnlySpan<char> readonlySpan, out T? value) where T : INumber<T>
     {
-        if (readonlySpan.ContainsAnyExcept(StandardCharacterSearchValues))
+        bool isInteger = NumberTypeHelper<T>.IsInteger;
+        NumberStyles numberStyles = isInteger ? NumberStyles.Integer : NumberStyles.Float;
+
+        if (readonlySpan.ContainsAnyExcept(isInteger ? StandardIntCharacterSearchValues : StandardFloatCharacterSearchValues))
         {
-            if (decimal.TryParse(readonlySpan, NumberStyles.Any, CultureInfo.CurrentCulture, out value))
+            if (T.TryParse(readonlySpan, NumberStyles.Any, CultureInfo.CurrentCulture, out value))
                 return true;
 
             Span<char> span = readonlySpan.Length * sizeof(char) <= 512 ? stackalloc char[readonlySpan.Length] : new char[readonlySpan.Length];
 
-            GetNormalizedSpan(readonlySpan, span, out int charsWritten);
+            GetNormalizedSpan(readonlySpan, span, isInteger, out int charsWritten);
 
-            return decimal.TryParse(span[..charsWritten], NumberStyles.Float, CultureInfo.InvariantCulture, out value);
+            return T.TryParse(span[..charsWritten], numberStyles, CultureInfo.InvariantCulture, out value);
         }
         else
         {
-            if (decimal.TryParse(readonlySpan, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
-                return true;
-        }
-        return false;
-    }
-
-    public static decimal ParseDecimalDifferentCulture(ReadOnlySpan<char> readonlySpan)
-    {
-        if (readonlySpan.ContainsAnyExcept(StandardCharacterSearchValues))
-        {
-            if (decimal.TryParse(readonlySpan, NumberStyles.Any, CultureInfo.CurrentCulture, out decimal value))
-                return value;
-
-            Span<char> span = readonlySpan.Length * sizeof(char) <= 512 ? stackalloc char[readonlySpan.Length] : new char[readonlySpan.Length];
-
-            GetNormalizedSpan(readonlySpan, span, out int charsWritten);
-
-            return decimal.Parse(span, NumberStyles.Float, CultureInfo.InvariantCulture);
-        }
-        else
-            return decimal.Parse(readonlySpan, NumberStyles.Float, CultureInfo.InvariantCulture);
-    }
-
-    public static bool TryParseDoubleDifferentCulture(ReadOnlySpan<char> readonlySpan, out double value)
-    {
-        if (readonlySpan.ContainsAnyExcept(StandardCharacterSearchValues))
-        {
-            if (double.TryParse(readonlySpan, NumberStyles.Any, CultureInfo.CurrentCulture, out value))
-                return true;
-
-            Span<char> span = readonlySpan.Length * sizeof(char) <= 512 ? stackalloc char[readonlySpan.Length] : new char[readonlySpan.Length];
-
-            GetNormalizedSpan(readonlySpan, span, out int charsWritten);
-
-            return double.TryParse(span, NumberStyles.Float, CultureInfo.InvariantCulture, out value);
-        }
-        else
-        {
-            if (double.TryParse(readonlySpan, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
+            if (T.TryParse(readonlySpan, numberStyles, CultureInfo.InvariantCulture, out value))
                 return true;
         }
         return false;
     }
 
-    public static double ParseDoubleDifferentCulture(ReadOnlySpan<char> readonlySpan)
+    public static T ParseDifferentCulture<T>(ReadOnlySpan<char> readonlySpan) where T : INumber<T>
     {
-        if (readonlySpan.ContainsAnyExcept(StandardCharacterSearchValues))
+        bool isInteger = NumberTypeHelper<T>.IsInteger;
+        NumberStyles numberStyles = isInteger ? NumberStyles.Integer : NumberStyles.Float;
+
+        if (readonlySpan.ContainsAnyExcept(isInteger ? StandardIntCharacterSearchValues : StandardFloatCharacterSearchValues))
         {
-            if (double.TryParse(readonlySpan, NumberStyles.Any, CultureInfo.CurrentCulture, out double value))
+            if (T.TryParse(readonlySpan, NumberStyles.Any, CultureInfo.CurrentCulture, out T? value))
                 return value;
 
             Span<char> span = readonlySpan.Length * sizeof(char) <= 512 ? stackalloc char[readonlySpan.Length] : new char[readonlySpan.Length];
 
-            GetNormalizedSpan(readonlySpan, span, out int charsWritten);
+            GetNormalizedSpan(readonlySpan, span, isInteger, out int charsWritten);
 
-            return double.Parse(span, NumberStyles.Float, CultureInfo.InvariantCulture);
+            return T.Parse(span, numberStyles, CultureInfo.InvariantCulture);
         }
         else
-            return double.Parse(readonlySpan, NumberStyles.Float, CultureInfo.InvariantCulture);
+            return T.Parse(readonlySpan, numberStyles, CultureInfo.InvariantCulture);
     }
 
-    private static void GetNormalizedSpan(ReadOnlySpan<char> source, Span<char> destiantion, out int charsWritten)
+    private static void GetNormalizedSpan(ReadOnlySpan<char> source, Span<char> destiantion, bool isInteger, out int charsWritten)
     {
-        int indexOfSeparator = source.LastIndexOfAny(DecimalSeparatorSearchValues);
+        int indexOfSeparator = isInteger ? -1 : source.LastIndexOfAny(DecimalSeparatorSearchValues);
         charsWritten = 0;
 
         if (NegativeSignSearchValues.Contains(source.TrimStart()[0]))
