@@ -12,12 +12,20 @@ public class PhotographyCalculationsService : IPhotographyCalculationsService
         double diagonalPrintMM = Math.Sqrt(dofInfo.PrintWidthMM * dofInfo.PrintWidthMM + dofInfo.PrintHeighthMM * dofInfo.PrintHeighthMM);
         double enlargmentFactor = diagonalPrintMM / dofInfo.CameraInfo.Diagonal;
 
+        double circleOfConfusion = dofInfo.ActualViewingDistanceMM / (double)(dofInfo.StandardViewingDistanceMM * dofInfo.VisualAcuityLpPerMM) / enlargmentFactor;
+        if (circleOfConfusion < 0.005)
+            circleOfConfusion = 0.005;
+        else if (circleOfConfusion > 0.3)
+            circleOfConfusion = 0.3;
+
         DofCalcResult result = new()
         {
-            CircleOfConfusion = dofInfo.ActualViewingDistanceMM / (double)(dofInfo.StandardViewingDistanceMM * dofInfo.VisualAcuityLpPerMM) / enlargmentFactor
+            CircleOfConfusion = circleOfConfusion,
+            HyperfocalDistanceMM = dofInfo.LensInfo.FocalLengthMM + dofInfo.LensInfo.FocalLengthMM * dofInfo.LensInfo.FocalLengthMM / (focalRatio * circleOfConfusion)
         };
-        result.HyperfocalDistanceMM = dofInfo.LensInfo.FocalLengthMM + dofInfo.LensInfo.FocalLengthMM * dofInfo.LensInfo.FocalLengthMM / (focalRatio * result.CircleOfConfusion);
-        result.DofFarLimitMM = result.HyperfocalDistanceMM * dofInfo.FocusingDistanceMM / (result.HyperfocalDistanceMM - (dofInfo.FocusingDistanceMM - dofInfo.LensInfo.FocalLengthMM));
+
+        double farLimit = result.HyperfocalDistanceMM * dofInfo.FocusingDistanceMM / (result.HyperfocalDistanceMM - (dofInfo.FocusingDistanceMM - dofInfo.LensInfo.FocalLengthMM));
+        result.DofFarLimitMM = farLimit >= 0 ? farLimit : double.PositiveInfinity;
         result.DofNearLimitMM = result.HyperfocalDistanceMM * dofInfo.FocusingDistanceMM / (result.HyperfocalDistanceMM + (dofInfo.FocusingDistanceMM - dofInfo.LensInfo.FocalLengthMM));
 
         result.DofMM = result.DofFarLimitMM - result.DofNearLimitMM;
