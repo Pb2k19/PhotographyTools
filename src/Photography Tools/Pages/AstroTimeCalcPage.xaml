@@ -79,9 +79,9 @@
                 Grid.ColumnSpan="2"
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
-                    MinValueBaseUnit="0.1"
-                    MaxValueBaseUnit="9999"
-                    BaseUnitValue="{Binding UserInput.Lens.FocalLengthMM}"
+                    MinValue="0.1"
+                    MaxValue="10000"
+                    EntryValue="{Binding UserInput.Lens.FocalLengthMM}"
                     ValueChangedCommand="{Binding CalculateAllValuesCommand}"
                     SelectedUnitIndex="{Binding UserInput.FocalLengthUnitIndex}"
                 />

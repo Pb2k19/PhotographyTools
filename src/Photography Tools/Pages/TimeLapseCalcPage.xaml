@@ -53,9 +53,9 @@
                 Grid.ColumnSpan="2"
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
-                    MinValueBaseUnit="0.001"
-                    MaxValueBaseUnit="999999"
-                    BaseUnitValue="{Binding UserInput.TimeLapseCalcValues.ShootingIntervalSeconds}"
+                    MinValue="0.001"
+                    MaxValue="21600"
+                    EntryValue="{Binding UserInput.TimeLapseCalcValues.ShootingIntervalSeconds}"
                     UnitConverter="{Static controls:StaticConverters.TimeUnitConverter}"
                     ValueChangedCommand="{Binding ShootingIntervalChangedCommand}"
                     SelectedUnitIndex="{Binding UserInput.ShootingIntervalSelectedUnitIndex}"
@@ -68,9 +68,9 @@
                 Grid.ColumnSpan="2"
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
-                    MinValueBaseUnit="0.001"
-                    MaxValueBaseUnit="2000000000"
-                    BaseUnitValue="{Binding UserInput.TimeLapseCalcValues.ShootingLengthSeconds}"
+                    MinValue="0.001"
+                    MaxValue="126230400"
+                    EntryValue="{Binding UserInput.TimeLapseCalcValues.ShootingLengthSeconds}"
                     UnitConverter="{Static controls:StaticConverters.TimeUnitConverter}"
                     ValueChangedCommand="{Binding ShootingLengthChanegedCommand}"
                     SelectedUnitIndex="{Binding UserInput.ShootingLengthSelectedUnitIndex}"
@@ -137,9 +137,9 @@
                 Grid.ColumnSpan="3"
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
-                    MinValueBaseUnit="0.001"
-                    MaxValueBaseUnit="999999"
-                    BaseUnitValue="{Binding UserInput.TimeLapseCalcValues.ClipLengthSeconds}"
+                    MinValue="1"
+                    MaxValue="259200"
+                    EntryValue="{Binding UserInput.TimeLapseCalcValues.ClipLengthSeconds}"
                     UnitConverter="{Static controls:StaticConverters.TimeUnitConverter}"
                     ValueChangedCommand="{Binding ClipLengthChangedCommand}"
                     SelectedUnitIndex="{Binding UserInput.ClipLengthSelectedUnitIndex}"
@@ -166,9 +166,9 @@
                 Grid.ColumnSpan="3"
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
-                    MinValueBaseUnit="0.00001"
-                    MaxValueBaseUnit="9999999"
-                    BaseUnitValue="{Binding UserInput.TimeLapseCalcValues.PhotoSizeMB}"
+                    MinValue="0.0001"
+                    MaxValue="1000000"
+                    EntryValue="{Binding UserInput.TimeLapseCalcValues.PhotoSizeMB}"
                     UnitConverter="{Static controls:StaticConverters.InformationUnitConverter}"
                     ValueChangedCommand="{Binding PhotoSizeChangedCommand}"
                     SelectedUnitIndex="{Binding UserInput.PhotoSizeSelectedUnitIndex}"
@@ -181,9 +181,9 @@
                 Grid.ColumnSpan="3"
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
-                    MinValueBaseUnit="0.00001"
-                    MaxValueBaseUnit="2000000000"
-                    BaseUnitValue="{Binding UserInput.TimeLapseCalcValues.TotalStorageSizeMB}"
+                    MinValue="0.0001"
+                    MaxValue="2000000000"
+                    EntryValue="{Binding UserInput.TimeLapseCalcValues.TotalStorageSizeMB}"
                     UnitConverter="{Static controls:StaticConverters.InformationUnitConverter}"
                     ValueChangedCommand="{Binding TotalStorageSizeChangedCommand}"
                     SelectedUnitIndex="{Binding UserInput.TotalStorageSelectedUnitIndex}"
