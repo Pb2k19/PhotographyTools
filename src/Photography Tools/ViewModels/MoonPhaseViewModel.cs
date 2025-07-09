@@ -59,7 +59,7 @@ public partial class MoonPhaseViewModel : AstroLocationViewModel
     }
 
     [RelayCommand]
-    protected void OnAppearing()
+    protected async Task OnAppearing()
     {
         if (IsPopupPresented)
             return;
@@ -69,6 +69,7 @@ public partial class MoonPhaseViewModel : AstroLocationViewModel
 #else
         UseOnlineService = preferencesService.GetPreference(PreferencesKeys.UseOnlineAstroDataPreferencesKey, true);
 #endif
+        await CalculateAsync();
     }
 
     [RelayCommand]
