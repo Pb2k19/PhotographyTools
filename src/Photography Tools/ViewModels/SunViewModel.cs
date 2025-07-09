@@ -29,7 +29,7 @@ public partial class SunViewModel : AstroLocationViewModel
             preferencesService, messageService, popupService)
     {
         SelectedDate = DateTime.Today.AddHours(12);
-        LocationName = preferencesService.GetPreference(PreferencesKeys.MoonPhaseUserInputPreferencesKey, string.Empty) ?? string.Empty;
+        LocationName = preferencesService.GetPreference(PreferencesKeys.SunUserInputPreferencesKey, string.Empty) ?? string.Empty;
     }
 
     [RelayCommand]

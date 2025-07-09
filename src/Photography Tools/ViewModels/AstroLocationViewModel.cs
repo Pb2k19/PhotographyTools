@@ -49,7 +49,6 @@ public abstract partial class AstroLocationViewModel : SaveableViewModel
 #endif
 
         locationDictionary[nameof(LocationPopup.InitSelected)] = LocationName;
-
         IsPopupPresented = true;
         try
         {
