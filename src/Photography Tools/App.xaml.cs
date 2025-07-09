@@ -9,6 +9,11 @@ public partial class App : Application
 
     protected override Window CreateWindow(IActivationState? activationState)
     {
+#if WINDOWS
+        //tmp
+        return MainWindow.Current;
+#else
         return new MainWindow();
+#endif
     }
 }
