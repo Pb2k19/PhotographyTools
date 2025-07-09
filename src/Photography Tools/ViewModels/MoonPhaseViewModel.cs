@@ -62,7 +62,9 @@ public partial class MoonPhaseViewModel : AstroLocationViewModel
     {
         if (IsPopupPresented)
             return;
-        await CalculateAsync();
+
+        if (!CalculateCommand.IsRunning && CalculateCommand.CanExecute(null))
+            await CalculateCommand.ExecuteAsync(null);
     }
 
     [RelayCommand]
@@ -72,10 +74,11 @@ public partial class MoonPhaseViewModel : AstroLocationViewModel
             return;
 
         lastSelectedTime = SelectedTime;
-        await CalculateAsync();
+        if (!CalculateCommand.IsRunning && CalculateCommand.CanExecute(null))
+            await CalculateCommand.ExecuteAsync(null);
     }
 
-    [RelayCommand]
+    [RelayCommand(AllowConcurrentExecutions = false)]
     protected override async Task CalculateAsync()
     {
         Place? location = await locationsKeyValueStore.GetValueAsync(LocationName);

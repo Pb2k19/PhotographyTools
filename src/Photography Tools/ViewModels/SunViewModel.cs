@@ -38,10 +38,11 @@ public partial class SunViewModel : AstroLocationViewModel
         if (IsPopupPresented)
             return;
 
-        await CalculateAsync();
+        if (!CalculateCommand.IsRunning && CalculateCommand.CanExecute(null))
+            await CalculateCommand.ExecuteAsync(null);
     }
 
-    [RelayCommand]
+    [RelayCommand(AllowConcurrentExecutions = false)]
     protected override async Task CalculateAsync()
     {
         Place? location = await locationsKeyValueStore.GetValueAsync(LocationName);
