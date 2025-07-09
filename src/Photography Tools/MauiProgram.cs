@@ -12,7 +12,10 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
-            .UseMauiCommunityToolkit()
+            .UseMauiCommunityToolkit(static options =>
+            {
+                options.SetPopupOptionsDefaults(new DefaultPopupOptionsSettings { Shape = null });
+            })
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -55,7 +58,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<TimeLapseCalculatorViewModel>();
 
         // Popups
-        builder.Services.AddSingleton<LocationPopup>();
+        builder.Services.AddSingletonPopup<LocationPopup>();
 
         // HttpClient
         builder.Services.AddHttpClient<IAstroDataAccess, UsnoAstroDataAccess>(client =>

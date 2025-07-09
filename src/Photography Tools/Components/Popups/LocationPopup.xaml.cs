@@ -30,7 +30,8 @@ public partial class LocationPopup : Popup<Place?>, IQueryAttributable
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        InitSelected = query[nameof(InitSelected)] as string;
+        query.TryGetValue(nameof(InitSelected), out object? o);
+        InitSelected = o as string;
     }
 
     private async void OnOpened(object? sender, EventArgs e)
