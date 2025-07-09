@@ -42,7 +42,7 @@ public abstract partial class AstroLocationViewModel : SaveableViewModel
     {
 #if WINDOWS
         //tmp
-        MainWindow? mainWindow = Application.Current?.Windows.Count > 0 ? Application.Current?.Windows[0] as MainWindow : null;
+        MainWindow? mainWindow = UiHelper.GetMainWindow() as MainWindow;
         mainWindow?.SetTitleBarNull();
 #endif
 
