@@ -167,6 +167,6 @@ public partial class NDFilterCalcViewModel : SaveableViewModel
     protected override void SaveUserInput()
     {
         if (UserInput.Validate())
-            preferencesService.SerializedAndSetPreference(PreferencesKeys.NDFilterCalcUserInputPreferencesKey, UserInput);
+            preferencesService.SerializeAndSetPreference(PreferencesKeys.NDFilterCalcUserInputPreferencesKey, UserInput);
     }
 }

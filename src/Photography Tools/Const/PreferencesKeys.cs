@@ -13,5 +13,5 @@ public static class PreferencesKeys
 
     // App preferences
     public const string
-        UseOnlineAstroDataPreferencesKey = "UseOnlineAstroData";
+        SettingsKey = "Settings";
 }

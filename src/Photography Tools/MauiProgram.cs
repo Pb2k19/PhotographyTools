@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Photography_Tools.Components.Popups;
 using Photography_Tools.DataAccess.AstroDataAccess;
+using Photography_Tools.Services.ConfigService;
 using Photography_Tools.Services.KeyValueStoreService;
 
 namespace Photography_Tools;
@@ -39,6 +40,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<MoonPhasePage>();
         builder.Services.AddSingleton<SunPage>();
         builder.Services.AddSingleton<TimeLapseCalcPage>();
+        builder.Services.AddSingleton<SettingsPage>();
 
         // Services
         builder.Services.AddKeyedSingleton<IAstroDataService, OfflineAstroDataService>(KeyedServiceNames.OfflineAstroData);
@@ -47,6 +49,7 @@ public static class MauiProgram
         builder.Services.AddSingleton(KeyValueStoreFactory.CreateLocationKeyValueStore());
         builder.Services.AddSingleton<IPhotographyCalculationsService, PhotographyCalculationsService>();
         builder.Services.AddSingleton<IPreferencesService, PreferencesService>();
+        builder.Services.AddSingleton<ISettingsService, SettingsService>();
         builder.Services.AddSingleton<IUiMessageService, UiMessageService>();
 
         // ViewModel
@@ -56,12 +59,13 @@ public static class MauiProgram
         builder.Services.AddSingleton<MoonPhaseViewModel>();
         builder.Services.AddSingleton<SunViewModel>();
         builder.Services.AddSingleton<TimeLapseCalculatorViewModel>();
+        builder.Services.AddSingleton<SettingsViewModel>();
 
         // Popups
         builder.Services.AddSingletonPopup<LocationPopup>();
 
         // HttpClient
-        builder.Services.AddHttpClient<IAstroDataAccess, UsnoAstroDataAccess>(client =>
+        builder.Services.AddHttpClient(HttpClientConst.UsnoHttpClientName, client =>
         {
             client.BaseAddress = new Uri("https://aa.usno.navy.mil/api/");
         });

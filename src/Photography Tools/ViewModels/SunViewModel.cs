@@ -38,11 +38,6 @@ public partial class SunViewModel : AstroLocationViewModel
         if (IsPopupPresented)
             return;
 
-#if DEBUG
-        UseOnlineService = preferencesService.GetPreference(PreferencesKeys.UseOnlineAstroDataPreferencesKey, false);
-#else
-        UseOnlineService = preferencesService.GetPreference(PreferencesKeys.UseOnlineAstroDataPreferencesKey, true);
-#endif
         await CalculateAsync();
     }
 
@@ -64,9 +59,6 @@ public partial class SunViewModel : AstroLocationViewModel
 
         if (offlineResult.IsSuccess && offlineResult.Data is not null)
             DisplayResult(offlineResult.Data, date, offlineAstroDataService.DataSourceInfo);
-
-        if (!UseOnlineService)
-            return;
 
         try
         {

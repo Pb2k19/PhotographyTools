@@ -98,6 +98,6 @@ public partial class AstroTimeCalcViewModel : SaveableViewModel
     protected override void SaveUserInput()
     {
         if (UserInput.Validate())
-            preferencesService?.SerializedAndSetPreference(PreferencesKeys.AstroTimeCalcUserInputPreferencesKey, UserInput);
+            preferencesService?.SerializeAndSetPreference(PreferencesKeys.AstroTimeCalcUserInputPreferencesKey, UserInput);
     }
 }

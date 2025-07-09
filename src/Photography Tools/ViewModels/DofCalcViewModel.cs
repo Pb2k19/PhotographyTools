@@ -102,6 +102,6 @@ public partial class DofCalcViewModel : SaveableViewModel
     protected override void SaveUserInput()
     {
         if (UserInput.Validate())
-            preferencesService.SerializedAndSetPreference(PreferencesKeys.DofCalcUserInputPreferencesKey, UserInput);
+            preferencesService.SerializeAndSetPreference(PreferencesKeys.DofCalcUserInputPreferencesKey, UserInput);
     }
 }
