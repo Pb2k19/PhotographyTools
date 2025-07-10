@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using Photography_Tools.Services.ConfigService;
+using System.Collections.Immutable;
 
 namespace Photography_Tools.ViewModels;
 
@@ -6,6 +7,7 @@ public partial class NDFilterCalcViewModel : SaveableViewModel
 {
     private readonly IPhotographyCalculationsService photographyCalculationsService;
     private readonly INDFiltersDataAccess ndFiltersDataAccess;
+    private readonly ISettingsService settingsService;
 
     private bool isCountdownRunning = false;
     private CancellationTokenSource? cancellationTokenSource;
@@ -22,10 +24,11 @@ public partial class NDFilterCalcViewModel : SaveableViewModel
 
     public ImmutableArray<string> AllShutterSpeedsNames { get; }
 
-    public NDFilterCalcViewModel(IPhotographyCalculationsService photographyCalculationsService, IPreferencesService preferencesService, INDFiltersDataAccess ndFiltersDataAccess) : base(preferencesService)
+    public NDFilterCalcViewModel(IPhotographyCalculationsService photographyCalculationsService, IPreferencesService preferencesService, INDFiltersDataAccess ndFiltersDataAccess, ISettingsService settingsService) : base(preferencesService)
     {
         this.photographyCalculationsService = photographyCalculationsService;
         this.ndFiltersDataAccess = ndFiltersDataAccess;
+        this.settingsService = settingsService;
 
         AllShutterSpeedsNames = ShutterSpeedConst.AllShutterSpeedsNamesSorted;
         AvaliableNDFiltersNames = ndFiltersDataAccess.GetFilterNames();
@@ -95,6 +98,9 @@ public partial class NDFilterCalcViewModel : SaveableViewModel
         }
         catch (TaskCanceledException)
         {
+            if (Vibration.Default.IsSupported && settingsService.GetSettings().IsVibrationsEnabled)
+                Vibration.Default.Cancel();
+
             ResultTimeText = "Canceled";
             await Task.Delay(2000);
         }
@@ -132,7 +138,11 @@ public partial class NDFilterCalcViewModel : SaveableViewModel
         }
 
         ResultTimeText = "STOP";
-        await Task.Delay(3000, cancellationToken);
+
+        if (Vibration.Default.IsSupported && settingsService.GetSettings().IsVibrationsEnabled)
+            Vibration.Default.Vibrate(TimeSpan.FromSeconds(2));
+
+        await Task.Delay(TimeSpan.FromSeconds(2), cancellationToken);
     }
 
     private static string GetTimeText(TimeSpan time)
@@ -155,13 +165,13 @@ public partial class NDFilterCalcViewModel : SaveableViewModel
     public static string GetTimeTextCore(TimeSpan time)
     {
         if (time.Days > 0)
-            return $"{time.Days} days, {time.Hours}h, {time.Minutes}m, {time.Seconds}s, {time.Milliseconds}ms";
+            return $"{time.Days} days, {time.Hours}h, {time.Minutes}m, {time.Seconds}s, {time.Milliseconds:000}ms";
         else if (time.Hours > 0)
-            return $"{time.Hours}h, {time.Minutes}m, {time.Seconds}s, {time.Milliseconds}ms";
+            return $"{time.Hours}h, {time.Minutes}m, {time.Seconds}s, {time.Milliseconds:000}ms";
         else if (time.Minutes > 0)
-            return $"{time.Minutes}m, {time.Seconds}s, {time.Milliseconds}ms";
+            return $"{time.Minutes}m, {time.Seconds}s, {time.Milliseconds:000}ms";
         else
-            return $"{time.Seconds}s, {time.Milliseconds}ms";
+            return $"{time.Seconds}s, {time.Milliseconds:000}ms";
     }
 
     protected override void SaveUserInput()

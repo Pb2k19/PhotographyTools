@@ -52,7 +52,38 @@
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
             </Border>
-            
+
+            <Border
+                IsVisible="{Binding IsVibrationsSupported}"
+                Style="{StaticResource StandardBorder}"
+                Margin="0,15,0,0">
+
+                <VerticalStackLayout>
+                    <Label
+                        Text="Notifications"
+                        Style="{StaticResource LabelMediumBold}" 
+                    />
+
+                    <HorizontalStackLayout
+                        IsVisible="{Binding IsVibrationsSupported}"
+                        Margin="0,10,0,0">
+
+                        <CheckBox 
+                            IsChecked="{Binding IsVibrationsEnabled}" 
+                        />
+
+                        <Label
+                            Text="Vibrations"
+                            Style="{StaticResource LabelMedium}"
+                            VerticalOptions="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ToggleVibrationsCommand}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
             <Border
                 Style="{StaticResource StandardBorder}"
                 Margin="0,15,0,0">

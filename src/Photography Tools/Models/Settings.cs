@@ -1,3 +1,3 @@
 ﻿namespace Photography_Tools.Models;
 
-public record Settings(bool IsUseOnlyOfflineDataSourceModeEnabled);
+public record Settings(bool IsUseOnlyOfflineDataSourceModeEnabled, bool IsVibrationsEnabled);

@@ -11,7 +11,7 @@ public partial class SettingsViewModel : ObservableObject
     private Settings currentSettings = ISettingsService.DefaultSettings;
 
     [ObservableProperty]
-    private bool isUseOfflineDataSourceModeEnabled = false;
+    private bool isUseOfflineDataSourceModeEnabled = false, isVibrationsEnabled = true, isVibrationsSupported = true;
 
     public SettingsViewModel(IPreferencesService preferencesService, ISettingsService settingsService, IUiMessageService uiMessageService)
     {
@@ -23,7 +23,11 @@ public partial class SettingsViewModel : ObservableObject
     [RelayCommand]
     private void OnDisappearing()
     {
-        Settings newSettings = currentSettings with { IsUseOnlyOfflineDataSourceModeEnabled = IsUseOfflineDataSourceModeEnabled };
+        Settings newSettings = currentSettings with
+        {
+            IsUseOnlyOfflineDataSourceModeEnabled = IsUseOfflineDataSourceModeEnabled,
+            IsVibrationsEnabled = IsVibrationsEnabled
+        };
 
         int result = settingsService.UpdateSettings(newSettings);
 
@@ -40,6 +44,7 @@ public partial class SettingsViewModel : ObservableObject
     private void OnAppearing()
     {
         SetValues(settingsService.GetSettings());
+        IsVibrationsSupported = Vibration.Default.IsSupported;
     }
 
     [RelayCommand]
@@ -60,9 +65,16 @@ public partial class SettingsViewModel : ObservableObject
         IsUseOfflineDataSourceModeEnabled = !IsUseOfflineDataSourceModeEnabled;
     }
 
+    [RelayCommand]
+    private void ToggleVibrations()
+    {
+        IsVibrationsEnabled = !IsVibrationsEnabled;
+    }
+
     private void SetValues(Settings settings)
     {
         currentSettings = settings;
         IsUseOfflineDataSourceModeEnabled = settings.IsUseOnlyOfflineDataSourceModeEnabled;
+        IsVibrationsEnabled = settings.IsVibrationsEnabled;
     }
 }
