@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Maui.Views;
+﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Core;
 using Photography_Tools.Components.Popups;
 using Photography_Tools.Services.KeyValueStoreService;
 
@@ -6,10 +7,12 @@ namespace Photography_Tools.ViewModels;
 
 public abstract partial class AstroLocationViewModel : SaveableViewModel
 {
+    protected readonly Dictionary<string, object> locationDictionary = [];
     protected readonly IAstroDataService onlineAstroDataService;
     protected readonly IAstroDataService offlineAstroDataService;
     protected readonly IKeyValueStore<Place> locationsKeyValueStore;
     protected readonly IUiMessageService messageService;
+    protected readonly IPopupService popupService;
 
     [ObservableProperty]
     private string locationName = string.Empty;
@@ -20,13 +23,16 @@ public abstract partial class AstroLocationViewModel : SaveableViewModel
     [ObservableProperty]
     private string dataSourceInfo = string.Empty;
 
+    public bool IsPopupPresented { get; protected set; } = false;
+
     protected AstroLocationViewModel([FromKeyedServices(KeyedServiceNames.OnlineAstroData)] IAstroDataService onlineAstroDataService, [FromKeyedServices(KeyedServiceNames.OfflineAstroData)] IAstroDataService offlineAstroDataService,
-        IKeyValueStore<Place> locationsKeyValueStore, IPreferencesService preferencesService, IUiMessageService messageService) : base(preferencesService)
+        IKeyValueStore<Place> locationsKeyValueStore, IPreferencesService preferencesService, IUiMessageService messageService, IPopupService popupService) : base(preferencesService)
     {
         this.onlineAstroDataService = onlineAstroDataService;
         this.offlineAstroDataService = offlineAstroDataService;
         this.locationsKeyValueStore = locationsKeyValueStore;
         this.messageService = messageService;
+        this.popupService = popupService;
     }
 
     protected abstract Task CalculateAsync();
@@ -34,17 +40,33 @@ public abstract partial class AstroLocationViewModel : SaveableViewModel
     [RelayCommand]
     private async Task ChangeLocationAsync()
     {
-        Page? mainPage = UiHelper.GetMainPage();
-        if (mainPage is null)
-            return;
+#if WINDOWS
+        //tmp
+        MainWindow? mainWindow = UiHelper.GetMainWindow() as MainWindow;
+        mainWindow?.SetTitleBarNull();
+#endif
 
-        Place? selectedPlace = await mainPage.ShowPopupAsync(new LocationPopup(locationsKeyValueStore, messageService, LocationName)) as Place;
-
-        if (selectedPlace is not null)
+        locationDictionary[nameof(LocationPopup.InitSelected)] = LocationName;
+        IsPopupPresented = true;
+        try
         {
-            LocationName = selectedPlace.Name;
-            await CalculateAsync();
+            IPopupResult<Place> popupResult = await popupService.ShowPopupAsync<LocationPopup, Place>(Shell.Current);
+
+            if (popupResult.WasDismissedByTappingOutsideOfPopup || popupResult.Result is null)
+                return;
+
+            LocationName = popupResult.Result.Name;
         }
+        finally
+        {
+#if WINDOWS
+            //tmp
+            mainWindow?.ShowTitleBar();
+#endif
+            IsPopupPresented = false;
+        }
+
+        await CalculateAsync();
     }
 
     public void SetDataSourceInfo(string info) =>

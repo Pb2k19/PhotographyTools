@@ -1,4 +1,5 @@
-﻿using Photography_Tools.Services.KeyValueStoreService;
+﻿using CommunityToolkit.Maui;
+using Photography_Tools.Services.KeyValueStoreService;
 using System.Text.Json;
 
 namespace Photography_Tools.ViewModels;
@@ -24,20 +25,24 @@ public partial class SunViewModel : AstroLocationViewModel
         upperTransitDate = string.Empty;
 
     public SunViewModel([FromKeyedServices(KeyedServiceNames.OnlineAstroData)] IAstroDataService onlineAstroDataService, [FromKeyedServices(KeyedServiceNames.OfflineAstroData)] IAstroDataService offlineAstroDataService,
-        IKeyValueStore<Place> locationsKeyValueStore, IPreferencesService preferencesService, IUiMessageService messageService) : base(onlineAstroDataService, offlineAstroDataService, locationsKeyValueStore,
-            preferencesService, messageService)
+        IKeyValueStore<Place> locationsKeyValueStore, IPreferencesService preferencesService, IUiMessageService messageService, IPopupService popupService) : base(onlineAstroDataService, offlineAstroDataService, locationsKeyValueStore,
+            preferencesService, messageService, popupService)
     {
         SelectedDate = DateTime.Today.AddHours(12);
-        LocationName = preferencesService.GetPreference(PreferencesKeys.MoonPhaseUserInputPreferencesKey, string.Empty) ?? string.Empty;
+        LocationName = preferencesService.GetPreference(PreferencesKeys.SunUserInputPreferencesKey, string.Empty) ?? string.Empty;
     }
 
     [RelayCommand]
     protected async Task OnAppearingAsync()
     {
-        await CalculateAsync();
+        if (IsPopupPresented)
+            return;
+
+        if (!CalculateCommand.IsRunning && CalculateCommand.CanExecute(null))
+            await CalculateCommand.ExecuteAsync(null);
     }
 
-    [RelayCommand]
+    [RelayCommand(AllowConcurrentExecutions = false)]
     protected override async Task CalculateAsync()
     {
         Place? location = await locationsKeyValueStore.GetValueAsync(LocationName);

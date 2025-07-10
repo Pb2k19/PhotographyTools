@@ -1,22 +1,21 @@
-using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Views;
 using Photography_Tools.Services.KeyValueStoreService;
 using System.Collections.ObjectModel;
 
 namespace Photography_Tools.Components.Popups;
 
-public partial class LocationPopup : Popup
+public partial class LocationPopup : Popup<Place?>, IQueryAttributable
 {
     private readonly IKeyValueStore<Place> locationsStore;
     private readonly IUiMessageService messageService;
-
-    private string? initSelected = null;
 
     public ObservableCollection<string> Places { get; private set; } = [];
 
     public string Name { get; set; } = string.Empty;
 
     public string Coordinates { get; set; } = string.Empty;
+
+    public string? InitSelected { get; private set; } = null;
 
     public LocationPopup(IKeyValueStore<Place> locationsStore, IUiMessageService messageService, string? initSelected = null)
     {
@@ -26,16 +25,22 @@ public partial class LocationPopup : Popup
         Closed += OnClosed;
         this.locationsStore = locationsStore;
         this.messageService = messageService;
-        this.initSelected = initSelected;
+        this.InitSelected = initSelected;
     }
 
-    private async void OnOpened(object? sender, PopupOpenedEventArgs e)
+    public void ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        query.TryGetValue(nameof(InitSelected), out object? o);
+        InitSelected = o as string;
+    }
+
+    private async void OnOpened(object? sender, EventArgs e)
     {
         Places = [.. (await locationsStore.GetAllKeys()).Order()];
 
-        if (!string.IsNullOrWhiteSpace(initSelected) && Places.Contains(initSelected))
+        if (!string.IsNullOrWhiteSpace(InitSelected) && Places.Contains(InitSelected))
         {
-            Place? place = await locationsStore.GetValueAsync(initSelected);
+            Place? place = await locationsStore.GetValueAsync(InitSelected);
 
             if (place is not null)
             {
@@ -49,7 +54,7 @@ public partial class LocationPopup : Popup
         OnPropertyChanged(nameof(Places));
     }
 
-    private void OnClosed(object? sender, PopupClosedEventArgs e)
+    private void OnClosed(object? sender, EventArgs e)
     {
         Closed -= OnClosed;
         Opened -= OnOpened;

@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+using Photography_Tools.Components.Popups;
 using Photography_Tools.DataAccess.AstroDataAccess;
 using Photography_Tools.Services.ConfigService;
 using Photography_Tools.Services.KeyValueStoreService;
@@ -12,7 +13,10 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
-            .UseMauiCommunityToolkit()
+            .UseMauiCommunityToolkit(static options =>
+            {
+                options.SetPopupOptionsDefaults(new DefaultPopupOptionsSettings { Shape = null });
+            })
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -56,6 +60,9 @@ public static class MauiProgram
         builder.Services.AddSingleton<SunViewModel>();
         builder.Services.AddSingleton<TimeLapseCalculatorViewModel>();
         builder.Services.AddSingleton<SettingsViewModel>();
+
+        // Popups
+        builder.Services.AddSingletonPopup<LocationPopup>();
 
         // HttpClient
         builder.Services.AddHttpClient(HttpClientConst.UsnoHttpClientName, client =>
