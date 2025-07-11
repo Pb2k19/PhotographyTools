@@ -154,7 +154,7 @@ public abstract partial class NumEntryBase<T> : ContentView, IDisposable where T
 
     public void Dispose()
     {
-        Dispose(disposing: true);
+        Dispose(true);
         GC.SuppressFinalize(this);
     }
 

@@ -19,7 +19,6 @@ public static class ParseHelper
     {
         HashSet<char>
             decimalSeparators = [Comma, Dot,],
-            groupSeparators = [Comma, Dot, Space, ThinSpace, '\'',],
             negativeSigns = ['-'];
 
         foreach (CultureInfo culture in CultureInfo.GetCultures(CultureTypes.AllCultures))
