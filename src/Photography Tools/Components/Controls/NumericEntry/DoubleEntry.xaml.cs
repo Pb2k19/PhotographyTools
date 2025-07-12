@@ -35,8 +35,6 @@ public sealed partial class DoubleEntry : NumEntryBase<double>, IDisposable
         InitializeComponent();
     }
 
-    ~DoubleEntry() => Dispose(false);
-
     private void NumEntry_Unfocused(object sender, FocusEventArgs e)
     {
         OnUnfocused();

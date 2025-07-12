@@ -35,8 +35,6 @@ public sealed partial class IntEntry : NumEntryBase<int>, IDisposable
         InitializeComponent();
     }
 
-    ~IntEntry() => Dispose(false);
-
     private void NumEntry_Unfocused(object sender, FocusEventArgs e)
     {
         OnUnfocused();

@@ -90,8 +90,6 @@ public sealed partial class UnitEntryControl : NumEntryBase<double>, IDisposable
         SetValueText(entryValue, false);
     }
 
-    ~UnitEntryControl() => Dispose(false);
-
     private void UnitEntry_Unfocused(object sender, FocusEventArgs e)
     {
         if (string.IsNullOrEmpty(UnitEntry.Text) || !ParseHelper.TryParseDifferentCulture(UnitEntry.Text, out double newValue) || newValue != selectedUnitValue)
