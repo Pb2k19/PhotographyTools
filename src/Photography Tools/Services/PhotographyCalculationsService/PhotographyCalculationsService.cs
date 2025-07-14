@@ -91,9 +91,9 @@ public class PhotographyCalculationsService : IPhotographyCalculationsService
     {
         if (ApertureConst.FullStops.Contains(apertureValue))
             return ApertureConst.FullStopsMultiplier;
-        else if (ApertureConst.SecondStops.Contains(apertureValue))
+        else if (ApertureConst.OneHalfStops.Contains(apertureValue))
             return ApertureConst.SecondStopsMultiplier;
-        else if (ApertureConst.ThirdStops.Contains(apertureValue))
+        else if (ApertureConst.OneThirdStops.Contains(apertureValue))
             return ApertureConst.ThirdStopsMultiplier;
         else
             return ApertureConst.Undefined;
