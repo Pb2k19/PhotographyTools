@@ -24,6 +24,9 @@ public static class AstroHelper
         quotationSearchValues = SearchValues.Create(['″', '"', '〃']),
         dmsCharactersSearchValues = SearchValues.Create(['°', '*', '′', '\'', '‘', '´', '`', '″', '"', '〃']);
 
+    private static readonly SearchValues<string>
+        altSeparatorsSearchValues = SearchValues.Create([" ", ", ", ". "], StringComparison.Ordinal);
+
     public static bool IsJulianDate(this DateTime date)
     {
         if (date.Year < 1582 || (date.Year == 1582 && date.Month < 10) || (date.Year == 1582 && date.Month == 10 && date.Day < 5))
@@ -91,9 +94,9 @@ public static class AstroHelper
         input = input.Trim();
         int indexOfSecondPart = input.IndexOfAny(separatorsSearchValues);
 
-        if (indexOfSecondPart == -1)
+        if (indexOfSecondPart == -1 || input.LastIndexOfAny(separatorsSearchValues) != indexOfSecondPart)
         {
-            indexOfSecondPart = input.IndexOf(' ');
+            indexOfSecondPart = input.IndexOfAny(altSeparatorsSearchValues);
             if (indexOfSecondPart == -1)
                 return new(double.NaN, double.NaN);
         }
@@ -102,7 +105,7 @@ public static class AstroHelper
         indexOfSecondPart++;
         ReadOnlySpan<char> longitudePart = input[indexOfSecondPart..].Trim();
 
-        return new(double.Parse(latitudePart, CultureInfo.InvariantCulture), double.Parse(longitudePart, CultureInfo.InvariantCulture));
+        return new(ParseHelper.ParseDifferentCulture<double>(latitudePart), ParseHelper.ParseDifferentCulture<double>(longitudePart));
     }
 
     public static GeographicalCoordinates ConvertDmsStringToDd(ReadOnlySpan<char> input)
