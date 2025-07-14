@@ -40,21 +40,21 @@ public static class ParseHelper
         StandardIntCharacterSearchValues = SearchValues.Create('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '+');
     }
 
-    public static bool TryParseDifferentCulture<T>(ReadOnlySpan<char> readonlySpan, out T? value) where T : INumber<T>
+    public static bool TryParseDifferentCulture<T>(ReadOnlySpan<char> readonlySpan, out T? value, IFormatProvider? defaultFormat = null) where T : INumber<T>
     {
         bool isInteger = NumberTypeHelper<T>.IsInteger;
         NumberStyles numberStyles = isInteger ? NumberStyles.Integer : NumberStyles.Float;
 
         if (readonlySpan.ContainsAnyExcept(isInteger ? StandardIntCharacterSearchValues : StandardFloatCharacterSearchValues))
         {
-            if (T.TryParse(readonlySpan, NumberStyles.Any, CultureInfo.CurrentCulture, out value))
-                return true;
-
             Span<char> span = readonlySpan.Length * sizeof(char) <= 512 ? stackalloc char[readonlySpan.Length] : new char[readonlySpan.Length];
 
             GetNormalizedSpan(readonlySpan, span, isInteger, out int charsWritten);
 
-            return T.TryParse(span[..charsWritten], numberStyles, CultureInfo.InvariantCulture, out value);
+            if (T.TryParse(span[..charsWritten], numberStyles, CultureInfo.InvariantCulture, out value))
+                return true;
+
+            return T.TryParse(readonlySpan, NumberStyles.Any, defaultFormat is not null ? defaultFormat : CultureInfo.CurrentCulture, out value);
         }
         else
         {
@@ -64,21 +64,21 @@ public static class ParseHelper
         return false;
     }
 
-    public static T ParseDifferentCulture<T>(ReadOnlySpan<char> readonlySpan) where T : INumber<T>
+    public static T ParseDifferentCulture<T>(ReadOnlySpan<char> readonlySpan, IFormatProvider? defaultFormat = null) where T : INumber<T>
     {
         bool isInteger = NumberTypeHelper<T>.IsInteger;
         NumberStyles numberStyles = isInteger ? NumberStyles.Integer : NumberStyles.Float;
 
         if (readonlySpan.ContainsAnyExcept(isInteger ? StandardIntCharacterSearchValues : StandardFloatCharacterSearchValues))
         {
-            if (T.TryParse(readonlySpan, NumberStyles.Any, CultureInfo.CurrentCulture, out T? value))
-                return value;
-
             Span<char> span = readonlySpan.Length * sizeof(char) <= 512 ? stackalloc char[readonlySpan.Length] : new char[readonlySpan.Length];
 
             GetNormalizedSpan(readonlySpan, span, isInteger, out int charsWritten);
 
-            return T.Parse(span, numberStyles, CultureInfo.InvariantCulture);
+            if (T.TryParse(span, numberStyles, CultureInfo.InvariantCulture, out T? value))
+                return value;
+
+            return T.Parse(readonlySpan, NumberStyles.Any, defaultFormat is not null ? defaultFormat : CultureInfo.CurrentCulture);
         }
         else
             return T.Parse(readonlySpan, numberStyles, CultureInfo.InvariantCulture);
