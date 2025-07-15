@@ -40,16 +40,14 @@
                         </SwipeItemView>
                     </SwipeView.RightItems>
 
-                    <FlexLayout
-                        Direction="Row">
+                    <VerticalStackLayout
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center">
                         <Label
-                            FlexLayout.Grow="1"
                             Text="{Binding .}"
                             Style="{StaticResource LabelMedium}"
-                            HorizontalTextAlignment="Center"
-                            VerticalTextAlignment="Center"
                         />
-                    </FlexLayout>
+                    </VerticalStackLayout>
                 </SwipeView>
             </Border>
         </DataTemplate>
@@ -59,24 +57,26 @@
                 Style="{StaticResource StandardBorder}"
                 Padding="15,10">
 
-                <FlexLayout
-                    Direction="RowReverse">
+                <Grid
+                    ColumnDefinitions="75,*,75">
+                    <Label
+                        Grid.Column="1"
+                        Text="{Binding .}"
+                        Style="{StaticResource LabelMedium}"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center"
+                    />
+
                     <Button
+                        Grid.Column="2"
+                        WidthRequest="75"
                         Text="Delete"
                         Clicked="RemoveButton_Clicked"
                         CommandParameter="{Binding .}"
                         FontSize="16"
                         Style="{StaticResource TransparentButton}"
                     />
-
-                    <Label
-                        FlexLayout.Grow="1"
-                        Text="{Binding .}"
-                        Style="{StaticResource LabelMedium}"
-                        VerticalTextAlignment="Center"
-                        HorizontalTextAlignment="Center"
-                    />
-                </FlexLayout>
+                </Grid>
             </Border>
         </DataTemplate>
         
