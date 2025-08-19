@@ -4,14 +4,18 @@ using System.Collections.ObjectModel;
 
 namespace Photography_Tools.Components.Popups;
 
-public partial class LocationPopup : Popup<Place?>, IQueryAttributable
+public sealed partial class LocationPopup : Popup<Place?>, IQueryAttributable, IDisposable
 {
     private readonly IKeyValueStore<Place> locationsStore;
     private readonly IUiMessageService messageService;
 
+    bool isFirstOpen = true, isDisposed = false;
+
     public ObservableCollection<string> Places { get; private set; } = [];
 
     public string Name { get; set; } = string.Empty;
+
+    public string SelectedName { get; private set; } = string.Empty;
 
     public string Coordinates { get; set; } = string.Empty;
 
@@ -22,7 +26,6 @@ public partial class LocationPopup : Popup<Place?>, IQueryAttributable
         BindingContext = this;
         InitializeComponent();
         Opened += OnOpened;
-        Closed += OnClosed;
         this.locationsStore = locationsStore;
         this.messageService = messageService;
         this.InitSelected = initSelected;
@@ -36,7 +39,14 @@ public partial class LocationPopup : Popup<Place?>, IQueryAttributable
 
     private async void OnOpened(object? sender, EventArgs e)
     {
-        Places = [.. (await locationsStore.GetAllKeys()).Order()];
+        ObjectDisposedException.ThrowIf(isDisposed, this);
+
+        if (isFirstOpen)
+        {
+            isFirstOpen = false;
+            Places = [.. (await locationsStore.GetAllKeys()).Order()];
+            OnPropertyChanged(nameof(Places));
+        }
 
         if (!string.IsNullOrWhiteSpace(InitSelected) && Places.Contains(InitSelected))
         {
@@ -46,18 +56,13 @@ public partial class LocationPopup : Popup<Place?>, IQueryAttributable
             {
                 Name = place.Name;
                 Coordinates = AstroHelper.ConvertDdToDmsString(place.Coordinates, 3);
+                SelectedName = place.Name;
+
                 OnPropertyChanged(nameof(Name));
                 OnPropertyChanged(nameof(Coordinates));
+                OnPropertyChanged(nameof(SelectedName));
             }
         }
-
-        OnPropertyChanged(nameof(Places));
-    }
-
-    private void OnClosed(object? sender, EventArgs e)
-    {
-        Closed -= OnClosed;
-        Opened -= OnOpened;
     }
 
     private async void CollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -72,6 +77,8 @@ public partial class LocationPopup : Popup<Place?>, IQueryAttributable
 
         Name = place.Name;
         Coordinates = AstroHelper.ConvertDdToDmsString(place.Coordinates, 3);
+        SelectedName = place.Name;
+
         OnPropertyChanged(nameof(Name));
         OnPropertyChanged(nameof(Coordinates));
     }
@@ -145,7 +152,10 @@ public partial class LocationPopup : Popup<Place?>, IQueryAttributable
             }
 
             Coordinates = AstroHelper.ConvertDdToDmsString(coordinates, 3);
+            SelectedName = Name;
+
             OnPropertyChanged(nameof(Coordinates));
+            OnPropertyChanged(nameof(SelectedName));
 
             return true;
         }
@@ -186,5 +196,14 @@ public partial class LocationPopup : Popup<Place?>, IQueryAttributable
             else
                 await messageService.ShowMessageAsync("Something went wrong", "Location has not been removed", "Ok");
         }
+    }
+
+    public void Dispose()
+    {
+        if (isDisposed)
+            return;
+
+        Opened -= OnOpened;
+        isDisposed = true;
     }
 }

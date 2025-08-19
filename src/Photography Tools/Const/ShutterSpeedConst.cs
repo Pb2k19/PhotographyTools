@@ -78,6 +78,6 @@ public class ShutterSpeedConst
             { "50s", 50.0 },
             { "60s", 60.0 }
         }.ToFrozenDictionary();
-        AllShutterSpeedsNamesSorted = AllShutterSpeeds.OrderBy(s => s.Value).Select(s => s.Key).ToImmutableArray();
+        AllShutterSpeedsNamesSorted = [.. AllShutterSpeeds.OrderBy(s => s.Value).Select(s => s.Key)];
     }
 }

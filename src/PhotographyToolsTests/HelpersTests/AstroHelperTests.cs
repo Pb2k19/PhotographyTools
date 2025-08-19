@@ -119,6 +119,8 @@ public class AstroHelperTests
     [InlineData("-23.703611,-46.699722", -23.703611, -46.699722)]
     [InlineData(" -37.849722;144.968333  ", -37.849722, 144.968333)]
     [InlineData(" -37.849722; 144.968333  ", -37.849722, 144.968333)]
+    [InlineData(" -37,849722, 144,968333  ", -37.849722, 144.968333)]
+    [InlineData(" -37,849722,     144,968333  ", -37.849722, 144.968333)]
     public void ConvertDdStringToDd_ShouldReturnCorrectLatitudeAndLongitude(string input, double expectedLat, double expectedLong)
     {
         (double latitude, double longitude) = AstroHelper.ConvertDdStringToDd(input);

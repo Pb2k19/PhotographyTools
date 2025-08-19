@@ -7,7 +7,7 @@ namespace Photography_Tools.ViewModels;
 
 public abstract partial class AstroLocationViewModel : SaveableViewModel
 {
-    protected readonly Dictionary<string, object> locationDictionary = [];
+    protected readonly Dictionary<string, object> locationDictionary = new(1);
     protected readonly IAstroDataService onlineAstroDataService;
     protected readonly IAstroDataService offlineAstroDataService;
     protected readonly IKeyValueStore<Place> locationsKeyValueStore;
@@ -50,7 +50,7 @@ public abstract partial class AstroLocationViewModel : SaveableViewModel
         IsPopupPresented = true;
         try
         {
-            IPopupResult<Place> popupResult = await popupService.ShowPopupAsync<LocationPopup, Place>(Shell.Current);
+            IPopupResult<Place> popupResult = await popupService.ShowPopupAsync<LocationPopup, Place>(Shell.Current, shellParameters: locationDictionary);
 
             if (popupResult.WasDismissedByTappingOutsideOfPopup || popupResult.Result is null)
                 return;

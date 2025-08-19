@@ -17,13 +17,13 @@ public class TimeLapseCalcValues
         => ShootingLengthSeconds = ShootsCount * ShootingIntervalSeconds;
 
     public void CalculateShotsCount()
-        => ShootsCount = ShootingIntervalSeconds is not 0 ? (int)(ShootingLengthSeconds / ShootingIntervalSeconds) : 0;
+        => ShootsCount = ShootingIntervalSeconds is not 0 ? (int)Math.Round(ShootingLengthSeconds / ShootingIntervalSeconds, 5) : 0;
 
     public void CalculateShotsCountFromResultClip()
-        => ShootsCount = (int)(ClipFrameRateFPS * ClipLengthSeconds);
+        => ShootsCount = (int)Math.Round(ClipFrameRateFPS * ClipLengthSeconds, 5);
 
     public void CalculateShotsCountFromStorage()
-        => ShootsCount = PhotoSizeMB is not 0 ? (int)(TotalStorageSizeMB / PhotoSizeMB) : 0;
+        => ShootsCount = PhotoSizeMB is not 0 ? (int)Math.Round(TotalStorageSizeMB / PhotoSizeMB, 5) : 0;
 
     public void CalculateClipLength()
         => ClipLengthSeconds = ClipFrameRateFPS is not 0 ? ShootsCount / ClipFrameRateFPS : 0;

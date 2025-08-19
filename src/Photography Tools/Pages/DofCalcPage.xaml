@@ -79,9 +79,9 @@
                 Grid.ColumnSpan="2"
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
-                    MinValueBaseUnit="0.1"
-                    MaxValueBaseUnit="9999"
-                    BaseUnitValue="{Binding UserInput.DofCalcInput.LensInfo.FocalLengthMM}"
+                    MinValue="0.1"
+                    MaxValue="10000"
+                    EntryValue="{Binding UserInput.DofCalcInput.LensInfo.FocalLengthMM}"
                     ValueChangedCommand="{Binding CalculateValuesCommand}"
                     SelectedUnitIndex="{Binding UserInput.FocalLengthUnitIndex}"
                 />
@@ -93,9 +93,9 @@
                 Grid.ColumnSpan="2"
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
-                    MinValueBaseUnit="1"
-                    MaxValueBaseUnit="9999999"
-                    BaseUnitValue="{Binding UserInput.DofCalcInput.FocusingDistanceMM}"
+                    MinValue="1"
+                    MaxValue="100000"
+                    EntryValue="{Binding UserInput.DofCalcInput.FocusingDistanceMM}"
                     ValueChangedCommand="{Binding CalculateValuesCommand}"
                     SelectedUnitIndex="{Binding UserInput.FocusingDistanceUnitIndex}"
                 />
@@ -165,9 +165,9 @@
                 IsVisible="{Binding UserInput.IsAdvancedModeEnabled}"
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
-                    MinValueBaseUnit="1"
-                    MaxValueBaseUnit="10000"
-                    BaseUnitValue="{Binding UserInput.DofCalcInput.PrintHeighthMM}"
+                    MinValue="10"
+                    MaxValue="5000"
+                    EntryValue="{Binding UserInput.DofCalcInput.PrintHeighthMM}"
                     ValueChangedCommand="{Binding CalculateValuesCommand}"
                     SelectedUnitIndex="{Binding UserInput.PrintHeighthUnitIndex}"
                 />
@@ -180,9 +180,9 @@
                 IsVisible="{Binding UserInput.IsAdvancedModeEnabled}"
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
-                    MinValueBaseUnit="1"
-                    MaxValueBaseUnit="10000"
-                    BaseUnitValue="{Binding UserInput.DofCalcInput.PrintWidthMM}"
+                    MinValue="10"
+                    MaxValue="5000"
+                    EntryValue="{Binding UserInput.DofCalcInput.PrintWidthMM}"
                     ValueChangedCommand="{Binding CalculateValuesCommand}"
                     SelectedUnitIndex="{Binding UserInput.PrintWidthUnitIndex}"
                 />
@@ -202,7 +202,7 @@
                         Margin="0,5"
                         EntryValue="{Binding UserInput.VisualAcuityLpPerMM}"
                         MinValue="1"
-                        MaxValue="100"
+                        MaxValue="50"
                         ValueChangedCommand="{Binding VisualAcuityLpPerMMChangedCommand}">
                     </numcontrols:IntEntry>
                     <Label 
@@ -237,9 +237,9 @@
                 IsVisible="{Binding UserInput.IsAdvancedModeEnabled}"
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
-                    MinValueBaseUnit="1"
-                    MaxValueBaseUnit="10000"
-                    BaseUnitValue="{Binding UserInput.DofCalcInput.StandardViewingDistanceMM}"
+                    MinValue="10"
+                    MaxValue="10000"
+                    EntryValue="{Binding UserInput.DofCalcInput.StandardViewingDistanceMM}"
                     ValueChangedCommand="{Binding CalculateValuesCommand}"
                     SelectedUnitIndex="{Binding UserInput.StandardViewingDistanceUnitIndex}"
                 />
@@ -252,9 +252,9 @@
                 IsVisible="{Binding UserInput.IsAdvancedModeEnabled}"
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
-                    MinValueBaseUnit="1"
-                    MaxValueBaseUnit="10000"
-                    BaseUnitValue="{Binding UserInput.DofCalcInput.ActualViewingDistanceMM}"
+                    MinValue="10"
+                    MaxValue="10000"
+                    EntryValue="{Binding UserInput.DofCalcInput.ActualViewingDistanceMM}"
                     ValueChangedCommand="{Binding CalculateValuesCommand}"
                     SelectedUnitIndex="{Binding UserInput.ActualViewingDistanceUnitIndex}"
                 />
@@ -281,8 +281,8 @@
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
                     IsReadOnly="True"
-                    MaxValueBaseUnit="1000000"
-                    BaseUnitValue="{Binding DofCalcResult.DofMM}"
+                    MaxValue="1000000"
+                    EntryValue="{Binding DofCalcResult.DofMM}"
                     SelectedUnitIndex="{Binding UserInput.DofUnitIndex}"
                 />
             </Border>
@@ -294,8 +294,8 @@
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
                     IsReadOnly="True"
-                    MaxValueBaseUnit="1000000"
-                    BaseUnitValue="{Binding DofCalcResult.HyperfocalDistanceMM}"
+                    MaxValue="1000000"
+                    EntryValue="{Binding DofCalcResult.HyperfocalDistanceMM}"
                     SelectedUnitIndex="{Binding UserInput.HyperfocalDistanceUnitIndex}"
                 />
             </Border>
@@ -321,8 +321,8 @@
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
                      IsReadOnly="True"
-                     MaxValueBaseUnit="1000000"
-                     BaseUnitValue="{Binding DofCalcResult.DofNearLimitMM}"
+                     MaxValue="1000000"
+                     EntryValue="{Binding DofCalcResult.DofNearLimitMM}"
                      SelectedUnitIndex="{Binding UserInput.DofNearLimitUnitIndex}"
                  />
             </Border>
@@ -334,8 +334,8 @@
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
                     IsReadOnly="True"
-                    MaxValueBaseUnit="1000000"
-                    BaseUnitValue="{Binding DofCalcResult.DofFarLimitMM}"
+                    MaxValue="1000000"
+                    EntryValue="{Binding DofCalcResult.DofFarLimitMM}"
                     SelectedUnitIndex="{Binding UserInput.DofFarLimitUnitIndex}"
                 />
             </Border>
@@ -343,7 +343,7 @@
             <Label
                 Grid.Row="12"
                 Grid.ColumnSpan="3"
-                Text="Behind Subject"
+                Text="In Front of Subject"
                 Style="{StaticResource LabelMediumBoldMargin}"
             />
 
@@ -351,7 +351,7 @@
                 Grid.Row="12"
                 Grid.Column="3"
                 Grid.ColumnSpan="3"
-                Text="In Front of Subject"
+                Text="Behind Subject"
                 Style="{StaticResource LabelMediumBoldMargin}"
             />
 
@@ -361,9 +361,9 @@
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
                     IsReadOnly="True"
-                    MaxValueBaseUnit="1000000"
-                    BaseUnitValue="{Binding DofCalcResult.DofInBackOfSubject}"
-                    SelectedUnitIndex="{Binding UserInput.DofInBackOfSubjectUnitIndex}"
+                    MaxValue="1000000"
+                    EntryValue="{Binding DofCalcResult.DofInFrontOfSubject}"
+                    SelectedUnitIndex="{Binding UserInput.DofInFrontOfSubjectUnitIndex}"
                 />
             </Border>
 
@@ -374,9 +374,9 @@
                 Style="{StaticResource EntryBorder}">
                 <controls:UnitEntryControl
                     IsReadOnly="True"
-                    MaxValueBaseUnit="1000000"
-                    BaseUnitValue="{Binding DofCalcResult.DofInFrontOfSubject}"
-                    SelectedUnitIndex="{Binding UserInput.DofInFrontOfSubjectUnitIndex}"
+                    MaxValue="1000000"
+                    EntryValue="{Binding DofCalcResult.DofInBackOfSubject}"
+                    SelectedUnitIndex="{Binding UserInput.DofInBackOfSubjectUnitIndex}"
                 />
             </Border>
 

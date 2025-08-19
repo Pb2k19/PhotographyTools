@@ -87,7 +87,7 @@
                             Style="{StaticResource LabelSmall}"
                             HorizontalTextAlignment="Center"
                             VerticalTextAlignment="Center"
-                            Text="{Binding Factor}"
+                            Text="{Binding FStopReduction}"
                         />
                         <Label
                             Grid.Row="2"
@@ -95,7 +95,7 @@
                             Style="{StaticResource LabelSmall}"
                             HorizontalTextAlignment="Center"
                             VerticalTextAlignment="Center"
-                            Text="{Binding FStopReduction}"
+                            Text="{Binding Factor}"
                         />
                         <Label
                             Grid.Row="2"
@@ -165,7 +165,7 @@
                             Style="{StaticResource LabelSmall}"
                             HorizontalTextAlignment="Center"
                             VerticalTextAlignment="Center"
-                            Text="{Binding Factor}"
+                            Text="{Binding FStopReduction}"
                         />
                         <Label
                             Grid.Row="1"
@@ -173,7 +173,7 @@
                             Style="{StaticResource LabelSmall}"
                             HorizontalTextAlignment="Center"
                             VerticalTextAlignment="Center"
-                            Text="{Binding FStopReduction}"
+                            Text="{Binding Factor}"
                         />
                         <Label
                             Grid.Row="1"

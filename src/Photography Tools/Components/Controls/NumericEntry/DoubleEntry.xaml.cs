@@ -2,12 +2,12 @@ using System.Windows.Input;
 
 namespace Photography_Tools.Components.Controls.NumericEntry;
 
-public partial class DoubleEntry : ContentView
+public sealed partial class DoubleEntry : NumEntryBase<double>, IDisposable
 {
     public static readonly BindableProperty ValueChangedCommandProperty = BindableProperty.Create(
-        nameof(ValueChangedCommand),
-        typeof(ICommand),
-        typeof(DoubleEntry));
+    nameof(ValueChangedCommand),
+    typeof(ICommand),
+    typeof(DoubleEntry));
 
     public static readonly BindableProperty EntryValueProperty = BindableProperty.Create(
         nameof(EntryValue),
@@ -21,97 +21,32 @@ public partial class DoubleEntry : ContentView
             control.EntryValue = (double)newValue;
         });
 
-    private double entryValue;
+    protected override Entry NumEntry { get => MainDoubleEntry; }
 
-    public ICommand? ValueChangedCommand
-    {
-        get => (ICommand)GetValue(ValueChangedCommandProperty);
-        set => SetValue(ValueChangedCommandProperty, value);
-    }
+    public override BindableProperty ValueChangedCommandProp => ValueChangedCommandProperty;
 
-    public double MinValue { get; set; } = 0;
-
-    public double MaxValue { get; set; } = 10_000;
-
-    public int Precision { get; set; } = 3;
-
-    public double EntryValue
-    {
-        get => entryValue;
-        set
-        {
-            if (entryValue == value || value < MinValue || value > MaxValue)
-                return;
-
-            entryValue = value;
-            SetValue(EntryValueProperty, value);
-            OnPropertyChanged(nameof(EntryValue));
-            SetValueText(value);
-
-            if (ValueChangedCommand?.CanExecute(null) ?? false)
-                ValueChangedCommand.Execute(null);
-        }
-    }
+    public override BindableProperty EntryValueProp => EntryValueProperty;
 
     public DoubleEntry()
     {
-        InitializeComponent();
-    }
+        MinValue = 0;
+        MaxValue = 10_000;
 
-    private void NumEntry_Completed(object sender, EventArgs e)
-    {
-        SetValueFromText();
+        InitializeComponent();
     }
 
     private void NumEntry_Unfocused(object sender, FocusEventArgs e)
     {
-        SetValueFromText();
+        OnUnfocused();
     }
 
-    private void NumEntry_TextChanged(object sender, TextChangedEventArgs e)
+    private async void NumEntry_TextChanged(object sender, TextChangedEventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(e.NewTextValue))
-            return;
-
-        if (MinValue < 0 && e.NewTextValue.AsSpan().Trim().Equals("-", StringComparison.Ordinal))
-            return;
-
-        if (!ParseHelper.TryParseDoubleDifferentCulture(e.NewTextValue, out _))
-        {
-            NumEntry.Text = e.OldTextValue;
-            return;
-        }
+        await OnTextChanged(e.NewTextValue, e.OldTextValue);
     }
 
-    private void SetValueFromText()
+    protected override double CustomizeNewValue(double newValue)
     {
-        if (ParseHelper.TryParseDoubleDifferentCulture(NumEntry.Text, out double newValue))
-        {
-            if (SetValueAndNotify(Math.Round(newValue, Precision)))
-                return;
-        }
-
-        SetValueText(entryValue);
-    }
-
-    private bool SetValueAndNotify(double value)
-    {
-        if (value == entryValue || value < MinValue || value > MaxValue)
-            return false;
-
-        entryValue = value;
-        SetValue(EntryValueProperty, entryValue);
-        OnPropertyChanged(nameof(EntryValue));
-        SetValueText(value);
-
-        if (ValueChangedCommand?.CanExecute(null) ?? false)
-            ValueChangedCommand.Execute(null);
-
-        return true;
-    }
-
-    private void SetValueText(double value)
-    {
-        NumEntry.Text = value.ToString();
+        return Math.Round(newValue, Precision);
     }
 }

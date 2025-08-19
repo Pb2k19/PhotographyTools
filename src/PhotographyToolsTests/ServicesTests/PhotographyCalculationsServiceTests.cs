@@ -10,7 +10,8 @@ public class PhotographyCalculationsServiceTests
     [InlineData(11, ApertureConst.FullStopsMultiplier)]
     [InlineData(9.5, ApertureConst.SecondStopsMultiplier)]
     [InlineData(25, ApertureConst.ThirdStopsMultiplier)]
-    [InlineData(0.0001, ApertureConst.Undefined)]
+    [InlineData(0.95, ApertureConst.Undefined)]
+    [InlineData(1.05, ApertureConst.Undefined)]
     public void GetApertureMultiplier_ShouldReturnApertureMultiplier(double input, int expected)
     {
         int actual = PhotographyCalculationsService.GetApertureMultiplier(input);
@@ -34,7 +35,7 @@ public class PhotographyCalculationsServiceTests
     [InlineData(1.05, 1.05)]
     [InlineData(11, 11.314)]
     [InlineData(2.8, 2.8284)]
-    [InlineData(0.00001, 0.00001)]
+    [InlineData(0.95, 0.95)]
     public void CalculateFullApertureValue_ShouldRetrunFullApertureValue(double input, double expected)
     {
         double actual = PhotographyCalculationsService.CalculateFullApertureValue(input);
