@@ -66,6 +66,7 @@ public partial class NDFilterCalcViewModel : SaveableViewModel
     [RelayCommand]
     private void AddFilter(string filterName)
     {
+        StopCountdown();
         UserInput.NdFilters.Add(ndFiltersDataAccess.GetFilter(filterName));
         CalculateTime();
     }
@@ -73,6 +74,7 @@ public partial class NDFilterCalcViewModel : SaveableViewModel
     [RelayCommand]
     private void RemoveFilter(NDFilter filter)
     {
+        StopCountdown();
         UserInput.NdFilters.Remove(filter);
         CalculateTime();
     }
@@ -80,6 +82,7 @@ public partial class NDFilterCalcViewModel : SaveableViewModel
     [RelayCommand]
     private void ClearAllFilters()
     {
+        StopCountdown();
         UserInput.NdFilters.Clear();
         CalculateTime();
     }
@@ -165,13 +168,13 @@ public partial class NDFilterCalcViewModel : SaveableViewModel
     public static string GetTimeTextCore(TimeSpan time)
     {
         if (time.Days > 0)
-            return $"{time.Days} days, {time.Hours}h, {time.Minutes}m, {time.Seconds}s, {time.Milliseconds:000}ms";
+            return $"{time.Days} days, {time.Hours}h, {time.Minutes:00}m, {time.Seconds:00}s";
         else if (time.Hours > 0)
-            return $"{time.Hours}h, {time.Minutes}m, {time.Seconds}s, {time.Milliseconds:000}ms";
+            return $"{time.Hours}h, {time.Minutes:00}m, {time.Seconds:00}s, {time.Milliseconds:000}ms";
         else if (time.Minutes > 0)
-            return $"{time.Minutes}m, {time.Seconds}s, {time.Milliseconds:000}ms";
+            return $"{time.Minutes:00}m, {time.Seconds:00}s, {time.Milliseconds:000}ms";
         else
-            return $"{time.Seconds}s, {time.Milliseconds:000}ms";
+            return $"{time.Seconds:00}s, {time.Milliseconds:000}ms";
     }
 
     protected override void SaveUserInput()
