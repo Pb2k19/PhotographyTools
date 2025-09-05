@@ -40,14 +40,16 @@
                         </SwipeItemView>
                     </SwipeView.RightItems>
 
-                    <VerticalStackLayout
-                        HorizontalOptions="Center"
-                        VerticalOptions="Center">
+                    <FlexLayout
+                        Direction="Row">
                         <Label
+                            FlexLayout.Grow="1"
                             Text="{Binding .}"
                             Style="{StaticResource LabelMedium}"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
                         />
-                    </VerticalStackLayout>
+                    </FlexLayout>
                 </SwipeView>
             </Border>
         </DataTemplate>
