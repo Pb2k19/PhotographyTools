@@ -61,6 +61,9 @@ public partial class SunViewModel : AstroLocationViewModel
         if (offlineResult.IsSuccess && offlineResult.Data is not null)
             DisplayResult(offlineResult.Data, date, offlineAstroDataService.DataSourceInfo);
 
+        if (!UseOnlineData)
+            return;
+
         try
         {
             ServiceResponse<SunPhasesResult?> onlineResult = await onlineAstroDataService.GetSunDataAsync(date, coordinates.Latitude, coordinates.Longitude);

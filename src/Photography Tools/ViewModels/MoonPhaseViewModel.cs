@@ -97,6 +97,9 @@ public partial class MoonPhaseViewModel : AstroLocationViewModel
         if (offlineResult.IsSuccess && offlineResult.Data is not null)
             DisplayResult(offlineResult.Data, date, coordinates.Latitude, offlineAstroDataService.DataSourceInfo);
 
+        if (!UseOnlineData)
+            return;
+
         try
         {
             ServiceResponse<MoonData?> onlineResult = await onlineAstroDataService.GetMoonDataAsync(date, coordinates.Latitude, coordinates.Longitude);

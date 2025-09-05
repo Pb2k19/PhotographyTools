@@ -23,6 +23,9 @@ public abstract partial class AstroLocationViewModel : SaveableViewModel
     [ObservableProperty]
     private string dataSourceInfo = string.Empty;
 
+    [ObservableProperty]
+    private bool useOnlineData = true;
+
     public bool IsPopupPresented { get; protected set; } = false;
 
     protected AstroLocationViewModel([FromKeyedServices(KeyedServiceNames.OnlineAstroData)] IAstroDataService onlineAstroDataService, [FromKeyedServices(KeyedServiceNames.OfflineAstroData)] IAstroDataService offlineAstroDataService,
@@ -66,6 +69,13 @@ public abstract partial class AstroLocationViewModel : SaveableViewModel
             IsPopupPresented = false;
         }
 
+        await CalculateAsync();
+    }
+
+    [RelayCommand]
+    private async Task ToggleSource()
+    {
+        UseOnlineData = !UseOnlineData;
         await CalculateAsync();
     }
 
