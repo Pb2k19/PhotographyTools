@@ -30,6 +30,7 @@
                 Style="{StaticResource LabelLarge}"
                 Text="☀️"
                 HorizontalOptions="Center"
+                FontFamily="NotoColorEmoji"
                 FontSize="{OnPlatform Default=125, WinUI=150, MacCatalyst=150}"
             />
 

@@ -19,6 +19,7 @@ public static class MauiProgram
             })
             .ConfigureFonts(fonts =>
             {
+                fonts.AddFont("NotoColorEmojiSubsetted.ttf", "NotoColorEmoji");
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
