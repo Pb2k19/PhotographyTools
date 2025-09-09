@@ -101,6 +101,31 @@
                     />
                 </VerticalStackLayout>
             </Border>
+
+            <Border
+                Style="{StaticResource StandardBorder}"
+                Margin="0,15,0,0">
+                <VerticalStackLayout>
+                    <Label
+                        Text="Licenses"
+                        Style="{StaticResource LabelMediumBold}" 
+                    />
+
+                    <Button
+                        Text="License"
+                        Margin="0,15,0,0"
+                        HorizontalOptions="Start"
+                        Command="{Binding ShowLicenseCommand}"
+                    />
+                    
+                    <Button
+                        Text="Third-Party Notices"
+                        Margin="0,15,0,0"
+                        HorizontalOptions="Start"
+                        Command="{Binding ShowThirdPartyNoticesCommand}"
+                    />
+                </VerticalStackLayout>
+            </Border>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
