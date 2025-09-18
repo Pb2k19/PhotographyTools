@@ -34,7 +34,8 @@
                         Style="{StaticResource LabelMediumBold}" 
                     />
 
-                    <HorizontalStackLayout
+                    <Grid
+                        ColumnDefinitions="auto,*"
                         Margin="0,10,0,0">
                         
                         <CheckBox 
@@ -42,14 +43,16 @@
                         />
 
                         <Label
+                            Grid.Column="1"
                             Text="Use only offline data (lower accuracy)"
                             Style="{StaticResource LabelMedium}"
+                            LineBreakMode="WordWrap"
                             VerticalOptions="Center">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding ToggleOfflineDataOnlyCommand}"/>
                             </Label.GestureRecognizers>
                         </Label>
-                    </HorizontalStackLayout>
+                    </Grid>
                 </VerticalStackLayout>
             </Border>
 
