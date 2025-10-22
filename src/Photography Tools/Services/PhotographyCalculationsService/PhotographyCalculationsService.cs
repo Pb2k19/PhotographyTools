@@ -24,6 +24,14 @@ public class PhotographyCalculationsService : IPhotographyCalculationsService
             HyperfocalDistanceMM = dofInfo.LensInfo.FocalLengthMM + dofInfo.LensInfo.FocalLengthMM * dofInfo.LensInfo.FocalLengthMM / (focalRatio * circleOfConfusion)
         };
 
+        if (dofInfo.FocusingDistanceMM < dofInfo.LensInfo.FocalLengthMM)
+        {
+            result.DofFarLimitMM = result.DofNearLimitMM = result.DofInFrontOfSubject = result.DofInBackOfSubject = double.NaN;
+            result.DofMM = 0;
+
+            return result;
+        }
+
         double farLimit = result.HyperfocalDistanceMM * dofInfo.FocusingDistanceMM / (result.HyperfocalDistanceMM - (dofInfo.FocusingDistanceMM - dofInfo.LensInfo.FocalLengthMM));
         result.DofFarLimitMM = farLimit >= 0 ? farLimit : double.PositiveInfinity;
         result.DofNearLimitMM = result.HyperfocalDistanceMM * dofInfo.FocusingDistanceMM / (result.HyperfocalDistanceMM + (dofInfo.FocusingDistanceMM - dofInfo.LensInfo.FocalLengthMM));
